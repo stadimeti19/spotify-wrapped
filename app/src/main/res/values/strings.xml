@@ -5,4 +5,7 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="signup">SIGN UP FREE</string>
+    <string name="request_token">Request Token</string>
+    <string name="request_code">Request Code</string>
+    <string name="get_user_profile">Get User Profile</string>
 </resources>
