@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        Intent i = new Intent(MainActivity.this,WrappedActivity.class);
-//        startActivity(i);
+        Intent i = new Intent(MainActivity.this,WrappedActivity.class);
+        startActivity(i);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.basic_layout);
 
