@@ -8,6 +8,9 @@
     <string name="request_token">Request Token</string>
     <string name="request_code">Request Code</string>
     <string name="get_user_profile">Get User Profile</string>
+    <string name="get_user_tracks">Get Most Listened Tracks</string>
+    <string name="logout_user">Log out</string>
+    <string name="get_user_genres">Get Top Genres</string>
     <string name="user_signup">User Signup</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
