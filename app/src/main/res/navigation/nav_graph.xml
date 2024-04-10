@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/HomePage" >
+
+    <fragment
+        android:id="@+id/HomePage"
+        android:name="com.example.spotify_wrapped.HomePage"
+        android:label="Home Page">
+        <action
+            android:id="@+id/action_HomePage_to_WrappedActivity"
+            app:destination="@id/WrappedActivity" />
+    </fragment>
+
+    <activity
+        android:id="@+id/WrappedActivity"
+        android:name="com.example.spotify_wrapped.WrappedActivity"
+        android:label="Wrapped Activity Page" />
+
+    <fragment
+        android:id="@+id/SettingsPage"
+        android:name="com.example.spotify_wrapped.HomePage"
+        android:label="Settings Page">
+        <action
+            android:id="@+id/action_SettingsPage_to_HomePage"
+            app:destination="@id/HomePage" />
+    </fragment>
+</navigation>

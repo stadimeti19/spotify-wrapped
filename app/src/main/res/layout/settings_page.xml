@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/account_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="@string/account_settings"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/currentUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <!-- Line 1: Username -->
+    <TextView
+        android:id="@+id/usernameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/account_settings"
+        app:layout_constraintEnd_toStartOf="@+id/currentUsername"
+        app:layout_constraintBottom_toTopOf="@id/emailLabel"
+        />
+
+    <TextView
+        android:id="@+id/currentUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Current Username"
+        android:textColor="@color/settingsTextColor"
+        app:layout_constraintEnd_toStartOf="@+id/editUsernameButton"
+        app:layout_constraintStart_toEndOf="@+id/usernameLabel"
+        app:layout_constraintBottom_toTopOf="@+id/currentEmail"
+        app:layout_constraintTop_toBottomOf="@+id/account_settings"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/editUsernameButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit"
+        android:background="@drawable/edit_button"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/editEmailButton"
+        app:layout_constraintStart_toEndOf="@+id/currentUsername"
+        app:layout_constraintTop_toBottomOf="@+id/account_settings"
+        />
+
+    <!-- Line 2: Email -->
+    <TextView
+        android:id="@+id/emailLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/currentEmail"
+        app:layout_constraintBottom_toTopOf="@+id/passwordLabel"
+        app:layout_constraintTop_toBottomOf="@+id/usernameLabel"
+        />
+
+    <TextView
+        android:id="@+id/currentEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Current Email"
+        android:textColor="@color/settingsTextColor"
+        app:layout_constraintBottom_toTopOf="@+id/currentPassword"
+        app:layout_constraintEnd_toStartOf="@+id/editEmailButton"
+        app:layout_constraintStart_toEndOf="@+id/emailLabel"
+        app:layout_constraintTop_toBottomOf="@+id/currentUsername" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/editEmailButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit"
+        android:background="@drawable/edit_button"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/currentEmail"
+        app:layout_constraintBottom_toTopOf="@+id/editPasswordButton"
+        app:layout_constraintTop_toBottomOf="@+id/editUsernameButton"
+        />
+
+    <!-- Line 3: Password -->
+    <TextView
+        android:id="@+id/passwordLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/currentPassword"
+        app:layout_constraintBottom_toTopOf="@+id/deleteAccountButton"
+        app:layout_constraintTop_toBottomOf="@+id/emailLabel"
+        />
+
+    <TextView
+        android:id="@+id/currentPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Current Password"
+        android:textColor="@color/settingsTextColor"
+        app:layout_constraintEnd_toStartOf="@+id/editPasswordButton"
+        app:layout_constraintStart_toEndOf="@+id/passwordLabel"
+        app:layout_constraintTop_toBottomOf="@+id/currentEmail"
+        app:layout_constraintBottom_toTopOf="@+id/deleteAccountButton"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/editPasswordButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit"
+        android:background="@drawable/edit_button"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/currentPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editEmailButton"
+        app:layout_constraintBottom_toTopOf="@+id/deleteAccountButton"
+        />
+
+    <!-- Delete Account Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/deleteAccountButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/delete_account"
+        android:background="@drawable/rounded_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currentPassword"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

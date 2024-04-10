@@ -1,13 +1,26 @@
 package com.example.spotify_wrapped;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.spotify_wrapped.databinding.ActivityMainBinding;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
@@ -25,50 +38,63 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
-
     public static final String CLIENT_ID = "c7e24e2587ce44b89dfe5494431930e3";
     public static final String REDIRECT_URI = "spotify-wrapped://auth";
-
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
-
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
     private String mAccessToken, mAccessCode;
     private Call mCall;
-
     private TextView tokenTextView, codeTextView, profileTextView;
+    private FirebaseFirestore db;
+    private CollectionReference usersCollection;
+    private ActivityMainBinding binding;
+    private NavController navController;
+    private AppBarConfiguration appBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Intent i = new Intent(MainActivity.this,WrappedActivity.class);
-        startActivity(i);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.basic_layout);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        // Set up the ActionBar
+        setSupportActionBar(binding.toolbar);
+
+        // inflate basic_layout.xml to access its views
+        View rootView = getLayoutInflater().inflate(R.layout.basic_layout, null);
+
+        // Initialize NavHostFragment and NavController
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
+        navController = navHostFragment.getNavController();
+
+        // Set up the AppBarConfiguration with the NavGraph
+        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+
+        // Set up ActionBar with NavController
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this);
 
         // Initialize the views
-        tokenTextView = (TextView) findViewById(R.id.token_text_view);
-        codeTextView = (TextView) findViewById(R.id.code_text_view);
-        profileTextView = (TextView) findViewById(R.id.response_text_view);
+        tokenTextView = rootView.findViewById(R.id.token_text_view);
+        codeTextView = rootView.findViewById(R.id.code_text_view);
+        profileTextView = rootView.findViewById(R.id.response_text_view);
 
         // Initialize the buttons
-        Button tokenBtn = (Button) findViewById(R.id.token_btn);
-        Button codeBtn = (Button) findViewById(R.id.code_btn);
-        Button profileBtn = (Button) findViewById(R.id.profile_btn);
+        Button tokenBtn = rootView.findViewById(R.id.token_btn);
+        Button codeBtn = rootView.findViewById(R.id.code_btn);
+        Button profileBtn = rootView.findViewById(R.id.profile_btn);
 
         // Set the click listeners for the buttons
+        tokenBtn.setOnClickListener((v) -> getToken());
 
-        tokenBtn.setOnClickListener((v) -> {
-            getToken();
-        });
+        codeBtn.setOnClickListener((v) -> getCode());
 
-        codeBtn.setOnClickListener((v) -> {
-            getCode();
-        });
-
-        profileBtn.setOnClickListener((v) -> {
-            onGetUserProfileClicked();
-        });
-
+        profileBtn.setOnClickListener((v) -> onGetUserProfileClicked());
     }
 
     /**
@@ -135,15 +161,16 @@ public class MainActivity extends AppCompatActivity {
 
         mCall.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.d("HTTP", "Failed to fetch data: " + e);
                 Toast.makeText(MainActivity.this, "Failed to fetch data, watch Logcat for more details",
                         Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 try {
+                    assert response.body() != null;
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     setTextAsync(jsonObject.toString(3), profileTextView);
                 } catch (JSONException e) {
@@ -193,6 +220,14 @@ public class MainActivity extends AppCompatActivity {
         if (mCall != null) {
             mCall.cancel();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        // Navigate up when the ActionBar back button is pressed
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
+                || super.onSupportNavigateUp();
     }
 
     @Override

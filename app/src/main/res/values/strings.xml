@@ -8,4 +8,14 @@
     <string name="request_token">Request Token</string>
     <string name="request_code">Request Code</string>
     <string name="get_user_profile">Get User Profile</string>
+    <string name="user_signup">User Signup</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="email_address">Email Address</string>
+    <string name="spotify_logo">spotify logo</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="edit">Edit</string>
+    <string name="delete_account">Delete Account</string>
 </resources>

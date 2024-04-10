@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/basic_layout"
     android:background="@color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,7 +11,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="176dp"
+        tools:layout_editor_absoluteY="-308dp">
 
         <TextView
             android:id="@+id/token_text_view"
@@ -26,8 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="@drawable/rounded_button"
-            android:textColor="@color/white"
-            android:text="@string/request_token" />
+            android:text="@string/request_token"
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/code_text_view"
@@ -42,8 +44,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="@drawable/rounded_button"
-            android:textColor="@color/white"
-            android:text="@string/request_code" />
+            android:text="@string/request_code"
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/response_text_view"
@@ -64,8 +66,8 @@
                 android:layout_margin="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_button"
-                android:textColor="@color/white"
-                android:text="@string/get_user_profile" />
+                android:text="@string/get_user_profile"
+                android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>
 

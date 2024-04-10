@@ -3,23 +3,23 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/logoImageView"
-        android:layout_width="88dp"
-        android:layout_height="78dp"
+        android:id="@+id/spotifyLogo"
+        android:layout_width="84dp"
+        android:layout_height="76dp"
         android:src="@drawable/spotify_icon"
         app:layout_constraintBottom_toTopOf="@id/editTextEmail"
         app:layout_constraintEnd_toStartOf="@+id/home"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.49" />
+        app:layout_constraintVertical_bias="0.49"
+        android:contentDescription="@string/spotify_logo" />
 
     <TextView
         android:id="@+id/home"
@@ -40,12 +40,12 @@
     <EditText
         android:id="@+id/editTextEmail"
         android:layout_width="270dp"
-        android:layout_height="45dp"
-        android:autofillHints="@string/username"
+        android:layout_height="54dp"
+        android:autofillHints="@string/email_address"
         android:background="@color/spotify_text_background"
         android:ems="10"
         android:fontFamily="sans-serif"
-        android:hint="@string/username"
+        android:hint="@string/email_address"
         android:inputType="textEmailAddress"
         android:padding="8dp"
         android:textColor="@color/white"
@@ -57,8 +57,8 @@
 
     <EditText
         android:id="@+id/editTextPassword"
-        android:layout_width="267dp"
-        android:layout_height="44dp"
+        android:layout_width="266dp"
+        android:layout_height="53dp"
         android:autofillHints="@string/password"
         android:background="@color/spotify_text_background"
         android:ems="10"
