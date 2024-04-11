@@ -69,66 +69,6 @@
                 android:text="@string/get_user_profile"
                 android:textColor="@color/white" />
         </LinearLayout>
-        <TextView
-            android:id="@+id/tracks_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="10sp"
-            tools:text="Line 1\nLine 2\nLine 3" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/tracks_btn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_button"
-                android:textColor="@color/white"
-                android:text="@string/get_user_tracks" />
-        </LinearLayout>
-        <TextView
-            android:id="@+id/genres_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="10sp"
-            tools:text="Line 1\nLine 2\nLine 3" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/genres_btn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_button"
-                android:textColor="@color/white"
-                android:text="@string/get_user_genres" />
-        </LinearLayout>
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content">-->
-
-<!--            <androidx.appcompat.widget.AppCompatButton-->
-<!--                android:id="@+id/logout_btn"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center_vertical"-->
-<!--                android:layout_margin="8dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:background="@drawable/rounded_button"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:text="@string/logout_user" />-->
-<!--        </LinearLayout>-->
-
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
