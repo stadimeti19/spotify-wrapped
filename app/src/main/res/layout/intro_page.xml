@@ -8,6 +8,7 @@
 
 <TextView
         android:id="@+id/welcomeText"
+        android:fontFamily="@font/spotifyfont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Welcome, Henry!"
@@ -21,6 +22,7 @@
 
     <TextView
         android:id="@+id/tapToContinueText"
+        android:fontFamily="@font/spotifyfont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"

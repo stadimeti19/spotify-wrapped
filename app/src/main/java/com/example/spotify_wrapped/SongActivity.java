@@ -60,7 +60,7 @@ public class SongActivity extends AppCompatActivity {
 
         // Set up the text views
         TextView songTitleTextView = findViewById(R.id.textView2);
-        songTitleTextView.setText("Love Story!"); // Set the song title text
+        songTitleTextView.setText("1. Love Story\n2. Rap God\n3. Despacito"); // Set the song title text
 
         // Set up gesture detector for left swipes
         gestureDetector = new GestureDetector(this, new SwipeGestureListener());

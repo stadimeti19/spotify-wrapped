@@ -54,7 +54,7 @@ public class GenreActivity extends AppCompatActivity {
 
         // Set up the text views
         TextView artistTextView = findViewById(R.id.textView2);
-        artistTextView.setText("Country"); // Set the song title text
+        artistTextView.setText("1. Country\n2. Pop\n3. Rap"); // Set the song title text
 
         View rootLayout = findViewById(android.R.id.content); // Get the root layout
         rootLayout.setOnTouchListener(new View.OnTouchListener() {
