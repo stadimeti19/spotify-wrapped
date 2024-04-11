@@ -104,6 +104,7 @@ public class WrappedActivity extends AppCompatActivity {
         Canvas canvas = new Canvas(bitmap);
         mCardView.draw(canvas);
         mCardView.setDrawingCacheEnabled(false);
+
         File directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         if (directory != null) {
             File file = new File(directory, "spotify_wrapped.png");

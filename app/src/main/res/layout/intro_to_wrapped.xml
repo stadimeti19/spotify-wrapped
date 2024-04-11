@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="900dp"
+        android:layout_height="712dp"
+        android:src="@drawable/homePageBackground"
+        tools:layout_editor_absoluteX="-29dp"
+        tools:layout_editor_absoluteY="-71dp" />
+
+    <ImageView
+        android:id="@+id/rectangle"
+        android:layout_width="900dp"
+        android:layout_height="712dp"
+        android:src="@drawable/rectangle"
+        tools:layout_editor_absoluteX="-29dp"
+        tools:layout_editor_absoluteY="437dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/spotifyfont"
+        android:text="@string/view_your"
+        android:textColor="@color/white"
+        android:textSize="27sp"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="608dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:fontFamily="@font/spotifyfont"
+        android:text="@string/spotify_wrapped"
+        android:textColor="@color/white"
+        android:textSize="27sp"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="608dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="200sp"
+        android:layout_height="45sp"
+        android:layout_marginStart="-760dp"
+        android:background="@color/spotify_green"
+        android:fontFamily="@font/spotifyfont"
+        android:text="@string/let_s_go"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/rectangle"
+        tools:layout_editor_absoluteY="672dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

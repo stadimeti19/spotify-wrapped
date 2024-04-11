@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/gradient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/gradient"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-6dp" />
+
+    <ImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="275dp"
+        android:layout_height="275dp"
+        android:src="@drawable/profile_icon"
+        tools:layout_editor_absoluteX="70dp"
+        tools:layout_editor_absoluteY="95dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/spotifyfont"
+        android:text="@string/tap_the_screen_to_continue"
+        android:textColor="@color/white"
+        android:textSize="27sp"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="400dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/spotifyfont"
+        android:text="@string/welcome_user_name"
+        android:textColor="@color/white"
+        android:textSize="27sp"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="50dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
