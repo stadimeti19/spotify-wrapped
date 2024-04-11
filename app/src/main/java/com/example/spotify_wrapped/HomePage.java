@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -24,12 +22,18 @@ import android.widget.Toast;
 import com.example.spotify_wrapped.databinding.HomePageBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-
 public class HomePage extends Fragment {
-
+    public interface OnLoginSuccessListener {
+        void onLoginSuccess();
+    }
     private HomePageBinding binding;
     private static final String TAG = "HomePage";
+    private static OnLoginSuccessListener loginSuccessListener;
+    public static HomePage newInstance(OnLoginSuccessListener listener) {
+        HomePage fragment = new HomePage();
+        HomePage.setLoginSuccessListener(listener);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(
@@ -62,7 +66,8 @@ public class HomePage extends Fragment {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 // navigate to spotify wrapped page
                                 if (user != null) {
-                                    navigateToWrappedActivity();
+                                    getTokenAndNavigate();
+                                    //navigateToStartActivity();
                                 } else {
                                     Log.w(TAG, "User is null after successful sign-in");
                                     Toast.makeText(getContext(), "Authentication failed.",
@@ -125,13 +130,16 @@ public class HomePage extends Fragment {
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
                             assert firebaseUser != null;
 
+                            // Get the UID of the user
+                            String uid = firebaseUser.getUid();
+
                             // create new user object
                             User newUser = new User(firstName, lastName, username, email);
 
                             // Add user data to cloud database
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                             db.collection("users")
-                                    .document(firstName + "_" + lastName)
+                                    .document(uid)
                                     .set(newUser.toHashMap())
                                     .addOnSuccessListener(documentReference -> {
                                         // User data added successfully
@@ -159,9 +167,23 @@ public class HomePage extends Fragment {
         cancelUserButton.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
+    public static void setLoginSuccessListener(OnLoginSuccessListener listener) {
+        HomePage.loginSuccessListener = listener;
+        Log.d(TAG, "Login success listener set");
+    }
 
+    // Get Spotify token and navigate to wrapped activity
+    private void getTokenAndNavigate() {
+        if (loginSuccessListener != null) {
+            loginSuccessListener.onLoginSuccess();
+        } else {
+            Log.e(TAG, "OnLoginSuccessListener is not set");
+            Toast.makeText(getContext(), "Failed to get Spotify token, listener is null", Toast.LENGTH_SHORT).show();
+        }
+    }
+    // Get Spotify token and navigate to wrapped activity
     // navigate to the spotify wrapped page
-    private void navigateToWrappedActivity() {
+    private void navigateToStartActivity() {
         Intent intent = new Intent(requireContext(), startActivity.class);
         startActivity(intent);
     }
