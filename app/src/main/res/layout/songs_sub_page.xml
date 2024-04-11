@@ -9,7 +9,7 @@
         android:id="@+id/album_rectangle2"
         android:layout_width="900dp"
         android:layout_height="712dp"
-        android:src="@drawable/blue_background"
+        android:src="@drawable/homePageBackground"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-20dp" />
 

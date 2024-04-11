@@ -18,4 +18,9 @@
     <string name="account_settings">Account Settings</string>
     <string name="edit">Edit</string>
     <string name="delete_account">Delete Account</string>
+    <string name="let_s_go">Let\'s Go!</string>
+    <string name="view_your">View your</string>
+    <string name="spotify_wrapped">Spotify wrapped</string>
+    <string name="tap_the_screen_to_continue">Tap the screen to continue</string>
+    <string name="welcome_user_name">Welcome user_name!</string>
 </resources>

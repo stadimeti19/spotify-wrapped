@@ -18,8 +18,8 @@
         android:layout_width="900dp"
         android:layout_height="712dp"
         android:src="@drawable/rectangle"
-        tools:layout_editor_absoluteX="-29dp"
-        tools:layout_editor_absoluteY="437dp" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="380dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         android:textColor="@color/white"
         android:textSize="27sp"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="608dp" />
+        tools:layout_editor_absoluteY="550dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
         android:textColor="@color/white"
         android:textSize="27sp"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="608dp" />
+        tools:layout_editor_absoluteY="550dp" />
 
     <Button
         android:id="@+id/button"
@@ -53,8 +53,25 @@
         android:text="@string/let_s_go"
         android:textColor="@color/white"
         android:textSize="30sp"
-        app:layout_constraintStart_toEndOf="@+id/rectangle"
-        tools:layout_editor_absoluteY="672dp" />
+        tools:layout_editor_absoluteY="610dp"
+        tools:layout_editor_absoluteX ="105dp" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Select"
+        style ="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        >
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        tools:layout_editor_absoluteX="19dp"
+        tools:layout_editor_absoluteY="669dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
