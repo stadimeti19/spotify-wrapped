@@ -53,7 +53,7 @@ public class ArtistActivity extends AppCompatActivity {
 
         // Set up the text views
         TextView artistTextView = findViewById(R.id.textView2);
-        artistTextView.setText("Drake"); // Set the song title text
+        artistTextView.setText("1. Drake\n2. Taylor Swift\n3. Eminem"); // Set the song title text
 
         View rootLayout = findViewById(android.R.id.content); // Get the root layout
         rootLayout.setOnTouchListener(new View.OnTouchListener() {
