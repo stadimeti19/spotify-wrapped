@@ -25,6 +25,23 @@
             android:name=".WrappedActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".startActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".SongActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".ArtistActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".IntroActivity"
+            android:exported="true">
+        </activity>
+        <activity android:name="com.example.spotify_wrapped.GenreActivity" />
     </application>
 
 </manifest>
