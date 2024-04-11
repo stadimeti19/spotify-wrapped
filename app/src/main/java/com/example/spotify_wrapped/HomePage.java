@@ -1,6 +1,7 @@
 package com.example.spotify_wrapped;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -161,8 +162,8 @@ public class HomePage extends Fragment {
 
     // navigate to the spotify wrapped page
     private void navigateToWrappedActivity() {
-        NavController navController = NavHostFragment.findNavController(this);
-        navController.navigate(R.id.action_HomePage_to_WrappedActivity);
+        Intent intent = new Intent(requireContext(), startActivity.class);
+        startActivity(intent);
     }
 
     @Override
