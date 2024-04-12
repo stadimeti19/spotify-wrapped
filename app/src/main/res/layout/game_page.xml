@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/blue_gradient"
+        >
+
+        <TextView
+            android:id="@+id/questionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Question: What is your favorite song?"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            />
+
+        <RadioGroup
+            android:id="@+id/answersRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/questionTextView"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <RadioButton
+                android:id="@+id/answer1RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Answer 1" />
+
+            <RadioButton
+                android:id="@+id/answer2RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Answer 2" />
+
+            <RadioButton
+                android:id="@+id/answer3RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Answer 3" />
+
+            <RadioButton
+                android:id="@+id/answer4RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Answer 4" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/answersRadioGroup"
+            android:text="Submit"
+            />
+
+        <TextView
+            android:id="@+id/questionTextView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Question: What is your favorite artist?"
+            android:layout_below="@id/submitButton"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            />
+
+        <RadioGroup
+            android:id="@+id/answersRadioGroup2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/questionTextView2"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <RadioButton
+                android:id="@+id/answer1RadioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Answer 1" />
+
+            <RadioButton
+                android:id="@+id/answer2RadioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Answer 2" />
+
+            <RadioButton
+                android:id="@+id/answer3RadioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Answer 3" />
+
+            <RadioButton
+                android:id="@+id/answer4RadioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Answer 4" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/submitButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/answersRadioGroup2"
+            android:text="Submit"
+            />
+
+        <TextView
+            android:id="@+id/questionTextView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Question: What is your favorite genre?"
+            android:layout_below="@id/submitButton2"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            />
+
+        <RadioGroup
+            android:id="@+id/answersRadioGroup3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/questionTextView3"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <RadioButton
+                android:id="@+id/answer1RadioButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Answer 1" />
+
+            <RadioButton
+                android:id="@+id/answer2RadioButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Answer 2" />
+
+            <RadioButton
+                android:id="@+id/answer3RadioButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Answer 3" />
+
+            <RadioButton
+                android:id="@+id/answer4RadioButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="Answer 4" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/submitButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/answersRadioGroup3"
+            android:text="Submit"
+            />
+
+    </RelativeLayout>
+</ScrollView>
