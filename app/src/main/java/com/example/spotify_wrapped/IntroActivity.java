@@ -7,7 +7,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class IntroActivity extends AppCompatActivity {
     private TextView welcomeText;
@@ -15,6 +23,8 @@ public class IntroActivity extends AppCompatActivity {
     private ImageView imageViewSetting;
 
     private ImageView imageViewHome;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +32,36 @@ public class IntroActivity extends AppCompatActivity {
         setContentView(R.layout.intro_page);
         int score = getIntent().getIntExtra("score", 0);
 
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
         welcomeText = findViewById(R.id.welcomeText);
         tapToContinueText = findViewById(R.id.tapToContinueText);
-        welcomeText.setText("Welcome, sashankt19, you got " + score + "!");
 
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            db.collection("users").document(uid)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String username = document.getString("username");
+                                    if (username != null) {
+                                        welcomeText.setText("Welcome, " + username + ", you got " + score + "!");
+                                    }
+                                }
+                            } else {
+                                // Handle failure
+                            }
+                        }
+                    });
+        } else {
+            // handle error
+        }
 
         // Set up touch listener on the layout to detect screen tap
         View introLayout = findViewById(R.id.introLayout);
