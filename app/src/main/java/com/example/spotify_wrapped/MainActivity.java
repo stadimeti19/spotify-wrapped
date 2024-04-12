@@ -48,7 +48,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity implements HomePage.OnLoginSuccessListener {
     private static final String TAG = "MainActivity";
-
+    public interface OnDataFetchedListener {
+        void onDataFetched();
+    }
     public static final String CLIENT_ID = "c7e24e2587ce44b89dfe5494431930e3";
     public static final String REDIRECT_URI = "spotify-wrapped://auth";
 
@@ -232,8 +234,10 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         JSONObject artist = items.getJSONObject(i);
                         artistList.add((i + 1) + ". " + artist.getString("name"));
                     }
-                    storeTopInFirebase(artistList, "Top Artists");
-                    onGetTopTracksClicked();
+                    storeTopInFirebase(artistList, "artists", () -> {
+                        onGetTopTracksClicked();
+                    });
+
                     //setTextAsync(artists.toString(), profileTextView);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -243,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             }
         });
     }
-    private void storeTopInFirebase(List<String> list, String type) {
+    private void storeTopInFirebase(List<String> list, String type, final Runnable callback) {
         // Initialize Firebase Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -259,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                 .addOnSuccessListener(documentReference -> {
                     // Successfully stored top artists in Firebase
                     Log.d(TAG, type +  "stored in Firebase: " + list);
+                    callback.run();
                 })
                 .addOnFailureListener(e -> {
                     // Failed to store top artists in Firebase
@@ -300,8 +305,9 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         JSONObject track = items.getJSONObject(i);
                         trackList.add((i + 1) + ". " + track.getString("name"));
                     }
-                    storeTopInFirebase(trackList, "Top Songs");
-                    onGetTopGenresClicked();
+                    storeTopInFirebase(trackList, "songs", () -> {
+                        onGetTopGenresClicked();
+                    });
                     //setTextAsync(tracks.toString(), tracksTextView);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -369,7 +375,9 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         topGenres.add((i + 1) + ". " + genreList.get(i).getKey());
                     }
 
-                    storeTopInFirebase(topGenres, "Top Genres:");
+                    storeTopInFirebase(topGenres, "genres", () -> {
+                        navigateToStartActivity();
+                    });
                     //setTextAsync(topGenres.toString(), genresTextView);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -429,6 +437,11 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
         if (mCall != null) {
             mCall.cancel();
         }
+    }
+
+    private void navigateToStartActivity() {
+        Intent intent = new Intent(MainActivity.this, startActivity.class);
+        startActivity(intent);
     }
 
     @Override

@@ -181,12 +181,6 @@ public class HomePage extends Fragment {
             Toast.makeText(getContext(), "Failed to get Spotify token, listener is null", Toast.LENGTH_SHORT).show();
         }
     }
-    // Get Spotify token and navigate to wrapped activity
-    // navigate to the spotify wrapped page
-    private void navigateToStartActivity() {
-        Intent intent = new Intent(requireContext(), startActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     public void onDestroyView() {
