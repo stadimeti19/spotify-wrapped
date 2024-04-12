@@ -164,7 +164,7 @@ public class HomePage extends Fragment {
                             String uid = firebaseUser.getUid();
 
                             // create new user object
-                            User newUser = new User(firstName, lastName, username, email);
+                            User newUser = new User(firstName, lastName, username);
 
                             // Add user data to cloud database
                             FirebaseFirestore db = FirebaseFirestore.getInstance();

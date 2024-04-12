@@ -10,7 +10,6 @@ public class User {
     private String firstName;
     private String lastName;
     private String username;
-    private String email;
     private HashMap<String, ArrayList<ArrayList<String>>> datesWrapped;
     private List<String> songs;
     private List<String> artists;
@@ -18,11 +17,10 @@ public class User {
     private List<String> genres;
 
     // User class constructors
-    public User(String firstName, String lastName, String username, String email) {
+    public User(String firstName, String lastName, String username) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
-        this.email = email;
         this.datesWrapped = new HashMap<>();
         this.songs = new ArrayList<>();
         this.artists = new ArrayList<>();
@@ -37,8 +35,6 @@ public class User {
     public void setLastName(String lastName) { this.lastName = lastName; }
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
-    public String getEmail() { return email; }
-    public void setEmail(String username) { this.email = username; }
     public HashMap<String, ArrayList<ArrayList<String>>> getDatesWrapped() {
         return datesWrapped;
     }
@@ -69,7 +65,6 @@ public class User {
         userMap.put("firstName", firstName);
         userMap.put("lastName", lastName);
         userMap.put("username", username);
-        userMap.put("email", email);
         userMap.put("datesWrapped", datesWrapped);
         userMap.put("songs", songs);
         userMap.put("artists", artists);
