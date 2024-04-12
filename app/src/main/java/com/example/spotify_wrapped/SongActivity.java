@@ -10,9 +10,19 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.List;
+
 public class SongActivity extends AppCompatActivity {
 
     private GestureDetector gestureDetector;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private TextView songTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +69,29 @@ public class SongActivity extends AppCompatActivity {
         setContentView(R.layout.song_page);
 
         // Set up the text views
-        TextView songTitleTextView = findViewById(R.id.textView2);
-        songTitleTextView.setText("1. Love Story\n2. Rap God\n3. Despacito"); // Set the song title text
+        songTextView = findViewById(R.id.textView2);
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            db = FirebaseFirestore.getInstance();
+            String userId = user.getUid();
+
+            db.collection("users").document(userId).get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                List<String> artists = (List<String>) document.get("songs");
+                                if (artists != null && !artists.isEmpty()) {
+                                    populateTopSongs(artists);
+                                }
+                            }
+                        } else {
+                            // Handle errors
+                        }
+                    });
+        }
         // Set up gesture detector for left swipes
         gestureDetector = new GestureDetector(this, new SwipeGestureListener());
 
@@ -80,7 +110,7 @@ public class SongActivity extends AppCompatActivity {
     private void navigateToNextActivity() {
         Intent intent = new Intent(SongActivity.this, ArtistActivity.class);
         startActivity(intent);
-        finish(); // Finish SongActivity to prevent going back to it on back press
+        finish();
     }
 
     @Override
@@ -113,6 +143,12 @@ public class SongActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             return result;
+        }
+    }
+    private void populateTopSongs(List<String> songs) {
+        if (songs.size() >= 3) {
+            String topArtists = songs.get(0) + "\n" + songs.get(1) + "\n" + songs.get(2);
+            songTextView.setText(topArtists);
         }
     }
 

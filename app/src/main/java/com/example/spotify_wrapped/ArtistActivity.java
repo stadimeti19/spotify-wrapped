@@ -61,7 +61,7 @@ public class ArtistActivity extends AppCompatActivity {
 
     private void populateTopArtists(List<String> artists) {
         if (artists.size() >= 3) {
-            String topArtists = "1. " + artists.get(0) + "\n2. " + artists.get(1) + "\n3. " + artists.get(2);
+            String topArtists = artists.get(0) + "\n" + artists.get(1) + "\n" + artists.get(2);
             artistTextView.setText(topArtists);
         }
     }

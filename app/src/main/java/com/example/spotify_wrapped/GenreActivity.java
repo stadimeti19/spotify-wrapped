@@ -9,7 +9,17 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.List;
+
 public class GenreActivity extends AppCompatActivity {
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private TextView genreTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +63,29 @@ public class GenreActivity extends AppCompatActivity {
         setContentView(R.layout.genre_page);
 
         // Set up the text views
-        TextView artistTextView = findViewById(R.id.textView2);
-        artistTextView.setText("1. Country\n2. Pop\n3. Rap"); // Set the song title text
+        genreTextView = findViewById(R.id.textView2);
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            db = FirebaseFirestore.getInstance();
+            String userId = user.getUid();
+
+            db.collection("users").document(userId).get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                List<String> artists = (List<String>) document.get("genres");
+                                if (artists != null && !artists.isEmpty()) {
+                                    populateTopGenres(artists);
+                                }
+                            }
+                        } else {
+                            // Handle errors
+                        }
+                    });
+        }
         View rootLayout = findViewById(android.R.id.content); // Get the root layout
         rootLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -65,6 +95,13 @@ public class GenreActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void populateTopGenres(List<String> genres) {
+        if (genres.size() >= 3) {
+            String topArtists = genres.get(0) + "\n" + genres.get(1) + "\n" + genres.get(2);
+            genreTextView.setText(topArtists);
+        }
     }
 
     private void navigateToNextActivity() {

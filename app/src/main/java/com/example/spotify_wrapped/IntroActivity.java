@@ -33,8 +33,7 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     private void navigateToNextActivity() {
-        Intent intent = new Intent(IntroActivity.this, SongActivity.class); // Replace NextActivity with the actual name of your next activity
+        Intent intent = new Intent(IntroActivity.this, SongActivity.class);
         startActivity(intent);
-        finish(); // Finish IntroActivity to prevent going back to it on back press
     }
 }
