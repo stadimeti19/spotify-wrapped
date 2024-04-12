@@ -93,7 +93,9 @@ public class GamePage extends AppCompatActivity {
             Button submitButton3 = findViewById(R.id.submitButton3);
             submitButton3.setOnClickListener(view -> {
                 checkAnswer(R.id.answer1RadioButton3, "topGenre");
-                startActivity(new Intent(GamePage.this, IntroActivity.class));
+                Intent intent = new Intent(GamePage.this, IntroActivity.class);
+                intent.putExtra("score", score); // Pass the score as an extra
+                startActivity(intent);
             });
         }
     }
