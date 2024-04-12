@@ -23,6 +23,9 @@ public class SongActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private TextView songTextView;
+    private ImageView imageViewSetting;
+
+    private ImageView imageViewHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +106,20 @@ public class SongActivity extends AppCompatActivity {
                 // Navigate to the next activity on screen tap
                 navigateToNextActivity();
                 return true;
+            }
+        });
+        imageViewSetting = findViewById(R.id.settings_button);
+        imageViewSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SongActivity.this, SettingsPage.class));
+            }
+        });
+        imageViewHome = findViewById(R.id.home_button);
+        imageViewSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SongActivity.this, HomePage.class));
             }
         });
     }

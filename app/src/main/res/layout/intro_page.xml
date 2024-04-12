@@ -48,17 +48,17 @@
         app:layout_constraintTop_toBottomOf="@+id/welcomeText"
         app:layout_constraintVertical_bias="0.699" />
 
-    <ImageView
-        android:id="@+id/nav_bar"
-        android:layout_width="900dp"
-        android:layout_height="690dp"
-        android:src="@drawable/home_bar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.443"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_picture"
-        app:layout_constraintVertical_bias="0.043" />
+<!--    <ImageView-->
+<!--        android:id="@+id/nav_bar"-->
+<!--        android:layout_width="900dp"-->
+<!--        android:layout_height="690dp"-->
+<!--        android:src="@drawable/home_bar"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.443"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/profile_picture"-->
+<!--        app:layout_constraintVertical_bias="0.043" />-->
 
 
     <LinearLayout

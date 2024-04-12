@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 public class startActivity extends AppCompatActivity {
     private Spinner timePeriodSpinner;
     private Button letsGoButton;
+
+    private ImageView imageViewSetting;
+
+    private ImageView imageViewHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,20 @@ public class startActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(startActivity.this, IntroActivity.class));
+            }
+        });
+        imageViewSetting = findViewById(R.id.settings_button);
+        imageViewSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(startActivity.this, SettingsPage.class));
+            }
+        });
+        imageViewHome = findViewById(R.id.home_button);
+        imageViewSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(startActivity.this, HomePage.class));
             }
         });
     }
