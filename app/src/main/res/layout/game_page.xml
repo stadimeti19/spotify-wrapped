@@ -54,29 +54,7 @@
                 android:textColor="@android:color/white"
                 android:text="Answer 1" />
 
-            <RadioButton
-                android:id="@+id/answer2RadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:buttonTint="@android:color/white"
-                android:textColor="@android:color/white"
-                android:text="Answer 2" />
-
-            <RadioButton
-                android:id="@+id/answer3RadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:buttonTint="@android:color/white"
-                android:textColor="@android:color/white"
-                android:text="Answer 3" />
-
-            <RadioButton
-                android:id="@+id/answer4RadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:buttonTint="@android:color/white"
-                android:textColor="@android:color/white"
-                android:text="Answer 4" />
+           \
         </RadioGroup>
 
         <Button

@@ -99,18 +99,63 @@ public class GamePage extends AppCompatActivity {
     }
 
     private void populateTopSongs(List<String> songs) {
-        RadioGroup answersRadioGroup = findViewById(R.id.answersRadioGroup);
-        populateRadioGroup(answersRadioGroup, songs);
+        RadioButton radioButton1 = findViewById(R.id.answer1RadioButton);
+        RadioButton radioButton2 = findViewById(R.id.answer2RadioButton);
+        RadioButton radioButton3 = findViewById(R.id.answer3RadioButton);
+        RadioButton radioButton4 = findViewById(R.id.answer4RadioButton);
+
+        if (songs.size() >= 1) {
+            radioButton1.setText(songs.get(0));
+        }
+        if (songs.size() >= 2) {
+            radioButton2.setText(songs.get(1));
+        }
+        if (songs.size() >= 3) {
+            radioButton3.setText(songs.get(2));
+        }
+        if (songs.size() >= 4) {
+            radioButton4.setText(songs.get(3));
+        }
     }
 
     private void populateTopGenres(List<String> genres) {
-        RadioGroup answersRadioGroup = findViewById(R.id.answersRadioGroup2);
-        populateRadioGroup(answersRadioGroup, genres);
+        RadioButton radioButton1 = findViewById(R.id.answer1RadioButton2);
+        RadioButton radioButton2 = findViewById(R.id.answer2RadioButton2);
+        RadioButton radioButton3 = findViewById(R.id.answer3RadioButton2);
+        RadioButton radioButton4 = findViewById(R.id.answer4RadioButton2);
+
+        if (genres.size() >= 1) {
+            radioButton1.setText(genres.get(0));
+        }
+        if (genres.size() >= 2) {
+            radioButton2.setText(genres.get(1));
+        }
+        if (genres.size() >= 3) {
+            radioButton3.setText(genres.get(2));
+        }
+        if (genres.size() >= 4) {
+            radioButton4.setText(genres.get(3));
+        }
     }
 
     private void populateTopArtists(List<String> artists) {
-        RadioGroup answersRadioGroup = findViewById(R.id.answersRadioGroup3);
-        populateRadioGroup(answersRadioGroup, artists);
+        RadioButton radioButton1 = findViewById(R.id.answer1RadioButton3);
+        RadioButton radioButton2 = findViewById(R.id.answer2RadioButton3);
+        RadioButton radioButton3 = findViewById(R.id.answer3RadioButton3);
+        RadioButton radioButton4 = findViewById(R.id.answer4RadioButton3);
+
+        if (artists.size() >= 1) {
+            radioButton1.setText(artists.get(0));
+        }
+        if (artists.size() >= 2) {
+            radioButton2.setText(artists.get(1));
+        }
+        if (artists.size() >= 3) {
+            radioButton3.setText(artists.get(2));
+        }
+        if (artists.size() >= 4) {
+            radioButton4.setText(artists.get(3));
+        }
     }
 
     private void populateRadioGroup(RadioGroup radioGroup, List<String> items) {
