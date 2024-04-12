@@ -132,7 +132,7 @@ public class SongActivity extends AppCompatActivity {
         imageViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SongActivity.this, HomePage.class));
+                startActivity(new Intent(SongActivity.this, startActivity.class));
             }
         });
         exportButton = findViewById(R.id.export_button);

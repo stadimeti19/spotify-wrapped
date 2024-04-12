@@ -81,7 +81,7 @@ public class ArtistActivity extends AppCompatActivity {
         imageViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ArtistActivity.this, HomePage.class));
+                startActivity(new Intent(ArtistActivity.this, startActivity.class));
             }
         });
         exportButton = findViewById(R.id.export_button);

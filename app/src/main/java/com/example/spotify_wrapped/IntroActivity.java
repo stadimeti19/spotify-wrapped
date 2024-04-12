@@ -84,7 +84,7 @@ public class IntroActivity extends AppCompatActivity {
         imageViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(IntroActivity.this, HomePage.class));
+                startActivity(new Intent(IntroActivity.this, startActivity.class));
             }
         });
     }

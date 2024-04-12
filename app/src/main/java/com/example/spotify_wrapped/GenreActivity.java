@@ -120,7 +120,7 @@ public class GenreActivity extends AppCompatActivity {
         imageViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(GenreActivity.this, HomePage.class));
+                startActivity(new Intent(GenreActivity.this, startActivity.class));
             }
         });
         exportButton = findViewById(R.id.export_button);
