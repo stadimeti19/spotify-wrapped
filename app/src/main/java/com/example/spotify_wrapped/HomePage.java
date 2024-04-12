@@ -20,7 +20,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.spotify_wrapped.databinding.HomePageBinding;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class HomePage extends Fragment {
     public interface OnLoginSuccessListener {
@@ -64,6 +69,15 @@ public class HomePage extends Fragment {
                                 // successful sign-in
                                 Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
+
+                                // get the current date
+                                Calendar calendar = Calendar.getInstance();
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                String currentDate = sdf.format(calendar.getTime());
+                                // update date in Firestore
+                                assert user != null;
+                                updateDatesWrapped(currentDate, user.getUid());
+
                                 // navigate to spotify wrapped page
                                 if (user != null) {
                                     getTokenAndNavigate();
@@ -89,6 +103,22 @@ public class HomePage extends Fragment {
 
         // onClickListener for the sign up button
         binding.signupButton.setOnClickListener(v -> showSignUpDialog(mAuth));
+    }
+
+    private void updateDatesWrapped(String currentDate, String uid) {
+        // Assuming you have the user's ID stored in a variable called userId
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference userRef = db.collection("users").document(uid);
+
+        // Update the document with the currentDate
+        userRef.update("datesWrapped." + currentDate, true)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "DocumentSnapshot successfully updated!");
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error updating document", e);
+                });
     }
 
     // method to show sign up dialog

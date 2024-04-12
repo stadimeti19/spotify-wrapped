@@ -24,16 +24,6 @@
         />
 
     <!-- Line 1: Username -->
-    <TextView
-        android:id="@+id/usernameLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Username:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_settings"
-        app:layout_constraintEnd_toStartOf="@+id/currentUsername"
-        app:layout_constraintBottom_toTopOf="@id/emailLabel"
-        />
 
     <TextView
         android:id="@+id/currentUsername"
@@ -41,8 +31,9 @@
         android:layout_height="wrap_content"
         android:text="Current Username"
         android:textColor="@color/white"
+        android:layout_margin="3dp"
         app:layout_constraintEnd_toStartOf="@+id/editUsernameButton"
-        app:layout_constraintStart_toEndOf="@+id/usernameLabel"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/currentEmail"
         app:layout_constraintTop_toBottomOf="@+id/account_settings"
         />
@@ -54,6 +45,7 @@
         android:text="@string/edit"
         android:background="@drawable/edit_button"
         android:textColor="@color/white"
+        android:layout_margin="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/editEmailButton"
         app:layout_constraintStart_toEndOf="@+id/currentUsername"
@@ -62,25 +54,15 @@
 
     <!-- Line 2: Email -->
     <TextView
-        android:id="@+id/emailLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/currentEmail"
-        app:layout_constraintBottom_toTopOf="@+id/passwordLabel"
-        app:layout_constraintTop_toBottomOf="@+id/usernameLabel"
-        />
-
-    <TextView
         android:id="@+id/currentEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Current Email"
         android:textColor="@color/white"
+        android:layout_margin="3dp"
         app:layout_constraintBottom_toTopOf="@+id/currentPassword"
         app:layout_constraintEnd_toStartOf="@+id/editEmailButton"
-        app:layout_constraintStart_toEndOf="@+id/emailLabel"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/currentUsername" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -90,6 +72,7 @@
         android:text="@string/edit"
         android:background="@drawable/edit_button"
         android:textColor="@color/white"
+        android:layout_margin="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/currentEmail"
         app:layout_constraintBottom_toTopOf="@+id/editPasswordButton"
@@ -98,24 +81,14 @@
 
     <!-- Line 3: Password -->
     <TextView
-        android:id="@+id/passwordLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Password:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/currentPassword"
-        app:layout_constraintBottom_toTopOf="@+id/deleteAccountButton"
-        app:layout_constraintTop_toBottomOf="@+id/emailLabel"
-        />
-
-    <TextView
         android:id="@+id/currentPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Current Password"
         android:textColor="@color/white"
+        android:layout_margin="3dp"
         app:layout_constraintEnd_toStartOf="@+id/editPasswordButton"
-        app:layout_constraintStart_toEndOf="@+id/passwordLabel"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/currentEmail"
         app:layout_constraintBottom_toTopOf="@+id/deleteAccountButton"
         />
@@ -127,6 +100,7 @@
         android:text="@string/edit"
         android:background="@drawable/edit_button"
         android:textColor="@color/white"
+        android:layout_margin="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/currentPassword"
         app:layout_constraintTop_toBottomOf="@+id/editEmailButton"

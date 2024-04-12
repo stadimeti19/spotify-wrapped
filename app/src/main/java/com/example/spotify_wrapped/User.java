@@ -11,6 +11,7 @@ public class User {
     private String lastName;
     private String username;
     private String email;
+    private HashMap<String, ArrayList<ArrayList<String>>> datesWrapped;
     private List<String> songs;
     private List<String> artists;
     private List<String> albums;
@@ -22,6 +23,7 @@ public class User {
         this.lastName = lastName;
         this.username = username;
         this.email = email;
+        this.datesWrapped = new HashMap<>();
         this.songs = new ArrayList<>();
         this.artists = new ArrayList<>();
         this.albums = new ArrayList<>();
@@ -37,6 +39,20 @@ public class User {
     public void setUsername(String username) { this.username = username; }
     public String getEmail() { return email; }
     public void setEmail(String username) { this.email = username; }
+    public HashMap<String, ArrayList<ArrayList<String>>> getDatesWrapped() {
+        return datesWrapped;
+    }
+    public void setDatesWrapped(HashMap<String, ArrayList<ArrayList<String>>> spotifyWrapped) {
+        this.datesWrapped = spotifyWrapped;
+    }
+    // Method to add Spotify Wrapped data for a specific date
+    public void addSpotifyWrapped(String date, ArrayList<ArrayList<String>> wrappedData) {
+        datesWrapped.put(date, wrappedData);
+    }
+    // Method to remove Spotify Wrapped data for a specific date
+    public void removeSpotifyWrapped(String date) {
+        datesWrapped.remove(date);
+    }
     public List<String> getSongs() { return songs; }
     public void setSongs(List<String> songs) { this.songs = songs; }
     public List<String> getArtists() { return artists; }
@@ -54,6 +70,7 @@ public class User {
         userMap.put("lastName", lastName);
         userMap.put("username", username);
         userMap.put("email", email);
+        userMap.put("datesWrapped", datesWrapped);
         userMap.put("songs", songs);
         userMap.put("artists", artists);
         userMap.put("albums", albums);
