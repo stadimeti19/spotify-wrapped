@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/album_rectangle2"
+        android:layout_width="900dp"
+        android:layout_height="712dp"
+        android:src="@drawable/homepagebackground"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-27dp" />
+
+
+    <ImageView
+        android:id="@+id/rectangle"
+        android:layout_width="379dp"
+        android:layout_height="600dp"
+        android:src="@drawable/homepage_rectangle"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="39dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="49dp"
+        tools:layout_editor_absoluteY="201dp">
+
+        <TextView
+            android:id="@+id/homePageTextView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spotifyfont"
+            android:text="View your"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            tools:layout_editor_absoluteX="141dp"
+            tools:layout_editor_absoluteY="182dp" />
+
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="16dp"
+            android:entries="@array/time_ranges"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toTopOf="@id/button"
+            app:layout_constraintEnd_toStartOf="@id/textView2"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/textView"
+            app:layout_constraintTop_toBottomOf="@id/imageView" />
+
+
+        <TextView
+            android:id="@+id/homePageTextView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spotifyfont"
+            android:text="Spotify Wrapped"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            tools:layout_editor_absoluteX="141dp"
+            tools:layout_editor_absoluteY="182dp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="50dp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="200sp"
+            android:layout_height="45sp"
+            android:background="@color/spotify_green"
+            android:fontFamily="@font/spotifyfont"
+            android:text="@string/let_s_go"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/rectangle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/background" />
+
+    </LinearLayout>
+
+
+    <!-- <Space
+         android:layout_width="25dp"
+         android:layout_height="80dp"
+         />-->
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

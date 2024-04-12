@@ -5,56 +5,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/background"-->
-<!--        android:layout_width="900dp"-->
-<!--        android:layout_height="712dp"-->
-<!--        android:src="@drawable/homePageBackground"-->
-<!--        tools:layout_editor_absoluteX="-29dp"-->
-<!--        tools:layout_editor_absoluteY="-71dp" />-->
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="900dp"
+        android:layout_height="712dp"
+        android:src="@drawable/homepagebackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="-71dp" />
 
-<!--    <ImageView-->
-<!--        android:id="@+id/rectangle"-->
-<!--        android:layout_width="900dp"-->
-<!--        android:layout_height="712dp"-->
-<!--        android:src="@drawable/rectangle"-->
-<!--        tools:layout_editor_absoluteX="0dp"-->
-<!--        tools:layout_editor_absoluteY="380dp" />-->
+    <ImageView
+        android:id="@+id/rectangle"
+        android:layout_width="900dp"
+        android:layout_height="712dp"
+        android:src="@drawable/rectangle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="380dp" />
 
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="10dp"-->
-<!--        android:fontFamily="@font/spotifyfont"-->
-<!--        android:text="@string/view_your"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textSize="27sp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        tools:layout_editor_absoluteY="550dp" />-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="58dp"
+        android:layout_marginBottom="300dp"
+        android:fontFamily="@font/spotifyfont"
+        android:text="@string/view_your"
+        android:textColor="@color/white"
+        android:textSize="27sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/background" />
 
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="200dp"-->
-<!--        android:fontFamily="@font/spotifyfont"-->
-<!--        android:text="@string/spotify_wrapped"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textSize="27sp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        tools:layout_editor_absoluteY="550dp" />-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:layout_marginBottom="135dp"
+        android:fontFamily="@font/spotifyfont"
+        android:text="@string/spotify_wrapped"
+        android:textColor="@color/white"
+        android:textSize="27sp"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/background" />
 
-<!--    <Button-->
-<!--        android:id="@+id/button"-->
-<!--        android:layout_width="200sp"-->
-<!--        android:layout_height="45sp"-->
-<!--        android:layout_marginStart="-760dp"-->
-<!--        android:background="@color/spotify_green"-->
-<!--        android:fontFamily="@font/spotifyfont"-->
-<!--        android:text="@string/let_s_go"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textSize="30sp"-->
-<!--        tools:layout_editor_absoluteY="610dp"-->
-<!--        tools:layout_editor_absoluteX ="105dp" />-->
+    <Button
+        android:id="@+id/button"
+        android:layout_width="200sp"
+        android:layout_height="45sp"
+        android:layout_marginTop="261dp"
+        android:layout_marginEnd="100dp"
+        android:background="@color/spotify_green"
+        android:fontFamily="@font/spotifyfont"
+        android:text="@string/let_s_go"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/rectangle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/background" />
 
 <!--    <com.google.android.material.textfield.TextInputLayout-->
 <!--        android:layout_width="match_parent"-->
@@ -63,6 +74,7 @@
 <!--        android:hint="Select"-->
 <!--        style ="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
 <!--        >-->
+
 
 
 <!--    </com.google.android.material.textfield.TextInputLayout>-->
