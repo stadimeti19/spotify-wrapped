@@ -20,9 +20,12 @@ public class IntroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.intro_page);
+        int score = getIntent().getIntExtra("score", 0);
 
         welcomeText = findViewById(R.id.welcomeText);
         tapToContinueText = findViewById(R.id.tapToContinueText);
+        welcomeText.setText("Welcome, Henry, you got " + score + "!");
+
 
         // Set up touch listener on the layout to detect screen tap
         View introLayout = findViewById(R.id.introLayout);
