@@ -47,7 +47,7 @@ public class startActivity extends AppCompatActivity {
         letsGoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(startActivity.this, IntroActivity.class));
+                startActivity(new Intent(startActivity.this, GamePage.class));
             }
         });
         imageViewSetting = findViewById(R.id.settings_button);
