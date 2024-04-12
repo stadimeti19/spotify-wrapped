@@ -1,19 +1,13 @@
 package com.example.spotify_wrapped;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class SettingsPage extends Fragment {
+public class SettingsPage extends AppCompatActivity {
     private EditText currentEmail;
     private EditText currentPassword;
     private Button editEmailButton;
@@ -31,15 +25,15 @@ public class SettingsPage extends Fragment {
     private FirebaseFirestore firestore;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.settings_page, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.settings_page);
 
-        currentEmail = view.findViewById(R.id.currentEmail);
-        currentPassword = view.findViewById(R.id.currentPassword);
-        editEmailButton = view.findViewById(R.id.editEmailButton);
-        editPasswordButton = view.findViewById(R.id.editPasswordButton);
-        deleteAccountButton = view.findViewById(R.id.deleteAccountButton);
+        currentEmail = findViewById(R.id.currentEmail);
+        currentPassword = findViewById(R.id.currentPassword);
+        editEmailButton = findViewById(R.id.editEmailButton);
+        editPasswordButton = findViewById(R.id.editPasswordButton);
+        deleteAccountButton = findViewById(R.id.deleteAccountButton);
 
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
@@ -59,8 +53,6 @@ public class SettingsPage extends Fragment {
         editEmailButton.setOnClickListener(v -> onEditEmailClicked());
         editPasswordButton.setOnClickListener(v -> onEditPasswordClicked());
         deleteAccountButton.setOnClickListener(v -> deleteAccount());
-
-        return view;
     }
 
     // Called when the edit email button is clicked
@@ -73,13 +65,13 @@ public class SettingsPage extends Fragment {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(getContext(), "Email updated successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SettingsPage.this, "Email updated successfully", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext(), "Failed to update email: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SettingsPage.this, "Failed to update email: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -95,13 +87,13 @@ public class SettingsPage extends Fragment {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(getContext(), "Password updated successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SettingsPage.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext(), "Failed to update password: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SettingsPage.this, "Failed to update password: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -118,24 +110,19 @@ public class SettingsPage extends Fragment {
                     firestore.collection("users").document(uid).delete()
                             .addOnSuccessListener(aVoid -> {
                                 // User deleted from Firestore successfully
-                                Toast.makeText(SettingsPage.this.getActivity(), "Account deleted successfully", Toast.LENGTH_SHORT).show();
-                                navigateToHomePage();
+                                Toast.makeText(SettingsPage.this, "Account deleted successfully", Toast.LENGTH_SHORT).show();
+                                finish(); // Finish this activity and return to the previous one
                             })
                             .addOnFailureListener(e -> {
                                 // Failed to delete user from Firestore
-                                Toast.makeText(SettingsPage.this.getActivity(), "Failed to delete account", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SettingsPage.this, "Failed to delete account", Toast.LENGTH_SHORT).show();
                             });
                 } else {
                     // Failed to delete user from Authentication
-                    Toast.makeText(SettingsPage.this.getActivity(), "Failed to delete account", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingsPage.this, "Failed to delete account", Toast.LENGTH_SHORT).show();
                 }
             });
         }
     }
 
-    // navigate to home page
-    private void navigateToHomePage() {
-        NavController navController = NavHostFragment.findNavController(this);
-        navController.navigate(R.id.action_SettingsPage_to_HomePage);
-    }
 }

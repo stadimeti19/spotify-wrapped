@@ -41,6 +41,10 @@
             android:name=".IntroActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".SettingsPage"
+            android:exported="true">
+        </activity>
         <activity android:name="com.example.spotify_wrapped.GenreActivity" />
     </application>
 
