@@ -1,10 +1,12 @@
 package com.example.spotify_wrapped;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,7 @@ public class SettingsPage extends AppCompatActivity {
     private Button editEmailButton;
     private Button editPasswordButton;
     private Button deleteAccountButton;
+    private ImageView imageViewHome;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
 
@@ -39,6 +42,14 @@ public class SettingsPage extends AppCompatActivity {
         editEmailButton = findViewById(R.id.editEmailButton);
         editPasswordButton = findViewById(R.id.editPasswordButton);
         deleteAccountButton = findViewById(R.id.deleteAccountButton);
+
+        imageViewHome = findViewById(R.id.home_button);
+        imageViewHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsPage.this, HomePage.class));
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
