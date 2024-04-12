@@ -96,26 +96,38 @@ public class GamePage extends AppCompatActivity {
             submitButton.setOnClickListener(view -> {
                 RadioGroup radioGroup = findViewById(R.id.answersRadioGroup);
                 int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
-                checkAnswer(checkedRadioButtonId, correctSong);
-                submitButton.setEnabled(false);
+                if(checkedRadioButtonId != -1) {
+                    checkAnswer(checkedRadioButtonId, correctSong);
+                    submitButton.setEnabled(false);
+                } else {
+                    Toast.makeText(this, "Please select an option", Toast.LENGTH_SHORT).show();
+                }
             });
 
             Button submitButton2 = findViewById(R.id.submitButton2);
             submitButton2.setOnClickListener(view -> {
                 RadioGroup radioGroup = findViewById(R.id.answersRadioGroup2);
                 int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
-                checkAnswer(checkedRadioButtonId, correctGenre);
-                submitButton2.setEnabled(false);
+                if(checkedRadioButtonId != -1) {
+                    checkAnswer(checkedRadioButtonId, correctGenre);
+                    submitButton2.setEnabled(false);
+                } else {
+                    Toast.makeText(this, "Please select an option", Toast.LENGTH_SHORT).show();
+                }
             });
 
             Button submitButton3 = findViewById(R.id.submitButton3);
             submitButton3.setOnClickListener(view -> {
                 RadioGroup radioGroup = findViewById(R.id.answersRadioGroup3);
                 int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
-                checkAnswer(checkedRadioButtonId, correctArtist);
-                Intent intent = new Intent(GamePage.this, IntroActivity.class);
-                intent.putExtra("score", score); // Pass the score as an extra
-                startActivity(intent);
+                if(checkedRadioButtonId != -1) {
+                    checkAnswer(checkedRadioButtonId, correctArtist);
+                    Intent intent = new Intent(GamePage.this, IntroActivity.class);
+                    intent.putExtra("score", score); // Pass the score as an extra
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "Please select an option", Toast.LENGTH_SHORT).show();
+                }
             });
         }
     }
