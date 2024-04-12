@@ -83,11 +83,13 @@ public class GamePage extends AppCompatActivity {
             Button submitButton = findViewById(R.id.submitButton);
             submitButton.setOnClickListener(view -> {
                 checkAnswer(R.id.answer1RadioButton, "topSong");
+                submitButton.setEnabled(false);
             });
 
             Button submitButton2 = findViewById(R.id.submitButton2);
             submitButton2.setOnClickListener(view -> {
                 checkAnswer(R.id.answer1RadioButton2, "topArtist");
+                submitButton.setEnabled(false);
             });
 
             Button submitButton3 = findViewById(R.id.submitButton3);
@@ -179,6 +181,8 @@ public class GamePage extends AppCompatActivity {
                 score++;
             }
             Toast.makeText(this, "Score: " + score, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Wrong answer dumbass", Toast.LENGTH_SHORT).show();
         }
     }
 }
