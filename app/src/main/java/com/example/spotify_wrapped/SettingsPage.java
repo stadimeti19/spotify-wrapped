@@ -47,7 +47,7 @@ public class SettingsPage extends AppCompatActivity {
         imageViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingsPage.this, HomePage.class));
+                startActivity(new Intent(SettingsPage.this, startActivity.class));
             }
         });
 
