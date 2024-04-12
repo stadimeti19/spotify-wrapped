@@ -62,40 +62,23 @@ public class SettingsPage extends AppCompatActivity {
 
     // Called when the edit email button is clicked
     public void onEditEmailClicked() {
-        // Update email in Firebase Authentication
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            String newEmail = currentEmail.getText().toString();
-            String password = currentPassword.getText().toString(); // Retrieve current password
-            AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), password);
-
-            // Reauthenticate user
-            currentUser.reauthenticate(credential)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            // Reauthentication successful, update email
-                            currentUser.verifyBeforeUpdateEmail(newEmail)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(SettingsPage.this, "Email updated successfully", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(SettingsPage.this, "Failed to update email: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
+        // [START update_email]
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        System.out.println(user);
+        System.out.println(user.getEmail());
+        System.out.println(currentEmail.getText().toString());
+        user.verifyBeforeUpdateEmail(currentEmail.getText().toString())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(SettingsPage.this, "User email address updated", Toast.LENGTH_SHORT).show();
                         }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Reauthentication failed
-                            Toast.makeText(SettingsPage.this, "Failed to reauthenticate: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
+                    }
+                });
+        System.out.println(user.getEmail());
+        // [END update_email
     }
 
     // Called when the edit password button is clicked
