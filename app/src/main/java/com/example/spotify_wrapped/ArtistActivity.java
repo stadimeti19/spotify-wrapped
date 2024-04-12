@@ -4,66 +4,66 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArtistActivity extends AppCompatActivity {
 
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private TextView artistTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.artist_sub_page);
-//
-//        // Set up the text views
-//        TextView topArtistsTextView = findViewById(R.id.textView1);
-//        topArtistsTextView.setText("Top Artists");
-//
-//        TextView artist1TextView = findViewById(R.id.textView2);
-//        artist1TextView.setText("1. Snoop Dogg");
-//
-//        TextView artist2TextView = findViewById(R.id.textView3);
-//        artist2TextView.setText("2. Eminem");
-//
-//        TextView artist3TextView = findViewById(R.id.textView4);
-//        artist3TextView.setText("3. Shawn Mendes");
-//
-//        TextView artist4TextView = findViewById(R.id.textView5);
-//        artist4TextView.setText("4. Drake");
-//
-//        TextView artist5TextView = findViewById(R.id.textView6);
-//        artist5TextView.setText("5. Taylor Swift");
-//
-//        // Set up the image view
-//        ImageView drakeImageView = findViewById(R.id.imageView);
-//        drakeImageView.setImageResource(R.drawable.drake);
-//
-//        View rootLayout = findViewById(android.R.id.content); // Get the root layout
-//        rootLayout.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                // Navigate to the next activity on screen tap
-//                navigateToNextActivity();
-//                return true;
-//            }
-//        });
         super.onCreate(savedInstanceState);
         setContentView(R.layout.artist_page);
 
-        // Set up the text views
-        TextView artistTextView = findViewById(R.id.textView2);
-        artistTextView.setText("1. Drake\n2. Taylor Swift\n3. Eminem"); // Set the song title text
+        artistTextView = findViewById(R.id.textView2);
 
-        View rootLayout = findViewById(android.R.id.content); // Get the root layout
-        rootLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // Navigate to the next activity on screen tap
-                navigateToNextActivity();
-                return true;
-            }
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            db = FirebaseFirestore.getInstance();
+            String userId = user.getUid();
+
+            db.collection("users").document(userId).get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                List<String> artists = (List<String>) document.get("artists");
+                                if (artists != null && !artists.isEmpty()) {
+                                    populateTopArtists(artists);
+                                }
+                            }
+                        } else {
+                            // Handle errors
+                        }
+                    });
+        }
+
+        View rootLayout = findViewById(android.R.id.content);
+        rootLayout.setOnTouchListener((v, event) -> {
+            navigateToNextActivity();
+            return true;
         });
+    }
+
+    private void populateTopArtists(List<String> artists) {
+        if (artists.size() >= 3) {
+            String topArtists = "1. " + artists.get(0) + "\n2. " + artists.get(1) + "\n3. " + artists.get(2);
+            artistTextView.setText(topArtists);
+        }
     }
 
     private void navigateToNextActivity() {
