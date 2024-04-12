@@ -58,7 +58,7 @@ public class startActivity extends AppCompatActivity {
             }
         });
         imageViewHome = findViewById(R.id.home_button);
-        imageViewSetting.setOnClickListener(new View.OnClickListener() {
+        imageViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(startActivity.this, HomePage.class));

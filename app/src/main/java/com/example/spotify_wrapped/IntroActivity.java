@@ -42,7 +42,7 @@ public class IntroActivity extends AppCompatActivity {
             }
         });
         imageViewHome = findViewById(R.id.home_button);
-        imageViewSetting.setOnClickListener(new View.OnClickListener() {
+        imageViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(IntroActivity.this, HomePage.class));
