@@ -224,11 +224,7 @@ public class SongActivity extends AppCompatActivity {
             @Override
             public void onSuccess(GenerateContentResponse result) {
                 String generatedText = result.getText();
-                // Display the generated text or use it as needed
-                // For example, you can set it to a TextView
                 runOnUiThread(() -> {
-                    // Set the generated text to a TextView
-                    // Assuming you have a TextView with id "generatedTextView"
                     TextView generatedTextView = findViewById(R.id.generatedTextView);
                     generatedTextView.setText(generatedText);
                 });

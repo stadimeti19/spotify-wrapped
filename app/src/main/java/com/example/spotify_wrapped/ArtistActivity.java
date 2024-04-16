@@ -17,6 +17,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+import com.google.ai.client.generativeai.type.Content;
+import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,6 +33,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class ArtistActivity extends AppCompatActivity {
 
@@ -57,6 +66,8 @@ public class ArtistActivity extends AppCompatActivity {
                                 List<String> artists = (List<String>) document.get("artists");
                                 if (artists != null && !artists.isEmpty()) {
                                     populateTopArtists(artists);
+                                    String prompt  = "Please generate a short sentence describing the user's music taste and personality based on this list of genres of songs: " + String.join(", ", artists);
+                                    generateGeminiText(prompt);
                                 }
                             }
                         } else {
@@ -142,6 +153,32 @@ public class ArtistActivity extends AppCompatActivity {
             String topArtists = artists.get(0) + "\n" + artists.get(1) + "\n" + artists.get(2);
             artistTextView.setText(topArtists);
         }
+    }
+    private void generateGeminiText(String inputText) {
+        GenerativeModel gm = new GenerativeModel("gemini-pro", BuildConfig.apikey);
+        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+
+        Content content = new Content.Builder()
+                .addText(inputText)
+                .build();
+
+        Executor executor = Executors.newSingleThreadExecutor();
+        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
+        Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+            @Override
+            public void onSuccess(GenerateContentResponse result) {
+                String generatedText = result.getText();
+                runOnUiThread(() -> {
+                    TextView generatedTextView = findViewById(R.id.generatedTextView);
+                    generatedTextView.setText(generatedText);
+                });
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+            }
+        }, executor);
     }
 
     private void navigateToNextActivity() {
