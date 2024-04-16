@@ -66,7 +66,7 @@ public class ArtistActivity extends AppCompatActivity {
                                 List<String> artists = (List<String>) document.get("artists");
                                 if (artists != null && !artists.isEmpty()) {
                                     populateTopArtists(artists);
-                                    String prompt  = "Please generate a short sentence describing the user's music taste and personality based on this list of genres of songs: " + String.join(", ", artists);
+                                    String prompt  = "Please generate a short sentence describing the user's music taste and personality, using second-person point of view,  based on this list of genres of songs: " + String.join(", ", artists);
                                     generateGeminiText(prompt);
                                 }
                             }
