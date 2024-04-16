@@ -31,6 +31,7 @@ public class SettingsPage extends AppCompatActivity {
     private ImageView imageViewHome;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
+    private static final String TAG = "SettingsPage";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,23 +74,22 @@ public class SettingsPage extends AppCompatActivity {
 
     // Called when the edit email button is clicked
     public void onEditEmailClicked() {
-        // [START update_email]
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        assert user != null;
-        System.out.println(user);
-        System.out.println(user.getEmail());
-        System.out.println(currentEmail.getText().toString());
-        user.verifyBeforeUpdateEmail(currentEmail.getText().toString())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(SettingsPage.this, "User email address updated", Toast.LENGTH_SHORT).show();
+        AuthCredential credential = EmailAuthProvider
+                .getCredential("user@example.com", "password1234");
+        if (user != null) {
+            user.verifyBeforeUpdateEmail(currentEmail.getText().toString())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(SettingsPage.this, "User email address updated", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SettingsPage.this, "Failed to update email: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
-        System.out.println(user.getEmail());
-        // [END update_email
+                    });
+        }
     }
 
     // Called when the edit password button is clicked
@@ -133,13 +133,31 @@ public class SettingsPage extends AppCompatActivity {
                     }
                 });
 
-        user.delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+        firestore.collection("users").document(user.getUid())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(SettingsPage.this, "User account deleted.", Toast.LENGTH_SHORT);
-                        }
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+
+                        // Once Firestore document is deleted, delete the user account
+                        user.delete()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(SettingsPage.this, "User account deleted.", Toast.LENGTH_SHORT);
+                                            // Finish this activity and return to the previous one
+                                            finish();
+                                        }
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
                     }
                 });
     }
