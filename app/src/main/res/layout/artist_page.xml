@@ -55,7 +55,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/spotifyfont"
-        android:text="LLM"
         android:textColor="@android:color/white"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
