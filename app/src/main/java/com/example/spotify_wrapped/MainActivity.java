@@ -11,6 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -66,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
     private ActivityMainBinding binding;
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
+    private ArrayList<String> artistList;
+    private ArrayList<String> trackList;
+    private ArrayList <String> topGenres;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -229,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray items = jsonObject.getJSONArray("items");
-                    ArrayList<String> artistList = new ArrayList<>();
+                    artistList = new ArrayList<>();
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject artist = items.getJSONObject(i);
                         artistList.add((i + 1) + ". " + artist.getString("name"));
@@ -300,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray items = jsonObject.getJSONArray("items");
-                    ArrayList<String> trackList = new ArrayList<>();
+                    trackList = new ArrayList<>();
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject track = items.getJSONObject(i);
                         trackList.add((i + 1) + ". " + track.getString("name"));
@@ -347,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray items = jsonObject.getJSONArray("items");
                     ArrayList<String> genres = new ArrayList<>();
-                    List <String> topGenres = new ArrayList<>();
+                    topGenres = new ArrayList<>();
                     //String genres = "";
 
 
@@ -376,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     }
 
                     storeTopInFirebase(topGenres, "genres", () -> {
-                        navigateToStartActivity();
+                        updateFirestoreWithWrap();
                     });
                     //setTextAsync(topGenres.toString(), genresTextView);
                 } catch (JSONException e) {
@@ -386,6 +392,73 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                 }
             }
         });
+    }
+
+    private void updateFirestoreWithWrap() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Get a reference to the users collection in Firestore
+        CollectionReference usersCollection = db.collection("users");
+
+        // Get current user's ID or username (you may need to adjust this based on your Firebase user management)
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DocumentReference userDocRef = usersCollection.document(userId);
+
+            userDocRef.get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    String date = documentSnapshot.getString("datesWrapped"); // Replace "date" with the actual field name where the date is stored
+                    if (date != null && !date.isEmpty()) {
+                        // Now you have the date for the current user
+                        // Proceed with creating the wrap data
+                        DocumentReference userWrapsRef = db.collection("wraps").document(userId);
+
+                        // Create a map containing the wrap data
+                        Map<String, Object> wrapData = new HashMap<>();
+                        wrapData.put("trackList", trackList);
+                        wrapData.put("artistList", artistList);
+                        wrapData.put("topGenres", topGenres);
+
+                        // Set the wrap data under the current date
+                        userWrapsRef.collection("dates").document(date)
+                                .set(wrapData)
+                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Wrap data successfully updated in Firestore"))
+                                .addOnFailureListener(e -> Log.e(TAG, "Error updating wrap data in Firestore", e));
+                        navigateToStartActivity();
+                    } else {
+                        Log.d(TAG, "Date is null or empty");
+                    }
+                } else {
+                    Log.d(TAG, "No such document");
+                }
+            }).addOnFailureListener(e -> {
+                Log.e(TAG, "Error getting user document from Firestore", e);
+            });
+        } else {
+            Log.e(TAG, "Current user is null");
+        }
+    }
+
+    private void fetchPastWrapsFromFirestore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("wraps")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String wrapDate = document.getId();
+                            List<String> topSongs = (List<String>) document.get("topSongs");
+                            List<String> topArtists = (List<String>) document.get("topArtists");
+                            List<String> topGenres = (List<String>) document.get("topGenres");
+                            // Process retrieved wrap data
+                        }
+                    } else {
+                        Log.e(TAG, "Error getting past wraps from Firestore", task.getException());
+                    }
+                });
     }
 
     /**

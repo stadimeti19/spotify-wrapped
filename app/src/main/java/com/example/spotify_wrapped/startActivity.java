@@ -15,6 +15,8 @@ public class startActivity extends AppCompatActivity {
     private Spinner timePeriodSpinner;
     private Button letsGoButton;
 
+    private Button viewPastWrapsButton;
+
     private ImageView imageViewSetting;
 
     private ImageView imageViewHome;
@@ -44,6 +46,7 @@ public class startActivity extends AppCompatActivity {
         });
 
         letsGoButton = findViewById(R.id.button);
+        viewPastWrapsButton = findViewById(R.id.buttonViewPastWraps);
         letsGoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +65,12 @@ public class startActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(startActivity.this, HomePage.class));
+            }
+        });
+        viewPastWrapsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(startActivity.this, PastWrapsActivity.class));
             }
         });
     }

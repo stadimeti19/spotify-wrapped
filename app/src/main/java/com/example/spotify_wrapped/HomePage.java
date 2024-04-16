@@ -25,7 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class HomePage extends Fragment {
     public interface OnLoginSuccessListener {
@@ -106,13 +108,15 @@ public class HomePage extends Fragment {
     }
 
     private void updateDatesWrapped(String currentDate, String uid) {
-        // Assuming you have the user's ID stored in a variable called userId
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference userRef = db.collection("users").document(uid);
 
-        // Update the document with the currentDate
-        userRef.update("datesWrapped." + currentDate, true)
+        // Create a map to represent the update
+        //String updateData = new String();
+        //updateData.put(currentDate, true); // Assuming true means the date is wrapped
+
+        // Update the document with the map
+        userRef.update("datesWrapped", currentDate)
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "DocumentSnapshot successfully updated!");
                 })

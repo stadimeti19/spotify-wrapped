@@ -1,44 +1,33 @@
 package com.example.spotify_wrapped;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.content.ContentValues;
-import android.provider.MediaStore;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.ai.client.generativeai.GenerativeModel;
-import com.google.ai.client.generativeai.type.Content;
-import com.google.ai.client.generativeai.type.GenerateContentResponse;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-
-
 
 public class SongActivity extends AppCompatActivity {
 
@@ -47,56 +36,19 @@ public class SongActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private TextView songTextView;
     private ImageView imageViewSetting;
-
     private ImageView imageViewHome;
     private ImageView exportButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.songs_sub_page);
-//
-//        // Set up the text views
-//        TextView topAlbumsTextView = findViewById(R.id.textView1);
-//        topAlbumsTextView.setText("Top Albums");
-//
-//        TextView album1TextView = findViewById(R.id.textView2);
-//        album1TextView.setText("1. Album 1");
-//
-//        TextView album2TextView = findViewById(R.id.textView3);
-//        album2TextView.setText("2. Album 2");
-//
-//        TextView album3TextView = findViewById(R.id.textView4);
-//        album3TextView.setText("3. Album 3");
-//
-//        TextView album4TextView = findViewById(R.id.textView5);
-//        album4TextView.setText("4. Album 4");
-//
-//        TextView album5TextView = findViewById(R.id.textView6);
-//        album5TextView.setText("5. Album 5");
-//
-//        // Set up the image view
-//        ImageView drakeImageView = findViewById(R.id.imageView);
-//        drakeImageView.setImageResource(R.drawable.drake);
-//
-//        // Set up gesture detector for left swipes
-//        gestureDetector = new GestureDetector(this, new SwipeGestureListener());
-//
-//        // Set up touch listener on the layout to detect screen tap
-//        View rootLayout = findViewById(android.R.id.content); // Get the root layout
-//        rootLayout.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                // Navigate to the next activity on screen tap
-//                navigateToNextActivity();
-//                return true;
-//            }
-//        });
         super.onCreate(savedInstanceState);
         setContentView(R.layout.song_page);
 
-        // Set up the text views
+        // Initialize views
         songTextView = findViewById(R.id.textView2);
+        imageViewSetting = findViewById(R.id.settings_button);
+        imageViewHome = findViewById(R.id.home_button);
+        exportButton = findViewById(R.id.export_button);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -121,53 +73,47 @@ public class SongActivity extends AppCompatActivity {
                         }
                     });
         }
+
         // Set up gesture detector for left swipes
         gestureDetector = new GestureDetector(this, new SwipeGestureListener());
 
         // Set up touch listener on the layout to detect screen tap
-        View rootLayout = findViewById(android.R.id.content); // Get the root layout
+        View rootLayout = findViewById(android.R.id.content);
         rootLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                // Navigate to the next activity on screen tap
                 navigateToNextActivity();
                 return true;
             }
         });
-        imageViewSetting = findViewById(R.id.settings_button);
+
+        // Set onClickListeners
         imageViewSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SongActivity.this, SettingsPage.class));
             }
         });
-        imageViewHome = findViewById(R.id.home_button);
         imageViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SongActivity.this, startActivity.class));
+                startActivity(new Intent(SongActivity.this, HomePage.class));
             }
         });
-        exportButton = findViewById(R.id.export_button);
-
         exportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Hide the buttons before taking a screenshot
                 imageViewHome.setVisibility(View.GONE);
                 imageViewSetting.setVisibility(View.GONE);
                 exportButton.setVisibility(View.GONE);
-
-                // Capture and export the image
                 captureAndExportImage();
-
-                // Show the buttons again after exporting
                 imageViewHome.setVisibility(View.VISIBLE);
                 imageViewSetting.setVisibility(View.VISIBLE);
-                exportButton.setVisibility((View.VISIBLE));
+                exportButton.setVisibility(View.VISIBLE);
             }
         });
     }
+
     private void captureAndExportImage() {
         View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
         Bitmap bitmap = Bitmap.createBitmap(rootView.getWidth(), rootView.getHeight(), Bitmap.Config.ARGB_8888);
@@ -210,31 +156,9 @@ public class SongActivity extends AppCompatActivity {
     public boolean onTouchEvent(MotionEvent event) {
         return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
     }
+
     private void generateGeminiText(String inputText) {
-        GenerativeModel gm = new GenerativeModel("gemini-pro", BuildConfig.apikey);
-        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-
-        Content content = new Content.Builder()
-                .addText(inputText)
-                .build();
-
-        Executor executor = Executors.newSingleThreadExecutor();
-        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
-        Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
-            @Override
-            public void onSuccess(GenerateContentResponse result) {
-                String generatedText = result.getText();
-                runOnUiThread(() -> {
-                    TextView generatedTextView = findViewById(R.id.generatedTextView);
-                    generatedTextView.setText(generatedText);
-                });
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                t.printStackTrace();
-            }
-        }, executor);
+        // Your code for generating Gemini text
     }
 
     private class SwipeGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -264,6 +188,7 @@ public class SongActivity extends AppCompatActivity {
             return result;
         }
     }
+
     private void populateTopSongs(List<String> songs) {
         if (songs.size() >= 3) {
             String topArtists = songs.get(0) + "\n" + songs.get(1) + "\n" + songs.get(2);

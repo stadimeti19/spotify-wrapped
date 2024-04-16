@@ -49,6 +49,7 @@
             android:name=".GamePage"
             android:exported="true">
         </activity>
+        <activity android:name=".PastWrapsActivity" />
         <activity android:name="com.example.spotify_wrapped.GenreActivity" />
     </application>
 
