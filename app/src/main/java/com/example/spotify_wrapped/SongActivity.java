@@ -18,16 +18,27 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.type.Content;
+import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+
+
 
 public class SongActivity extends AppCompatActivity {
 
@@ -101,6 +112,8 @@ public class SongActivity extends AppCompatActivity {
                                 List<String> artists = (List<String>) document.get("songs");
                                 if (artists != null && !artists.isEmpty()) {
                                     populateTopSongs(artists);
+                                    String prompt  = "Please generate a short sentence describing user's music tatste and personality based on this list of songs: " + String.join(", ", artists);
+                                    generateGeminiText(prompt);
                                 }
                             }
                         } else {
@@ -196,6 +209,36 @@ public class SongActivity extends AppCompatActivity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
+    }
+    private void generateGeminiText(String inputText) {
+        GenerativeModel gm = new GenerativeModel("gemini-pro", BuildConfig.apikey);
+        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+
+        Content content = new Content.Builder()
+                .addText(inputText)
+                .build();
+
+        Executor executor = Executors.newSingleThreadExecutor();
+        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
+        Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+            @Override
+            public void onSuccess(GenerateContentResponse result) {
+                String generatedText = result.getText();
+                // Display the generated text or use it as needed
+                // For example, you can set it to a TextView
+                runOnUiThread(() -> {
+                    // Set the generated text to a TextView
+                    // Assuming you have a TextView with id "generatedTextView"
+                    TextView generatedTextView = findViewById(R.id.generatedTextView);
+                    generatedTextView.setText(generatedText);
+                });
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+            }
+        }, executor);
     }
 
     private class SwipeGestureListener extends GestureDetector.SimpleOnGestureListener {
