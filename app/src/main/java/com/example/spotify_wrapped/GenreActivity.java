@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,11 +44,13 @@ public class GenreActivity extends AppCompatActivity {
     private ImageView imageViewHome;
 
     private ImageView exportButton;
+    private static final String TAG = "GenreActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.genre_page);
+        WrapData wrapData = getIntent().getParcelableExtra(WrapData.WRAP_DATA_KEY);
 
         // Set up the text views
         genreTextView = findViewById(R.id.textView2);
@@ -57,23 +60,30 @@ public class GenreActivity extends AppCompatActivity {
         if (user != null) {
             db = FirebaseFirestore.getInstance();
             String userId = user.getUid();
-
-            db.collection("users").document(userId).get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document != null && document.exists()) {
-                                List<String> artists = (List<String>) document.get("genres");
-                                if (artists != null && !artists.isEmpty()) {
-                                    populateTopGenres(artists);
-                                    String prompt  = "Please generate a short sentence describing the user's music taste personality, using second-person point of view, based on this list of genres of songs: " + String.join(", ", artists);
-                                    generateGeminiText(prompt);
+            if (wrapData != null) {
+                Log.e(TAG, "successfully got wrapData genres");
+                populateTopGenres(wrapData.getTopGenres());
+                String prompt  = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of songs: " + String.join(", ", wrapData.getTopGenres());
+                generateGeminiText(prompt);
+            }
+            else {
+                db.collection("users").document(userId).get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document != null && document.exists()) {
+                                    List<String> genres = (List<String>) document.get("genres");
+                                    if (genres != null && !genres.isEmpty()) {
+                                        populateTopGenres(genres);
+                                        String prompt  = "Please generate a short sentence describing the user's music taste personality, using second-person point of view, based on this list of genres of songs: " + String.join(", ", genres);
+                                        generateGeminiText(prompt);
+                                    }
                                 }
+                            } else {
+                                // Handle errors
                             }
-                        } else {
-                            // Handle errors
-                        }
-                    });
+                        });
+            }
         }
         View rootLayout = findViewById(android.R.id.content); // Get the root layout
         rootLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -152,8 +162,8 @@ public class GenreActivity extends AppCompatActivity {
 
     private void populateTopGenres(List<String> genres) {
         if (genres.size() >= 3) {
-            String topArtists = genres.get(0) + "\n" + genres.get(1) + "\n" + genres.get(2);
-            genreTextView.setText(topArtists);
+            String topGenres = genres.get(0) + "\n" + genres.get(1) + "\n" + genres.get(2);
+            genreTextView.setText(topGenres);
         }
     }
 //    public boolean onTouchEvent(MotionEvent event) {

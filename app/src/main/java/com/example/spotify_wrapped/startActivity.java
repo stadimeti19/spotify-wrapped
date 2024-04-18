@@ -20,6 +20,7 @@ public class startActivity extends AppCompatActivity {
     private ImageView imageViewSetting;
 
     private ImageView imageViewHome;
+    private String accessToken = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class startActivity extends AppCompatActivity {
         letsGoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(startActivity.this, GamePage.class));
+                navigateToGameClass();
             }
         });
         imageViewSetting = findViewById(R.id.settings_button);
@@ -73,5 +74,11 @@ public class startActivity extends AppCompatActivity {
                 startActivity(new Intent(startActivity.this, PastWrapsActivity.class));
             }
         });
+        accessToken = getIntent().getStringExtra("accessToken");
+    }
+    private void navigateToGameClass() {
+        Intent intent = new Intent(startActivity.this, GamePage.class);
+        intent.putExtra("accessToken", accessToken);
+        startActivity(intent);
     }
 }

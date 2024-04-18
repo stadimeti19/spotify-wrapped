@@ -30,6 +30,7 @@ public class GamePage extends AppCompatActivity {
     private String correctSong;
     private String correctArtist;
     private String correctGenre;
+    private String accessToken;
 
 
     @Override
@@ -43,6 +44,7 @@ public class GamePage extends AppCompatActivity {
         if (user != null) {
             db = FirebaseFirestore.getInstance();
             String userId = user.getUid();
+            accessToken = getIntent().getStringExtra("accessToken");
 
             db.collection("users").document(userId).get()
                     .addOnCompleteListener(task -> {
@@ -124,6 +126,7 @@ public class GamePage extends AppCompatActivity {
                     checkAnswer(checkedRadioButtonId, correctArtist);
                     Intent intent = new Intent(GamePage.this, IntroActivity.class);
                     intent.putExtra("score", score); // Pass the score as an extra
+                    intent.putExtra("accessToken", accessToken);
                     startActivity(intent);
                 } else {
                     Toast.makeText(this, "Please select an option", Toast.LENGTH_SHORT).show();

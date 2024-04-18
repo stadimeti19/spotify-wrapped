@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,10 +47,13 @@ public class SongActivity extends AppCompatActivity {
     private ImageView imageViewHome;
     private ImageView exportButton;
 
+    private static final String TAG = "SongActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.song_page);
+        WrapData wrapData = getIntent().getParcelableExtra(WrapData.WRAP_DATA_KEY);
 
         // Initialize views
         songTextView = findViewById(R.id.textView2);
@@ -63,22 +67,30 @@ public class SongActivity extends AppCompatActivity {
             db = FirebaseFirestore.getInstance();
             String userId = user.getUid();
 
-            db.collection("users").document(userId).get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document != null && document.exists()) {
-                                List<String> artists = (List<String>) document.get("songs");
-                                if (artists != null && !artists.isEmpty()) {
-                                    populateTopSongs(artists);
-                                    String prompt  = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of songs: " + String.join(", ", artists);
-                                    generateGeminiText(prompt);
+            // Now you can use the wrapData object as needed
+            if (wrapData != null) {
+                Log.e(TAG, "successfully got wrapData songs");
+                populateTopSongs(wrapData.getTrackList());
+                String prompt  = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of songs: " + String.join(", ", wrapData.getTrackList());
+                generateGeminiText(prompt);
+            } else {
+                db.collection("users").document(userId).get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document != null && document.exists()) {
+                                    List<String> artists = (List<String>) document.get("songs");
+                                    if (artists != null && !artists.isEmpty()) {
+                                        populateTopSongs(artists);
+                                        String prompt  = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of songs: " + String.join(", ", artists);
+                                        generateGeminiText(prompt);
+                                    }
                                 }
+                            } else {
+                                // Handle errors
                             }
-                        } else {
-                            // Handle errors
-                        }
-                    });
+                        });
+            }
         }
 
         // Set up gesture detector for left swipes
@@ -89,7 +101,7 @@ public class SongActivity extends AppCompatActivity {
         rootLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                navigateToNextActivity();
+                navigateToNextActivity(wrapData);
                 return true;
             }
         });
@@ -153,8 +165,9 @@ public class SongActivity extends AppCompatActivity {
         }
     }
 
-    private void navigateToNextActivity() {
+    private void navigateToNextActivity(WrapData wrapData) {
         Intent intent = new Intent(SongActivity.this, ArtistActivity.class);
+        intent.putExtra(WrapData.WRAP_DATA_KEY, wrapData);
         startActivity(intent);
         finish();
     }

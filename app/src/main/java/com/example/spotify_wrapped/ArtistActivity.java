@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -45,10 +46,13 @@ public class ArtistActivity extends AppCompatActivity {
     private ImageView imageViewHome;
 
     private ImageView exportButton;
+
+    private static final String TAG = "ArtistActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.artist_page);
+        WrapData wrapData = getIntent().getParcelableExtra(WrapData.WRAP_DATA_KEY);
 
         artistTextView = findViewById(R.id.textView2);
 
@@ -58,29 +62,39 @@ public class ArtistActivity extends AppCompatActivity {
             db = FirebaseFirestore.getInstance();
             String userId = user.getUid();
 
-            db.collection("users").document(userId).get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document != null && document.exists()) {
-                                List<String> artists = (List<String>) document.get("artists");
-                                if (artists != null && !artists.isEmpty()) {
-                                    populateTopArtists(artists);
-                                    String prompt  = "Please generate a short sentence describing the user's music taste and personality, using second-person point of view,  based on this list of genres of songs: " + String.join(", ", artists);
-                                    generateGeminiText(prompt);
+            if (wrapData != null) {
+                Log.e(TAG, "successfully got wrapData artists");
+                populateTopArtists(wrapData.getArtistList());
+                String prompt  = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of songs: " + String.join(", ", wrapData.getArtistList());
+                generateGeminiText(prompt);
+            }
+
+            else {
+                db.collection("users").document(userId).get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document != null && document.exists()) {
+                                    List<String> artists = (List<String>) document.get("artists");
+                                    if (artists != null && !artists.isEmpty()) {
+                                        populateTopArtists(artists);
+                                        String prompt = "Please generate a short sentence describing the user's music taste and personality, using second-person point of view,  based on this list of genres of songs: " + String.join(", ", artists);
+                                        generateGeminiText(prompt);
+                                    }
                                 }
+                            } else {
+                                // Handle errors
                             }
-                        } else {
-                            // Handle errors
-                        }
-                    });
+                        });
+            }
         }
 
         View rootLayout = findViewById(android.R.id.content);
         rootLayout.setOnTouchListener((v, event) -> {
-            navigateToNextActivity();
+            navigateToNextActivity(wrapData);
             return true;
         });
+
         imageViewSetting = findViewById(R.id.settings_button);
         imageViewSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,8 +195,9 @@ public class ArtistActivity extends AppCompatActivity {
         }, executor);
     }
 
-    private void navigateToNextActivity() {
+    private void navigateToNextActivity(WrapData wrapData) {
         Intent intent = new Intent(ArtistActivity.this, GenreActivity.class);
+        intent.putExtra(WrapData.WRAP_DATA_KEY, wrapData);
         startActivity(intent);
         finish(); // Finish ArtistActivity to prevent going back to it on back press
     }

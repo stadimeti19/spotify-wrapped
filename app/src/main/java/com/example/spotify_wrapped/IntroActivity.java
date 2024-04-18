@@ -10,12 +10,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.squareup.picasso.Picasso;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class IntroActivity extends AppCompatActivity {
     private TextView welcomeText;
@@ -25,12 +36,14 @@ public class IntroActivity extends AppCompatActivity {
     private ImageView imageViewHome;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
+    private String accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.intro_page);
         int score = getIntent().getIntExtra("score", 0);
+        accessToken = getIntent().getStringExtra("accessToken");
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -59,6 +72,11 @@ public class IntroActivity extends AppCompatActivity {
                             }
                         }
                     });
+            // Fetch profile picture from Spotify API
+//            String profilePictureUrl = getProfilePictureUrl(accessToken);
+//            if (profilePictureUrl != null) {
+//                Picasso.get().load(profilePictureUrl).into(imageViewHome);
+//            }
         } else {
             // handle error
         }
@@ -88,9 +106,33 @@ public class IntroActivity extends AppCompatActivity {
             }
         });
     }
-
     private void navigateToNextActivity() {
         Intent intent = new Intent(IntroActivity.this, SongActivity.class);
         startActivity(intent);
     }
+
+//    private String getProfilePictureUrl(String accessToken) {
+//        OkHttpClient client = new OkHttpClient();
+//
+//        Request request = new Request.Builder()
+//                .url("https://api.spotify.com/v1/me")
+//                .addHeader("Authorization", "Bearer " + accessToken)
+//                .build();
+//
+//        try {
+//            Response response = client.newCall(request).execute();
+//            if (response.isSuccessful()) {
+//                String responseBody = response.body().string();
+//                JSONObject jsonObject = new JSONObject(responseBody);
+//                // Extract profile picture URL from the JSON response
+//                return jsonObject.getJSONArray("images").getJSONObject(0).getString("url");
+//            } else {
+//                // Handle unsuccessful response
+//            }
+//        } catch (IOException | JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
 }

@@ -442,25 +442,6 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
         }
     }
 
-    private void fetchPastWrapsFromFirestore() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("wraps")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            String wrapDate = document.getId();
-                            List<String> topSongs = (List<String>) document.get("topSongs");
-                            List<String> topArtists = (List<String>) document.get("topArtists");
-                            List<String> topGenres = (List<String>) document.get("topGenres");
-                            // Process retrieved wrap data
-                        }
-                    } else {
-                        Log.e(TAG, "Error getting past wraps from Firestore", task.getException());
-                    }
-                });
-    }
-
     /**
      * Creates a UI thread to update a TextView in the background
      * Reduces UI latency and makes the system perform more consistently
@@ -514,6 +495,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
 
     private void navigateToStartActivity() {
         Intent intent = new Intent(MainActivity.this, startActivity.class);
+        intent.putExtra("accessToken", mAccessToken);
         startActivity(intent);
     }
 
