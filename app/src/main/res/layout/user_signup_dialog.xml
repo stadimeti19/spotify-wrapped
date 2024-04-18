@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="10dp"
-    android:background="@color/colorPrimaryDark">
+    android:background="@drawable/white_border">
 
     <TextView
         android:id="@+id/addNewUser"
@@ -34,7 +34,8 @@
         android:hint="@string/first_name"
         android:inputType="text"
         android:textColor="@color/white"
-        android:textColorHint="@color/colorPrimary"
+        android:backgroundTint="@color/white"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addNewUser" />
@@ -48,7 +49,8 @@
         android:hint="@string/last_name"
         android:inputType="text"
         android:textColor="@color/white"
-        android:textColorHint="@color/colorPrimary"
+        android:backgroundTint="@color/white"
+        android:textColorHint="@color/white"
         android:autofillHints="Last Name"
         app:layout_constraintTop_toBottomOf="@id/editFirstName"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +65,8 @@
         android:hint="@string/username"
         android:inputType="text"
         android:textColor="@color/white"
-        android:textColorHint="@color/colorPrimary"
+        android:backgroundTint="@color/white"
+        android:textColorHint="@color/white"
         android:autofillHints="Username"
         app:layout_constraintTop_toBottomOf="@id/editLastName"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +82,8 @@
         android:hint="@string/email_address"
         android:inputType="textEmailAddress"
         android:textColor="@color/white"
-        android:textColorHint="@color/colorPrimary"
+        android:backgroundTint="@color/white"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editUsername" />
@@ -93,7 +97,8 @@
         android:hint="@string/password"
         android:inputType="textPassword"
         android:textColor="@color/white"
-        android:textColorHint="@color/colorPrimary"
+        android:backgroundTint="@color/white"
+        android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editEmailAddress"
