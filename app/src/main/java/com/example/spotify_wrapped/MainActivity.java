@@ -313,24 +313,38 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
 
     private void storeArtistImageInFirebase(String artistImageURL) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference userRef = db.collection("users").document("w1zsEydCg8UyvBFJTTXeMCBKWDp1");
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        // Set the artistImage field in the user document
-        userRef.update("artistImageUrl", artistImageURL)
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "Artist image URL added to Firebase successfully"))
-                .addOnFailureListener(e -> Log.e(TAG, "Error adding artist image URL to Firebase", e));
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DocumentReference userDocRef = db.collection("users").document(userId);
+
+            userDocRef.update("artistImageUrl", artistImageURL)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Artist image URL stored in Firebase"))
+                    .addOnFailureListener(e -> Log.e(TAG, "Error storing artist image URL in Firebase", e));
+        } else {
+            Log.e(TAG, "Current user is null");
+        }
     }
 
 
 
     private void storeGenreImageInFirebase(String genreImageURL) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference userRef = db.collection("users").document("w1zsEydCg8UyvBFJTTXeMCBKWDp1");
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        // Set the genreImage field in the user document
-        userRef.update("genreImageUrl", genreImageURL)
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "Genre image URL added to Firebase successfully"))
-                .addOnFailureListener(e -> Log.e(TAG, "Error adding genre image URL to Firebase", e));
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DocumentReference userDocRef = db.collection("users").document(userId);
+
+            userDocRef.update("genreImageUrl", genreImageURL)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Genre image URL stored in Firebase"))
+                    .addOnFailureListener(e -> Log.e(TAG, "Error storing genre image URL in Firebase", e));
+        } else {
+            Log.e(TAG, "Current user is null");
+        }
     }
 
     private void storeProfileImageInFirebase(String imageUrl) {
@@ -431,11 +445,19 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
 
     private void storeSongImageInFirebase(String songImageURL) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference userRef = db.collection("users").document("w1zsEydCg8UyvBFJTTXeMCBKWDp1");
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        userRef.update("songImageUrl", songImageURL)
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "Song image URL added to Firebase successfully"))
-                .addOnFailureListener(e -> Log.e(TAG, "Error adding song image URL to Firebase", e));
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DocumentReference userDocRef = db.collection("users").document(userId);
+
+            userDocRef.update("songImageUrl", songImageURL)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Song image URL stored in Firebase"))
+                    .addOnFailureListener(e -> Log.e(TAG, "Error storing song image URL in Firebase", e));
+        } else {
+            Log.e(TAG, "Current user is null");
+        }
     }
 
 
