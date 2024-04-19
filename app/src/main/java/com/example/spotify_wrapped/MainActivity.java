@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                                 for (int i = 0; i < items.length(); i++) {
                                     JSONObject artist = items.getJSONObject(i);
                                     artistList.add((i + 1) + ". " + artist.getString("name"));
-                                    if (i == 0) {
+                                    if (i == 1) {
                                         JSONArray imagesArray = artist.getJSONArray("images");
                                         if (imagesArray.length() > 0) {
                                             JSONObject firstImage = imagesArray.getJSONObject(0);
