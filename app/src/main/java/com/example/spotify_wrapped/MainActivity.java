@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
@@ -267,11 +268,22 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             try {
-                                JSONArray items = new JSONObject(response.body().string()).getJSONArray("items");
+                                String jsonResponse = response.body().string();
+                                Log.d("JSON Response", jsonResponse);
+                                JSONArray items = new JSONObject(jsonResponse).getJSONArray("items");
                                 artistList = new ArrayList<>();
                                 for (int i = 0; i < items.length(); i++) {
                                     JSONObject artist = items.getJSONObject(i);
                                     artistList.add((i + 1) + ". " + artist.getString("name"));
+                                    if (i == 0) {
+                                        JSONArray imagesArray = artist.getJSONArray("images");
+                                        if (imagesArray.length() > 0) {
+                                            JSONObject firstImage = imagesArray.getJSONObject(0);
+                                            String imageUrl = firstImage.getString("url");
+                                            Log.d("Image URL", imageUrl);
+                                            storeArtistImageInFirebase(imageUrl);
+                                        }
+                                    }
                                 }
                                 storeTopInFirebase(artistList, "artists", () -> {
                                     onGetTopTracksClicked();
@@ -298,6 +310,29 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             }
         });
     }
+
+    private void storeArtistImageInFirebase(String artistImageURL) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference userRef = db.collection("users").document("w1zsEydCg8UyvBFJTTXeMCBKWDp1");
+
+        // Set the artistImage field in the user document
+        userRef.update("artistImage", artistImageURL)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Artist image URL added to Firebase successfully"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error adding artist image URL to Firebase", e));
+    }
+
+
+
+    private void storeGenreImageInFirebase(String genreImageURL) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference userRef = db.collection("users").document("w1zsEydCg8UyvBFJTTXeMCBKWDp1");
+
+        // Set the genreImage field in the user document
+        userRef.update("genreImage", genreImageURL)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Genre image URL added to Firebase successfully"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error adding genre image URL to Firebase", e));
+    }
+
     private void storeProfileImageInFirebase(String imageUrl) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -366,12 +401,20 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    final JSONObject jsonObject = new JSONObject(response.body().string());
-                    JSONArray items = jsonObject.getJSONArray("items");
+                    String jsonResponse = response.body().string();
+                    Log.d("Track Response", jsonResponse);
+                    JSONArray items = new JSONObject(jsonResponse).getJSONArray("items");
                     trackList = new ArrayList<>();
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject track = items.getJSONObject(i);
                         trackList.add((i + 1) + ". " + track.getString("name"));
+                        JSONArray imagesArray = track.getJSONObject("album").getJSONArray("images");
+                        if (i == 0 && imagesArray.length() > 0) {
+                            JSONObject firstImage = imagesArray.getJSONObject(0);
+                            String imageUrl = firstImage.getString("url");
+                            Log.d("Image URL", imageUrl);
+                            storeSongImageInFirebase(imageUrl);
+                        }
                     }
                     storeTopInFirebase(trackList, "songs", () -> {
                         onGetTopGenresClicked();
@@ -385,6 +428,16 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             }
         });
     }
+
+    private void storeSongImageInFirebase(String songImageURL) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference userRef = db.collection("users").document("w1zsEydCg8UyvBFJTTXeMCBKWDp1");
+
+        userRef.update("songImageUrl", songImageURL)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Song image URL added to Firebase successfully"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error adding song image URL to Firebase", e));
+    }
+
 
     public void onGetTopGenresClicked() {
         if (mAccessToken == null) {
@@ -412,8 +465,9 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    final JSONObject jsonObject = new JSONObject(response.body().string());
-                    JSONArray items = jsonObject.getJSONArray("items");
+                    String jsonResponse = response.body().string();
+                    Log.d("Genre Response", jsonResponse);
+                    JSONArray items = new JSONObject(jsonResponse).getJSONArray("items");
                     ArrayList<String> genres = new ArrayList<>();
                     topGenres = new ArrayList<>();
                     //String genres = "";
@@ -422,6 +476,16 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     int count = 0;
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject artist = items.getJSONObject(i);
+//                        if (i == 0) {
+//                            JSONArray imagesArray = artist.getJSONArray("images");
+//                            if (imagesArray.length() > 0) {
+//                                JSONObject firstImage = imagesArray.getJSONObject(0);
+//                                String imageUrl = firstImage.getString("url");
+//                                Log.d("Image URL", imageUrl);
+//                                storeGenreImageInFirebase(imageUrl);
+//                            }
+//                        }
+
                         JSONArray genresArray = artist.getJSONArray("genres");
 
                         for (int j = 0; j < genresArray.length(); j++) {
