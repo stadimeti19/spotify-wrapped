@@ -316,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
         DocumentReference userRef = db.collection("users").document("w1zsEydCg8UyvBFJTTXeMCBKWDp1");
 
         // Set the artistImage field in the user document
-        userRef.update("artistImage", artistImageURL)
+        userRef.update("artistImageUrl", artistImageURL)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Artist image URL added to Firebase successfully"))
                 .addOnFailureListener(e -> Log.e(TAG, "Error adding artist image URL to Firebase", e));
     }
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
         DocumentReference userRef = db.collection("users").document("w1zsEydCg8UyvBFJTTXeMCBKWDp1");
 
         // Set the genreImage field in the user document
-        userRef.update("genreImage", genreImageURL)
+        userRef.update("genreImageUrl", genreImageURL)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Genre image URL added to Firebase successfully"))
                 .addOnFailureListener(e -> Log.e(TAG, "Error adding genre image URL to Firebase", e));
     }
@@ -409,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         JSONObject track = items.getJSONObject(i);
                         trackList.add((i + 1) + ". " + track.getString("name"));
                         JSONArray imagesArray = track.getJSONObject("album").getJSONArray("images");
-                        if (i == 0 && imagesArray.length() > 0) {
+                        if (i == 0) {
                             JSONObject firstImage = imagesArray.getJSONObject(0);
                             String imageUrl = firstImage.getString("url");
                             Log.d("Image URL", imageUrl);
@@ -476,15 +476,13 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     int count = 0;
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject artist = items.getJSONObject(i);
-//                        if (i == 0) {
-//                            JSONArray imagesArray = artist.getJSONArray("images");
-//                            if (imagesArray.length() > 0) {
-//                                JSONObject firstImage = imagesArray.getJSONObject(0);
-//                                String imageUrl = firstImage.getString("url");
-//                                Log.d("Image URL", imageUrl);
-//                                storeGenreImageInFirebase(imageUrl);
-//                            }
-//                        }
+                        JSONArray imagesArray = artist.getJSONArray("images");
+                        if (i==0) {
+                            JSONObject firstImage = imagesArray.getJSONObject(0);
+                            String imageUrl = firstImage.getString("url");
+                            Log.d("Genre Image URL", imageUrl);
+                            storeGenreImageInFirebase(imageUrl);
+                        }
 
                         JSONArray genresArray = artist.getJSONArray("genres");
 
