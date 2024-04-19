@@ -17,13 +17,13 @@
 
     <TextView
         android:id="@+id/textView"
-        android:fontFamily="@font/spotifyfont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="36dp"
         android:layout_marginBottom="16dp"
+        android:fontFamily="@font/spotifyfont"
         android:text="Your favorite song is..."
         android:textColor="@android:color/white"
         android:textSize="24sp"

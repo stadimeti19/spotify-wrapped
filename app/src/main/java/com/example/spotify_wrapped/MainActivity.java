@@ -212,20 +212,20 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
         }
 
         // Create a request to get the user profile
-        final Request request = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/artists?limit=10")
+        final Request profileRequest = new Request.Builder()
+                .url("https://api.spotify.com/v1/me")
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
         cancelCall();
-        mCall = mOkHttpClient.newCall(request);
+        mCall = mOkHttpClient.newCall(profileRequest);
 
         mCall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("HTTP", "Failed to fetch data: " + e);
+                Log.d("HTTP", "Failed to fetch profile data: " + e);
                 runOnUiThread(() -> {
-                    Toast.makeText(MainActivity.this, "Failed to fetch data artists, watch Logcat for more details",
+                    Toast.makeText(MainActivity.this, "Failed to fetch profile data, watch Logcat for more details",
                             Toast.LENGTH_SHORT).show();
                 });
             }
@@ -233,26 +233,88 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    final JSONObject jsonObject = new JSONObject(response.body().string());
-                    JSONArray items = jsonObject.getJSONArray("items");
-                    artistList = new ArrayList<>();
-                    for (int i = 0; i < items.length(); i++) {
-                        JSONObject artist = items.getJSONObject(i);
-                        artistList.add((i + 1) + ". " + artist.getString("name"));
+                    String responseBodyString = response.body().string();
+                    Log.d("Spotify Profile JSON", responseBodyString);
+
+                    final JSONObject jsonObject = new JSONObject(responseBodyString);
+                    JSONArray images = jsonObject.getJSONArray("images");
+                    String profileImageUrl = "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg";
+                    if (images.length() > 0) {
+                        JSONObject imageObj = images.getJSONObject(0);
+                        profileImageUrl = imageObj.getString("url");
                     }
-                    storeTopInFirebase(artistList, "artists", () -> {
-                        onGetTopTracksClicked();
+
+                    storeProfileImageInFirebase(profileImageUrl);
+
+                    final Request artistsRequest = new Request.Builder()
+                            .url("https://api.spotify.com/v1/me/top/artists?limit=10")
+                            .addHeader("Authorization", "Bearer " + mAccessToken)
+                            .build();
+
+                    cancelCall(); // Cancel previous call if any
+                    mCall = mOkHttpClient.newCall(artistsRequest);
+
+                    mCall.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.d("HTTP", "Failed to fetch top artists: " + e);
+                            runOnUiThread(() -> {
+                                Toast.makeText(MainActivity.this, "Failed to fetch top artists, watch Logcat for more details",
+                                        Toast.LENGTH_SHORT).show();
+                            });
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            try {
+                                JSONArray items = new JSONObject(response.body().string()).getJSONArray("items");
+                                artistList = new ArrayList<>();
+                                for (int i = 0; i < items.length(); i++) {
+                                    JSONObject artist = items.getJSONObject(i);
+                                    artistList.add((i + 1) + ". " + artist.getString("name"));
+                                }
+                                storeTopInFirebase(artistList, "artists", () -> {
+                                    onGetTopTracksClicked();
+                                });
+
+                                //setTextAsync(artists.toString(), profileTextView);
+                            } catch (JSONException e) {
+                                Log.d("JSON", "Failed to parse top artists data: " + e);
+                                runOnUiThread(() -> {
+                                    Toast.makeText(MainActivity.this, "Failed to parse top artists data, watch Logcat for more details",
+                                            Toast.LENGTH_SHORT).show();
+                                });
+                            }
+                        }
                     });
 
-                    //setTextAsync(artists.toString(), profileTextView);
                 } catch (JSONException e) {
-                    Log.d("JSON", "Failed to parse data: " + e);
-                    Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
-                            Toast.LENGTH_SHORT).show();
+                    Log.d("JSON", "Failed to parse profile data: " + e);
+                    runOnUiThread(() -> {
+                        Toast.makeText(MainActivity.this, "Failed to parse profile data, watch Logcat for more details",
+                                Toast.LENGTH_SHORT).show();
+                    });
                 }
             }
         });
     }
+    private void storeProfileImageInFirebase(String imageUrl) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DocumentReference userDocRef = db.collection("users").document(userId);
+
+            userDocRef.update("profileImageUrl", imageUrl)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Profile image URL stored in Firebase"))
+                    .addOnFailureListener(e -> Log.e(TAG, "Error storing profile image URL in Firebase", e));
+        } else {
+            Log.e(TAG, "Current user is null");
+        }
+    }
+
     private void storeTopInFirebase(List<String> list, String type, final Runnable callback) {
         // Initialize Firebase Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();

@@ -1,6 +1,10 @@
 package com.example.spotify_wrapped;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +38,7 @@ public class IntroActivity extends AppCompatActivity {
     private ImageView imageViewSetting;
 
     private ImageView imageViewHome;
+    private ImageView profileImage;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String accessToken;
@@ -50,6 +55,7 @@ public class IntroActivity extends AppCompatActivity {
 
         welcomeText = findViewById(R.id.welcomeText);
         tapToContinueText = findViewById(R.id.tapToContinueText);
+        profileImage = findViewById(R.id.profile_picture);
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
@@ -65,6 +71,10 @@ public class IntroActivity extends AppCompatActivity {
                                     String username = document.getString("username");
                                     if (username != null) {
                                         welcomeText.setText("Welcome, " + username + ", you got " + score + "!");
+                                    }
+                                    String profileImageUrl = document.getString("profileImageUrl");
+                                    if (profileImageUrl != null) {
+                                        Picasso.get().load(profileImageUrl).into(profileImage);
                                     }
                                 }
                             } else {
@@ -106,6 +116,7 @@ public class IntroActivity extends AppCompatActivity {
             }
         });
     }
+
     private void navigateToNextActivity() {
         Intent intent = new Intent(IntroActivity.this, SongActivity.class);
         startActivity(intent);
