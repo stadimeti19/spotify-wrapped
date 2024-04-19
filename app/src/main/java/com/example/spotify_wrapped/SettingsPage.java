@@ -133,7 +133,7 @@ public class SettingsPage extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(SettingsPage.this, "User account deleted.", Toast.LENGTH_SHORT).show();
                                             // Finish this activity and return to the previous one
-                                            startActivity(new Intent(SettingsPage.this, HomePage.class));
+                                            startActivity(new Intent(SettingsPage.this, MainActivity.class));
                                         }
                                     }
                                 });

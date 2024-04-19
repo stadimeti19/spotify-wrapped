@@ -25,10 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-
 public class HomePage extends Fragment {
     public interface OnLoginSuccessListener {
         void onLoginSuccess();
