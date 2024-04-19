@@ -28,14 +28,14 @@
         android:id="@+id/currentEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Current Email"
-        android:textColor="@color/white"
         android:layout_margin="3dp"
+        android:hint="Current Email"
+        android:minHeight="48dp"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/currentPassword"
         app:layout_constraintEnd_toStartOf="@+id/editEmailButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_settings"
-    />
+        app:layout_constraintTop_toBottomOf="@+id/account_settings" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/editEmailButton"
@@ -56,15 +56,15 @@
         android:id="@+id/currentPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Current Password"
-        android:textColor="@color/white"
         android:layout_margin="3dp"
+        android:hint="Current Password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/deleteAccountButton"
         app:layout_constraintEnd_toStartOf="@+id/editPasswordButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentEmail"
-        app:layout_constraintBottom_toTopOf="@+id/deleteAccountButton"
-        android:inputType="textPassword"
-    />
+        app:layout_constraintTop_toBottomOf="@+id/currentEmail" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/editPasswordButton"
@@ -99,6 +99,7 @@
         android:layout_height="60dp"
         android:clickable="true"
         android:focusable="true"
+        android:contentDescription="Home"
         android:src="@drawable/home_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

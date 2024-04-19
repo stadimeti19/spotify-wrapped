@@ -53,14 +53,13 @@ public class SettingsPage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
-        // Set current user info
+        // current user info
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            // Get email and password from Firebase Authentication
-            String currEmail = currentUser.getEmail();
-            String currPassword = "********"; // Firebase doesn't expose passwords for security reasons
+            String currEmail = "Change Email Below:\n" + currentUser.getEmail();
+            String currPassword = "**************";
 
-            // Populate EditText fields with current email and password
+            // populate the EditText fields with current email and password
             currentEmail.setText(currEmail);
             currentPassword.setText(currPassword);
         }
@@ -70,13 +69,16 @@ public class SettingsPage extends AppCompatActivity {
         deleteAccountButton.setOnClickListener(v -> deleteAccount());
     }
 
-    // Called when the edit email button is clicked
+    // When EditEmail Button is clicked
     private void onEditEmailClicked() {
         FirebaseUser user = mAuth.getCurrentUser();
 
+        String emailText = currentEmail.getText().toString();
+        String email = emailText.replace("Change Email Below:\n", "");
+
         // update email
         assert user != null;
-        user.verifyBeforeUpdateEmail(currentEmail.getText().toString())
+        user.verifyBeforeUpdateEmail(email)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -91,7 +93,7 @@ public class SettingsPage extends AppCompatActivity {
                 });
     }
 
-    // Called when the edit password button is clicked
+    // When EditPassword Button is clicked
     public void onEditPasswordClicked() {
         // Update password in Firebase Authentication
         FirebaseUser currentUser = mAuth.getCurrentUser();
