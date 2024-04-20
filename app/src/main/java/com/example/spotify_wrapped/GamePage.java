@@ -51,7 +51,15 @@ public class GamePage extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document != null && document.exists()) {
-                                List<String> songs = (List<String>) document.get("songs");
+                                String timerange = startActivity.getSelectedTimePeriod();
+                                List<String> songs;
+                                if(timerange.equals("Monthly")) {
+                                    songs = (List<String>) document.get("short_term_songs");
+                                } else if (timerange.equals("Biyearly")) {
+                                    songs = (List<String>) document.get("songs");
+                                } else {
+                                    songs = (List<String>) document.get("long_term_songs");
+                                }
                                 if (songs != null && !songs.isEmpty()) {
                                     List<String> formattedSongs = removePrefix(songs);
                                     populateTopSongs(formattedSongs);
@@ -67,7 +75,15 @@ public class GamePage extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document != null && document.exists()) {
-                                List<String> genres = (List<String>) document.get("genres");
+                                String timerange = startActivity.getSelectedTimePeriod();
+                                List<String> genres;
+                                if(timerange.equals("Monthly")) {
+                                    genres = (List<String>) document.get("short_term_genres");
+                                } else if (timerange.equals("Biyearly")) {
+                                    genres = (List<String>) document.get("genres");
+                                } else {
+                                    genres = (List<String>) document.get("long_term_genres");
+                                }
                                 if (genres != null && !genres.isEmpty()) {
                                     List<String> formattedGenres = removePrefix(genres);
                                     populateTopGenres(formattedGenres);
@@ -83,7 +99,15 @@ public class GamePage extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document != null && document.exists()) {
-                                List<String> artists = (List<String>) document.get("artists");
+                                String timerange = startActivity.getSelectedTimePeriod();
+                                List<String> artists;
+                                if(timerange.equals("Monthly")) {
+                                    artists = (List<String>) document.get("short_term_artists");
+                                } else if (timerange.equals("Biyearly")) {
+                                    artists = (List<String>) document.get("artists");
+                                } else {
+                                    artists = (List<String>) document.get("long_term_artists");
+                                }
                                 if (artists != null && !artists.isEmpty()) {
                                     List<String> formattedArtists = removePrefix(artists);
                                     populateTopArtists(formattedArtists);

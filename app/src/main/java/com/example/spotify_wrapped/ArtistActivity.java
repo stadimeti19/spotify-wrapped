@@ -75,7 +75,15 @@ public class ArtistActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
-                                    List<String> artists = (List<String>) document.get("artists");
+                                    String timerange = startActivity.getSelectedTimePeriod();
+                                    List<String> artists;
+                                    if(timerange.equals("Monthly")) {
+                                        artists = (List<String>) document.get("short_term_artists");
+                                    } else if (timerange.equals("Biyearly")) {
+                                        artists = (List<String>) document.get("artists");
+                                    } else {
+                                        artists = (List<String>) document.get("long_term_artists");
+                                    }
                                     if (artists != null && !artists.isEmpty()) {
                                         populateTopArtists(artists);
                                         String prompt = "Please generate a short sentence describing the user's music taste and personality, using second-person point of view,  based on this list of genres of songs: " + String.join(", ", artists);

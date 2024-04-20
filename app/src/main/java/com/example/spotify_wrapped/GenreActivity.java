@@ -72,7 +72,15 @@ public class GenreActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
-                                    List<String> genres = (List<String>) document.get("genres");
+                                    String timerange = startActivity.getSelectedTimePeriod();
+                                    List<String> genres;
+                                    if(timerange.equals("Monthly")) {
+                                        genres = (List<String>) document.get("short_term_genres");
+                                    } else if (timerange.equals("Biyearly")) {
+                                        genres = (List<String>) document.get("genres");
+                                    } else {
+                                        genres = (List<String>) document.get("long_term_genres");
+                                    }
                                     if (genres != null && !genres.isEmpty()) {
                                         populateTopGenres(genres);
                                         String prompt  = "Please generate a short sentence describing the user's music taste personality, using second-person point of view, based on this list of genres of songs: " + String.join(", ", genres);

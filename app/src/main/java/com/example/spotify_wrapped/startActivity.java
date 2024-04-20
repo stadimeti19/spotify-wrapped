@@ -21,6 +21,7 @@ public class startActivity extends AppCompatActivity {
 
     private ImageView imageViewHome;
     private String accessToken = "";
+    private static String selectedTimePeriod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class startActivity extends AppCompatActivity {
         timePeriodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedTimePeriod = parent.getItemAtPosition(position).toString();
+                selectedTimePeriod = parent.getItemAtPosition(position).toString();
                 // Handle the selected time period, e.g., store it in a variable or perform an action
             }
 
@@ -80,5 +81,13 @@ public class startActivity extends AppCompatActivity {
         Intent intent = new Intent(startActivity.this, GamePage.class);
         intent.putExtra("accessToken", accessToken);
         startActivity(intent);
+    }
+
+    public static String getSelectedTimePeriod() {
+        return selectedTimePeriod;
+    }
+
+    public void setSelectedTimePeriod(String selectedTimePeriod) {
+        this.selectedTimePeriod = selectedTimePeriod;
     }
 }

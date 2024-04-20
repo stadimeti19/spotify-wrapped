@@ -79,10 +79,19 @@ public class SongActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
-                                    List<String> artists = (List<String>) document.get("songs");
-                                    if (artists != null && !artists.isEmpty()) {
-                                        populateTopSongs(artists);
-                                        String prompt  = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of songs: " + String.join(", ", artists);
+                                    String timerange = startActivity.getSelectedTimePeriod();
+                                    List<String> songs;
+                                    if(timerange.equals("Monthly")) {
+                                        songs = (List<String>) document.get("short_term_songs");
+                                    } else if (timerange.equals("Biyearly")) {
+                                        songs = (List<String>) document.get("songs");
+                                    } else {
+                                        songs = (List<String>) document.get("long_term_songs");
+                                    }
+
+                                    if (songs != null && !songs.isEmpty()) {
+                                        populateTopSongs(songs);
+                                        String prompt  = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of songs: " + String.join(", ", songs);
                                         generateGeminiText(prompt);
                                     }
                                 }
