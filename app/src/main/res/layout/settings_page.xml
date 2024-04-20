@@ -12,7 +12,7 @@
         android:id="@+id/account_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@font/spotifyfont"
         android:text="@string/account_settings"
         android:textColor="@android:color/white"
         android:textSize="40sp"
@@ -44,6 +44,8 @@
         android:text="@string/edit"
         android:background="@drawable/edit_button"
         android:textColor="@color/white"
+        android:fontFamily="@font/spotifyfont"
+
         android:layout_margin="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/currentEmail"
@@ -75,6 +77,8 @@
         android:textColor="@color/white"
         android:layout_margin="3dp"
         app:layout_constraintEnd_toEndOf="parent"
+        android:fontFamily="@font/spotifyfont"
+
         app:layout_constraintStart_toEndOf="@+id/currentPassword"
         app:layout_constraintTop_toBottomOf="@+id/editEmailButton"
         app:layout_constraintBottom_toTopOf="@+id/deleteAccountButton"
@@ -83,11 +87,13 @@
     <!-- Delete Account Button -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/deleteAccountButton"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/spotifyfont"
+        android:textColor="@color/white"
         android:text="@string/delete_account"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/delete_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/currentPassword"

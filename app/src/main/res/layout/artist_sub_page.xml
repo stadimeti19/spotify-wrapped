@@ -9,17 +9,20 @@
         android:id="@+id/album_rectangle2"
         android:layout_width="900dp"
         android:layout_height="712dp"
+        android:layout_marginBottom="38dp"
         android:src="@drawable/pink_patterns"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-20dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/rectangle"
         android:layout_width="379dp"
         android:layout_height="600dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="-25dp"
         android:src="@drawable/display_rectangle"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="25dp" />
+        app:layout_constraintStart_toStartOf="@+id/album_rectangle2"
+        app:layout_constraintTop_toTopOf="@+id/album_rectangle2" />
 
 
     <LinearLayout
@@ -28,7 +31,11 @@
         android:orientation="horizontal"
         android:gravity="center"
         tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="220dp">
+        tools:layout_editor_absoluteY="220dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="195dp"
+        app:layout_constraintStart_toStartOf="@+id/rectangle"
+        app:layout_constraintTop_toTopOf="@+id/rectangle">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -114,6 +121,55 @@
             android:layout_height="150dp"
 
             tools:srcCompat="@drawable/drake" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/desciptionRectangle"
+        android:layout_width="379dp"
+        android:layout_height="600dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="230dp"
+        android:src="@drawable/llmrectangle"
+        app:layout_constraintStart_toStartOf="@+id/album_rectangle2"
+        app:layout_constraintTop_toTopOf="@+id/album_rectangle2" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="430dp">
+
+        <TextView
+            android:id="@+id/top5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spotifyfont"
+            android:text="@string/what_your_top_5_says_about_you"
+            android:textColor="@color/white"
+            android:textSize="23sp"
+            tools:layout_editor_absoluteX="40dp"
+            tools:layout_editor_absoluteY="400dp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="10dp" />
+
+        <TextView
+            android:id="@+id/llmTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spotifyfont"
+            android:text="Lorem Ipsum"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            tools:layout_editor_absoluteX="40dp"
+            tools:layout_editor_absoluteY="400dp" />
+
+
+
+
     </LinearLayout>
 
 

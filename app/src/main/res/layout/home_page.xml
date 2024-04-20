@@ -3,6 +3,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
@@ -25,7 +26,7 @@
         android:id="@+id/home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@font/spotifyfont"
         android:text="@string/spotify"
         android:textColor="@android:color/white"
         android:textSize="55sp"
@@ -37,6 +38,32 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.2" />
 
+    <TextView
+        android:id="@+id/wrapped"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/spotifyfont"
+        android:text="@string/wrapped"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/editTextEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.544"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.653" />
+
+    <ImageView
+        android:id="@+id/white_block"
+        android:layout_width="7.9dp"
+        android:layout_height="21dp"
+        android:layout_marginLeft="161.9047dp"
+        android:layout_marginTop="120dp"
+        android:src="@drawable/white_block"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/editTextEmail"
         android:layout_width="270dp"
@@ -44,7 +71,7 @@
         android:autofillHints="@string/email_address"
         android:background="@color/spotify_text_background"
         android:ems="10"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@font/spotifyfont"
         android:hint="@string/email_address"
         android:inputType="textEmailAddress"
         android:padding="8dp"
@@ -63,6 +90,7 @@
         android:background="@color/spotify_text_background"
         android:ems="10"
         android:hint="@string/password"
+        android:fontFamily="@font/spotifyfont"
         android:inputType="textPassword"
         android:padding="8dp"
         android:textColor="@color/white"
@@ -78,6 +106,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_button"
         android:text="@string/login"
+        android:fontFamily="@font/spotifyfont"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/signup_button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,6 +120,7 @@
         android:background="@drawable/rounded_button"
         android:text="@string/signup"
         android:textColor="@color/white"
+        android:fontFamily="@font/spotifyfont"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
