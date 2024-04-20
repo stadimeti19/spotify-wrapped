@@ -661,7 +661,6 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     storeTopInFirebase(trackList, "songs", () -> {
                         onGetTopShortSongsClicked();
                     });
-                    //setTextAsync(tracks.toString(), tracksTextView);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",

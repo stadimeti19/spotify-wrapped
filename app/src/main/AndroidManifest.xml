@@ -51,6 +51,7 @@
         </activity>
         <activity android:name=".PastWrapsActivity" />
         <activity android:name="com.example.spotify_wrapped.GenreActivity" />
+        <activity android:name="com.example.spotify_wrapped.SongSubActivity" />
     </application>
 
 </manifest>
