@@ -41,8 +41,7 @@
         android:textSize="35sp"
         android:text="Your LLM Description:"
         />
-
-    <TextView
+<TextView
         android:id="@+id/generatedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
