@@ -62,7 +62,7 @@ public class SongSubActivity extends AppCompatActivity {
         imageViewSong = findViewById(R.id.imageView);
         exportButton = findViewById(R.id.export_button);
         populateTopSongs(artists);
-        String prompt = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of songs: " + String.join(", ", artists);
+        String prompt = "Please generate one sentence describing user's music taste and personality, and how someone who listens to this kind of music tends to act/think/dress, using second-person point of view,  based on this list of songs: " + String.join(", ", artists);
         generateGeminiText(prompt);
 
         gestureDetector = new GestureDetector(this, new SongSubActivity.SwipeGestureListener());
@@ -86,13 +86,18 @@ public class SongSubActivity extends AppCompatActivity {
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
                             String songImageURL;
-                            if(timeRange.equals("Monthly")) {
-                                songImageURL = documentSnapshot.getString("short_song_image");
-                            } else if (timeRange.equals("Biyearly")) {
-                                songImageURL = documentSnapshot.getString("songImageUrl");
+                            if(timeRange != null) {
+                                if(timeRange.equals("Monthly")) {
+                                    songImageURL = documentSnapshot.getString("short_song_image");
+                                } else if (timeRange.equals("Biyearly")) {
+                                    songImageURL = documentSnapshot.getString("songImageUrl");
+                                } else {
+                                    songImageURL = documentSnapshot.getString("long_song_image");
+                                }
                             } else {
-                                songImageURL = documentSnapshot.getString("long_song_image");
+                                songImageURL = documentSnapshot.getString("songImageUrl");
                             }
+
                             Log.e("SongSubActivity", "Successfully fetched song" + songImageURL);
                             // Load the image into the imageView using Picasso
                             Picasso.get().load(songImageURL).into(imageViewSong); // Change to the appropriate imageView
