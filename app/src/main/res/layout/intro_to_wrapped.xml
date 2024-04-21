@@ -22,11 +22,13 @@
         android:src="@drawable/blue_background"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-100dp" />
+
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Past Spotify Wraps"
+        android:fontFamily="@font/spotifyfont"
         android:textSize="36sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"

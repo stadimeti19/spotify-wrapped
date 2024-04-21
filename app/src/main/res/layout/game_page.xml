@@ -16,6 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Your Music Taste Quiz!"
+            android:fontFamily="@font/spotifyfont"
             android:textSize="24sp"
             android:padding="12dp"
             android:layout_marginTop="6dp"
@@ -30,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Question: What is your favorite song?"
+            android:fontFamily="@font/spotifyfont"
             android:textSize="20sp"
             android:padding="16dp"
             android:textColor="@android:color/white"
@@ -44,7 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/questionTextView"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_marginLeft="26sp"
+            android:padding="0sp">
 
             <RadioButton
                 android:id="@+id/answer1RadioButton"
@@ -52,6 +55,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@android:color/white"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/spotifyfont"
+                android:textSize="18sp"
                 android:text="Answer 1" />
 
             <RadioButton
@@ -60,6 +65,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@android:color/white"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/spotifyfont"
+                android:textSize="18sp"
                 android:text="Answer 2" />
 
             <RadioButton
@@ -68,6 +75,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@android:color/white"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/spotifyfont"
+                android:textSize="18sp"
                 android:text="Answer 3" />
 
             <RadioButton
@@ -76,6 +85,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@android:color/white"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/spotifyfont"
+                android:textSize="18sp"
                 android:text="Answer 4" />
         </RadioGroup>
 
@@ -86,6 +97,8 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/game_button"
             android:layout_below="@id/answersRadioGroup"
+            android:fontFamily="@font/spotifyfont"
+            android:textSize="14sp"
             android:text="Submit"
             />
 
@@ -97,7 +110,9 @@
             android:layout_below="@id/submitButton"
             android:textSize="20sp"
             android:padding="16dp"
+            android:layout_marginLeft="14sp"
             android:textColor="@android:color/white"
+            android:fontFamily="@font/spotifyfont"
             android:textStyle="bold"
             />
 
@@ -107,6 +122,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/questionTextView2"
             android:orientation="vertical"
+            android:fontFamily="@font/spotifyfont"
+            android:textSize="14sp"
+            android:layout_marginLeft="8sp"
             android:padding="16dp">
 
             <RadioButton
@@ -115,6 +133,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@android:color/white"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/spotifyfont"
+                android:textSize="18sp"
                 android:text="Answer 1" />
 
             <RadioButton
@@ -123,6 +143,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@android:color/white"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/spotifyfont"
+                android:textSize="18sp"
                 android:text="Answer 2" />
 
             <RadioButton
@@ -131,6 +153,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@android:color/white"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/spotifyfont"
+                android:textSize="18sp"
                 android:text="Answer 3" />
 
             <RadioButton
@@ -139,6 +163,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@android:color/white"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/spotifyfont"
+                android:textSize="18sp"
                 android:text="Answer 4" />
         </RadioGroup>
 
@@ -159,7 +185,9 @@
             android:text="Question: Who is your favorite artist?"
             android:layout_below="@id/submitButton2"
             android:textSize="20sp"
+            android:layout_marginLeft="12sp"
             android:padding="16dp"
+            android:fontFamily="@font/spotifyfont"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             />
@@ -170,6 +198,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/questionTextView3"
             android:orientation="vertical"
+            android:layout_marginLeft="4sp"
             android:padding="16dp">
 
             <RadioButton
@@ -178,6 +207,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@android:color/white"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/spotifyfont"
+                android:textSize="18sp"
                 android:text="Answer 1" />
 
             <RadioButton
@@ -186,6 +217,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@android:color/white"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/spotifyfont"
+                android:textSize="18sp"
                 android:text="Answer 2" />
 
             <RadioButton
@@ -194,6 +227,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@android:color/white"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/spotifyfont"
+                android:textSize="18sp"
                 android:text="Answer 3" />
 
             <RadioButton
@@ -202,6 +237,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@android:color/white"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/spotifyfont"
+                android:textSize="18sp"
                 android:text="Answer 4" />
         </RadioGroup>
 
@@ -212,6 +249,8 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/game_button"
             android:layout_below="@id/answersRadioGroup3"
+            android:fontFamily="@font/spotifyfont"
+            android:textSize="14sp"
             android:text="Submit"
             />
 
