@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/blue_gradient">
@@ -35,7 +34,8 @@
         app:layout_constraintBottom_toTopOf="@id/generatedTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rectangle"
+        app:layout_constraintTop_toBottomOf="@+id/album_rectangle2"
+        android:layout_marginTop="-100dp"
         android:fontFamily="@font/spotifyfont"
         android:textColor="@android:color/white"
         android:textSize="35sp"
@@ -45,13 +45,11 @@
         android:id="@+id/generatedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-150dp"
-        android:layout_marginBottom="16dp"
         android:fontFamily="@font/spotifyfont"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/navigateButtons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,14 +91,6 @@
 
     </LinearLayout>
 
-    <Space
-        android:id="@+id/space"
-        android:layout_width="25dp"
-        android:layout_height="80dp"
-        app:layout_constraintTop_toBottomOf="@id/rectangle"
-        app:layout_constraintStart_toEndOf="@id/rectangle"
-        app:layout_constraintBottom_toBottomOf="@id/rectangle"/>
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="120dp"
@@ -114,6 +104,7 @@
 
 
     <LinearLayout
+        android:id="@id/navigateButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="670dp"

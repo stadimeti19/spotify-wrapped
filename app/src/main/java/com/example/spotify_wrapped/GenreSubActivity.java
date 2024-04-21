@@ -36,11 +36,11 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class ArtistSubActivity extends AppCompatActivity {
-    private TextView artistTextView;
+public class GenreSubActivity extends AppCompatActivity {
+    private TextView genreTextView;
     private ImageView imageViewSetting;
     private ImageView imageViewHome;
-    private ImageView imageViewArtist;
+    private ImageView imageViewGenre;
     private ImageView exportButton;
     private GestureDetector gestureDetector;
 
@@ -49,27 +49,27 @@ public class ArtistSubActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         WrapData wrapData = getIntent().getParcelableExtra(WrapData.WRAP_DATA_KEY);
-        List<String> artists = getIntent().getStringArrayListExtra("artistsList");
+        List<String> genres = getIntent().getStringArrayListExtra("genresList");
         String timeRange = getIntent().getStringExtra("timeRange");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.artist_sub_page);
+        setContentView(R.layout.genre_sub_page);
 
-        artistTextView = findViewById(R.id.textView2);
+        genreTextView = findViewById(R.id.textView2);
         imageViewSetting = findViewById(R.id.settings_button);
         imageViewHome = findViewById(R.id.home_button);
-        imageViewArtist = findViewById(R.id.imageView);
+        imageViewGenre = findViewById(R.id.imageView);
         exportButton = findViewById(R.id.export_button);
-        populateTopArtists(artists);
-        String prompt = "Please generate one sentence (25 word limit) describing user's music taste and personality, and how someone who listens to this kind of music tends to act/think/dress, using second-person point of view,  based on this list of artists: " + String.join(", ", artists);
+        populateTopGenres(genres);
+        String prompt = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of genres: " + String.join(", ", genres);
         generateGeminiText(prompt);
 
-        gestureDetector = new GestureDetector(this, new ArtistSubActivity.SwipeGestureListener());
+        gestureDetector = new GestureDetector(this, new GenreSubActivity.SwipeGestureListener());
 
         View rootLayout = findViewById(android.R.id.content);
         rootLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                navigateToNextActivity(wrapData);
+                navigateToNextActivity();
                 return true;
             }
         });
@@ -83,40 +83,40 @@ public class ArtistSubActivity extends AppCompatActivity {
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
-                            String artistImageURL;
+                            String genreImageURL;
                             if (timeRange != null) {
                                 if (timeRange.equals("Monthly")) {
-                                    artistImageURL = documentSnapshot.getString("short_artist_image");
+                                    genreImageURL = documentSnapshot.getString("short_genre_image");
                                 } else if (timeRange.equals("Biyearly")) {
-                                    artistImageURL = documentSnapshot.getString("artistImageUrl");
+                                    genreImageURL = documentSnapshot.getString("genreImageUrl");
                                 } else {
-                                    artistImageURL = documentSnapshot.getString("long_artist_image");
+                                    genreImageURL = documentSnapshot.getString("long_genre_image");
                                 }
                             } else {
-                                artistImageURL = documentSnapshot.getString("artistImageUrl");
+                                genreImageURL = documentSnapshot.getString("genreImageUrl");
                             }
-                            Log.e("ArtistSubActivity", "Successfully fetched artist image" + artistImageURL);
+                            Log.e("GenreSubActivity", "Successfully fetched genre image" + genreImageURL);
                             // Load the image into the imageView using Picasso
-                            Picasso.get().load(artistImageURL).into(imageViewArtist); // Change to the appropriate imageView
+                            Picasso.get().load(genreImageURL).into(imageViewGenre); // Change to the appropriate imageView
                         } else {
-                            Log.d("ArtistSubActivity", "Document does not exist");
+                            Log.d("GenreSubActivity", "Document does not exist");
                         }
                     })
                     .addOnFailureListener(e -> {
-                        Log.e("ArtistSubActivity", "Error fetching artist image URL", e);
+                        Log.e("GenreSubActivity", "Error fetching genre image URL", e);
                     });
         }
         // Set onClickListeners
         imageViewSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ArtistSubActivity.this, SettingsPage.class));
+                startActivity(new Intent(GenreSubActivity.this, SettingsPage.class));
             }
         });
         imageViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ArtistSubActivity.this, startActivity.class));
+                startActivity(new Intent(GenreSubActivity.this, startActivity.class));
             }
         });
         exportButton.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +142,7 @@ public class ArtistSubActivity extends AppCompatActivity {
 
     private void saveBitmapToFile(Bitmap bitmap) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, "artist_image");
+        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, "genre_image");
         contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
         ContentResolver resolver = getContentResolver();
         Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
@@ -178,7 +178,7 @@ public class ArtistSubActivity extends AppCompatActivity {
             public void onSuccess(GenerateContentResponse result) {
                 String generatedText = result.getText();
                 runOnUiThread(() -> {
-                    TextView generatedTextView = findViewById(R.id.llmTextView);
+                    TextView generatedTextView = findViewById(R.id.generatedTextView);
                     generatedTextView.setText(generatedText);
                 });
             }
@@ -221,29 +221,28 @@ public class ArtistSubActivity extends AppCompatActivity {
             return result;
         }
     }
-    private void populateTopArtists(List<String> artists) {
-        if (artists != null) {
-            StringBuilder topArtists = new StringBuilder();
-            if (artists.size() >= 5) {
+    private void populateTopGenres(List<String> genres) {
+        if (genres != null) {
+            StringBuilder topGenres = new StringBuilder();
+            if (genres.size() >= 5) {
                 for (int i = 0; i < 5; ++i) {
-                    topArtists.append(artists.get(i)).append("\n");
+                    topGenres.append(genres.get(i)).append("\n");
                 }
             } else {
-                for (int i = 0; i < artists.size(); ++i) {
-                    topArtists.append(artists.get(i)).append("\n");
+                for (int i = 0; i < genres.size(); ++i) {
+                    topGenres.append(genres.get(i)).append("\n");
                 }
             }
-            artistTextView.setText(topArtists.toString());
+            genreTextView.setText(topGenres.toString());
         }
     }
-    private void navigateToNextActivity(WrapData wrapData) {
-        Intent intent = new Intent(ArtistSubActivity.this, GenreActivity.class);
-        intent.putExtra(WrapData.WRAP_DATA_KEY, wrapData);
+    private void navigateToNextActivity() {
+        Intent intent = new Intent(GenreSubActivity.this, startActivity.class);
         startActivity(intent);
         finish();
     }
     private void navigateToIntroActivity() {
-        Intent intent = new Intent(ArtistSubActivity.this, IntroActivity.class);
+        Intent intent = new Intent(GenreSubActivity.this, IntroActivity.class);
         startActivity(intent);
     }
 }

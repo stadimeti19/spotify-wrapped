@@ -62,7 +62,7 @@ public class SongSubActivity extends AppCompatActivity {
         imageViewSong = findViewById(R.id.imageView);
         exportButton = findViewById(R.id.export_button);
         populateTopSongs(songs);
-        String prompt = "Please generate one sentence describing user's music taste and personality, and how someone who listens to this kind of music tends to act/think/dress, using second-person point of view,  based on this list of songs: " + String.join(", ", songs);
+        String prompt = "Please generate one sentence (25 word limit) describing user's music taste and personality, and how someone who listens to this kind of music tends to act/think/dress, using second-person point of view,  based on this list of songs: " + String.join(", ", songs);
         generateGeminiText(prompt);
 
         gestureDetector = new GestureDetector(this, new SongSubActivity.SwipeGestureListener());

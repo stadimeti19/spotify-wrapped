@@ -31,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -44,6 +45,8 @@ public class GenreActivity extends AppCompatActivity {
     private ImageView imageViewHome;
 
     private ImageView exportButton;
+    private List<String> genres;
+    private String timeRange;
     private static final String TAG = "GenreActivity";
 
     @Override
@@ -63,8 +66,6 @@ public class GenreActivity extends AppCompatActivity {
             if (wrapData != null) {
                 Log.e(TAG, "successfully got wrapData genres");
                 populateTopGenres(wrapData.getTopGenres());
-                String prompt  = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of songs: " + String.join(", ", wrapData.getTopGenres());
-                generateGeminiText(prompt);
             }
             else {
                 db.collection("users").document(userId).get()
@@ -72,19 +73,16 @@ public class GenreActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
-                                    String timerange = startActivity.getSelectedTimePeriod();
-                                    List<String> genres;
-                                    if(timerange.equals("Monthly")) {
+                                    timeRange = startActivity.getSelectedTimePeriod();
+                                    if(timeRange.equals("Monthly")) {
                                         genres = (List<String>) document.get("short_term_genres");
-                                    } else if (timerange.equals("Biyearly")) {
+                                    } else if (timeRange.equals("Biyearly")) {
                                         genres = (List<String>) document.get("genres");
                                     } else {
                                         genres = (List<String>) document.get("long_term_genres");
                                     }
                                     if (genres != null && !genres.isEmpty()) {
                                         populateTopGenres(genres);
-                                        String prompt  = "Please generate a short sentence describing the user's music taste personality, using second-person point of view, based on this list of genres of songs: " + String.join(", ", genres);
-                                        generateGeminiText(prompt);
                                     }
                                 }
                             } else {
@@ -98,7 +96,7 @@ public class GenreActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // Navigate to the next activity on screen tap
-                navigateToNextActivity();
+                navigateToNextActivity(wrapData);
                 return true;
             }
         });
@@ -169,44 +167,24 @@ public class GenreActivity extends AppCompatActivity {
     }
 
     private void populateTopGenres(List<String> genres) {
-        if (genres.size() >= 3) {
-            String topGenres = genres.get(0) + "\n" + genres.get(1) + "\n" + genres.get(2);
-            genreTextView.setText(topGenres);
+        if (genres.size() >= 0) {
+            genreTextView.setText(genres.get(0));
         }
     }
 //    public boolean onTouchEvent(MotionEvent event) {
 //        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
 //    }
-    private void generateGeminiText(String inputText) {
-        GenerativeModel gm = new GenerativeModel("gemini-pro", BuildConfig.apikey);
-        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
-        Content content = new Content.Builder()
-                .addText(inputText)
-                .build();
-
-        Executor executor = Executors.newSingleThreadExecutor();
-        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
-        Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
-            @Override
-            public void onSuccess(GenerateContentResponse result) {
-                String generatedText = result.getText();
-                runOnUiThread(() -> {
-                    TextView generatedTextView = findViewById(R.id.generatedTextView);
-                    generatedTextView.setText(generatedText);
-                });
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                t.printStackTrace();
-            }
-        }, executor);
-    }
-
-    private void navigateToNextActivity() {
-        Intent intent = new Intent(GenreActivity.this, startActivity.class); // Replace NextActivity with the actual name of your next activity
+    private void navigateToNextActivity(WrapData wrapData) {
+        Intent intent = new Intent(GenreActivity.this, GenreSubActivity.class);
+        intent.putExtra(WrapData.WRAP_DATA_KEY, wrapData);
+        if (wrapData == null) {
+            intent.putStringArrayListExtra("genresList", (ArrayList<String>) genres);
+        } else {
+            intent.putStringArrayListExtra("genresList", (ArrayList<String>) wrapData.getTopGenres());
+        }
+        intent.putExtra("timeRange", timeRange);
         startActivity(intent);
-        finish(); // Finish GenreActivity to prevent going back to it on back press
+        finish();
     }
 }
