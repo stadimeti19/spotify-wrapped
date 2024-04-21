@@ -71,13 +71,18 @@ public class SongActivity extends AppCompatActivity {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
                                     timeRange = startActivity.getSelectedTimePeriod();
-                                    if(timeRange.equals("Monthly")) {
-                                        songs = (List<String>) document.get("short_term_songs");
-                                    } else if (timeRange.equals("Biyearly")) {
-                                        songs = (List<String>) document.get("songs");
+                                    if(timeRange != null) {
+                                        if(timeRange.equals("Monthly")) {
+                                            songs = (List<String>) document.get("short_term_songs");
+                                        } else if (timeRange.equals("Biyearly")) {
+                                            songs = (List<String>) document.get("songs");
+                                        } else {
+                                            songs = (List<String>) document.get("long_term_songs");
+                                        }
                                     } else {
-                                        songs = (List<String>) document.get("long_term_songs");
+                                        songs = (List<String>) document.get("songs");
                                     }
+
                                     if (songs != null && !songs.isEmpty()) {
                                         populateTopSongs(songs);
                                     }

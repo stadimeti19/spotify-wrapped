@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,6 +36,13 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class GenreSubActivity extends AppCompatActivity {
     private TextView genreTextView;
@@ -106,6 +114,10 @@ public class GenreSubActivity extends AppCompatActivity {
                         Log.e("GenreSubActivity", "Error fetching genre image URL", e);
                     });
         }
+//        imageViewGenre.setVisibility(View.INVISIBLE);
+//        fetchStabilityImage("Generate an image for the music genre" + genres.get(0));
+//        imageViewGenre.setVisibility(View.VISIBLE);
+
         // Set onClickListeners
         imageViewSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,16 +233,51 @@ public class GenreSubActivity extends AppCompatActivity {
             return result;
         }
     }
+    private void fetchStabilityImage(String prompt) {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://api.stability.ai/v2beta/stable-image/generate/core")
+                .addHeader("Authorization", BuildConfig.stableapikey)
+                .addHeader("accept", "image/*")
+                .post(new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("prompt", prompt)
+                        .addFormDataPart("output_format", "png")
+                        .build())
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                Log.e("fetchStabilityImage", "Failed to fetch Stability image: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    byte[] imageData = response.body().bytes();
+                    runOnUiThread(() -> {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                        imageViewGenre.setImageBitmap(bitmap);
+                    });
+                }
+            }
+        });
+    }
     private void populateTopGenres(List<String> genres) {
         if (genres != null) {
             StringBuilder topGenres = new StringBuilder();
             if (genres.size() >= 5) {
                 for (int i = 0; i < 5; ++i) {
-                    topGenres.append(genres.get(i)).append("\n");
+                    topGenres.append(genres.get(i));
                 }
             } else {
                 for (int i = 0; i < genres.size(); ++i) {
-                    topGenres.append(genres.get(i)).append("\n");
+                    topGenres.append(genres.get(i));
                 }
             }
             genreTextView.setText(topGenres.toString());

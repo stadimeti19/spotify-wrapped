@@ -79,12 +79,16 @@ public class ArtistActivity extends AppCompatActivity {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
                                     timeRange = startActivity.getSelectedTimePeriod();
-                                    if(timeRange.equals("Monthly")) {
-                                        artists = (List<String>) document.get("short_term_artists");
-                                    } else if (timeRange.equals("Biyearly")) {
-                                        artists = (List<String>) document.get("artists");
+                                    if (timeRange != null) {
+                                        if(timeRange.equals("Monthly")) {
+                                            artists = (List<String>) document.get("short_term_artists");
+                                        } else if (timeRange.equals("Biyearly")) {
+                                            artists = (List<String>) document.get("artists");
+                                        } else {
+                                            artists = (List<String>) document.get("long_term_artists");
+                                        }
                                     } else {
-                                        artists = (List<String>) document.get("long_term_artists");
+                                        artists = (List<String>) document.get("artists");
                                     }
                                     if (artists != null && !artists.isEmpty()) {
                                         populateTopArtists(artists);

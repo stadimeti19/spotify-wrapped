@@ -74,13 +74,18 @@ public class GenreActivity extends AppCompatActivity {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
                                     timeRange = startActivity.getSelectedTimePeriod();
-                                    if(timeRange.equals("Monthly")) {
-                                        genres = (List<String>) document.get("short_term_genres");
-                                    } else if (timeRange.equals("Biyearly")) {
-                                        genres = (List<String>) document.get("genres");
+                                    if (timeRange != null) {
+                                        if(timeRange.equals("Monthly")) {
+                                            genres = (List<String>) document.get("short_term_genres");
+                                        } else if (timeRange.equals("Biyearly")) {
+                                            genres = (List<String>) document.get("genres");
+                                        } else {
+                                            genres = (List<String>) document.get("long_term_genres");
+                                        }
                                     } else {
-                                        genres = (List<String>) document.get("long_term_genres");
+                                        genres = (List<String>) document.get("genres");
                                     }
+
                                     if (genres != null && !genres.isEmpty()) {
                                         populateTopGenres(genres);
                                     }
