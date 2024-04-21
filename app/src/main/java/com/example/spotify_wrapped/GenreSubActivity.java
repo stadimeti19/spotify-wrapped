@@ -68,7 +68,7 @@ public class GenreSubActivity extends AppCompatActivity {
         imageViewGenre = findViewById(R.id.imageView);
         exportButton = findViewById(R.id.export_button);
         populateTopGenres(genres);
-        String prompt = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of genres: " + String.join(", ", genres);
+        String prompt = "Please generate one sentence (25 word limit) describing user's music taste and personality, and how someone who listens to this kind of music tends to act/think/dress, using second-person point of view,  based on this list of genres: " + String.join(", ", genres);
         generateGeminiText(prompt);
 
         gestureDetector = new GestureDetector(this, new GenreSubActivity.SwipeGestureListener());
