@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -28,7 +27,6 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
@@ -38,11 +36,11 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class SongSubActivity extends AppCompatActivity {
-    private TextView songTextView;
+public class ArtistSubActivity extends AppCompatActivity {
+    private TextView artistTextView;
     private ImageView imageViewSetting;
     private ImageView imageViewHome;
-    private ImageView imageViewSong;
+    private ImageView imageViewArtist;
     private ImageView exportButton;
     private GestureDetector gestureDetector;
 
@@ -51,21 +49,21 @@ public class SongSubActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         WrapData wrapData = getIntent().getParcelableExtra(WrapData.WRAP_DATA_KEY);
-        List<String> songs = getIntent().getStringArrayListExtra("songsList");
+        List<String> artists = getIntent().getStringArrayListExtra("artistsList");
         String timeRange = getIntent().getStringExtra("timeRange");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.songs_sub_page);
+        setContentView(R.layout.artist_sub_page);
 
-        songTextView = findViewById(R.id.textView2);
+        artistTextView = findViewById(R.id.textView2);
         imageViewSetting = findViewById(R.id.settings_button);
         imageViewHome = findViewById(R.id.home_button);
-        imageViewSong = findViewById(R.id.imageView);
+        imageViewArtist = findViewById(R.id.imageView);
         exportButton = findViewById(R.id.export_button);
-        populateTopSongs(songs);
-        String prompt = "Please generate one sentence describing user's music taste and personality, and how someone who listens to this kind of music tends to act/think/dress, using second-person point of view,  based on this list of songs: " + String.join(", ", songs);
+        populateTopArtists(artists);
+        String prompt = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of artists: " + String.join(", ", artists);
         generateGeminiText(prompt);
 
-        gestureDetector = new GestureDetector(this, new SongSubActivity.SwipeGestureListener());
+        gestureDetector = new GestureDetector(this, new ArtistSubActivity.SwipeGestureListener());
 
         View rootLayout = findViewById(android.R.id.content);
         rootLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -85,41 +83,36 @@ public class SongSubActivity extends AppCompatActivity {
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
-                            String songImageURL;
-                            if(timeRange != null) {
-                                if (timeRange.equals("Monthly")) {
-                                    songImageURL = documentSnapshot.getString("short_song_image");
-                                } else if (timeRange.equals("Biyearly")) {
-                                    songImageURL = documentSnapshot.getString("songImageUrl");
-                                } else {
-                                    songImageURL = documentSnapshot.getString("long_song_image");
-                                }
+                            String artistImageURL;
+                            if(timeRange.equals("Monthly")) {
+                                artistImageURL = documentSnapshot.getString("short_artist_image");
+                            } else if (timeRange.equals("Biyearly")) {
+                                artistImageURL = documentSnapshot.getString("artistImageUrl");
                             } else {
-                                songImageURL = documentSnapshot.getString("songImageUrl");
+                                artistImageURL = documentSnapshot.getString("long_artist_image");
                             }
-
-                            Log.e("SongSubActivity", "Successfully fetched song" + songImageURL);
+                            Log.e("ArtistSubActivity", "Successfully fetched artist image" + artistImageURL);
                             // Load the image into the imageView using Picasso
-                            Picasso.get().load(songImageURL).into(imageViewSong); // Change to the appropriate imageView
+                            Picasso.get().load(artistImageURL).into(imageViewArtist); // Change to the appropriate imageView
                         } else {
-                            Log.d("SongSubActivity", "Document does not exist");
+                            Log.d("ArtistSubActivity", "Document does not exist");
                         }
                     })
                     .addOnFailureListener(e -> {
-                        Log.e("SongSubActivity", "Error fetching song image URL", e);
+                        Log.e("ArtistSubActivity", "Error fetching artist image URL", e);
                     });
         }
         // Set onClickListeners
         imageViewSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SongSubActivity.this, SettingsPage.class));
+                startActivity(new Intent(ArtistSubActivity.this, SettingsPage.class));
             }
         });
         imageViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SongSubActivity.this, startActivity.class));
+                startActivity(new Intent(ArtistSubActivity.this, startActivity.class));
             }
         });
         exportButton.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +138,7 @@ public class SongSubActivity extends AppCompatActivity {
 
     private void saveBitmapToFile(Bitmap bitmap) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, "song_image");
+        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, "artist_image");
         contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
         ContentResolver resolver = getContentResolver();
         Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
@@ -181,7 +174,7 @@ public class SongSubActivity extends AppCompatActivity {
             public void onSuccess(GenerateContentResponse result) {
                 String generatedText = result.getText();
                 runOnUiThread(() -> {
-                    TextView generatedTextView = findViewById(R.id.generatedTextView);
+                    TextView generatedTextView = findViewById(R.id.llmTextView);
                     generatedTextView.setText(generatedText);
                 });
             }
@@ -224,29 +217,30 @@ public class SongSubActivity extends AppCompatActivity {
             return result;
         }
     }
-    private void populateTopSongs(List<String> songs) {
-        if (songs != null) {
-            StringBuilder topSongs = new StringBuilder();
-            if (songs.size() >= 5) {
+    private void populateTopArtists(List<String> artists) {
+        if (artists != null) {
+            StringBuilder topArtists = new StringBuilder();
+            if (artists.size() >= 5) {
                 for (int i = 0; i < 5; ++i) {
-                    topSongs.append(songs.get(i)).append("\n");
+                    topArtists.append(artists.get(i)).append("\n");
                 }
             } else {
-                for (int i = 0; i < songs.size(); ++i) {
-                    topSongs.append(songs.get(i)).append("\n");
+                for (int i = 0; i < artists.size(); ++i) {
+                    topArtists.append(artists.get(i)).append("\n");
                 }
             }
-            songTextView.setText(topSongs.toString());
+            artistTextView.setText(topArtists.toString());
         }
     }
     private void navigateToNextActivity(WrapData wrapData) {
-        Intent intent = new Intent(SongSubActivity.this, ArtistActivity.class);
+        Intent intent = new Intent(ArtistSubActivity.this, GenreActivity.class);
         intent.putExtra(WrapData.WRAP_DATA_KEY, wrapData);
         startActivity(intent);
         finish();
     }
     private void navigateToIntroActivity() {
-        Intent intent = new Intent(SongSubActivity.this, IntroActivity.class);
+        Intent intent = new Intent(ArtistSubActivity.this, IntroActivity.class);
         startActivity(intent);
     }
 }
+

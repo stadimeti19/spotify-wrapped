@@ -165,9 +165,9 @@ public class SongActivity extends AppCompatActivity {
         Intent intent = new Intent(SongActivity.this, SongSubActivity.class);
         intent.putExtra(WrapData.WRAP_DATA_KEY, wrapData);
         if (wrapData == null) {
-            intent.putStringArrayListExtra("artistsList", (ArrayList<String>) songs);
+            intent.putStringArrayListExtra("songsList", (ArrayList<String>) songs);
         } else {
-            intent.putStringArrayListExtra("artistsList", (ArrayList<String>) wrapData.getTrackList());
+            intent.putStringArrayListExtra("songsList", (ArrayList<String>) wrapData.getTrackList());
         }
         intent.putExtra("timeRange", timeRange);
         startActivity(intent);
@@ -208,7 +208,9 @@ public class SongActivity extends AppCompatActivity {
     }
 
     private void populateTopSongs(List<String> songs) {
-        songTextView.setText(songs.get(0));
+        if (songs.size() > 0) {
+            songTextView.setText(songs.get(0));
+        }
     }
 
     private void navigateToIntroActivity() {

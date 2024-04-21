@@ -46,6 +46,8 @@ public class ArtistActivity extends AppCompatActivity {
     private ImageView imageViewHome;
 
     private ImageView exportButton;
+    private List<String> artists;
+    public String timeRange;
 
     private static final String TAG = "ArtistActivity";
     @Override
@@ -55,6 +57,9 @@ public class ArtistActivity extends AppCompatActivity {
         WrapData wrapData = getIntent().getParcelableExtra(WrapData.WRAP_DATA_KEY);
 
         artistTextView = findViewById(R.id.textView2);
+        imageViewSetting = findViewById(R.id.settings_button);
+        imageViewHome = findViewById(R.id.home_button);
+        exportButton = findViewById(R.id.export_button);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -65,8 +70,6 @@ public class ArtistActivity extends AppCompatActivity {
             if (wrapData != null) {
                 Log.e(TAG, "successfully got wrapData artists");
                 populateTopArtists(wrapData.getArtistList());
-                String prompt  = "Please generate a short sentence describing user's music taste and personality, using second-person point of view,  based on this list of songs: " + String.join(", ", wrapData.getArtistList());
-                generateGeminiText(prompt);
             }
 
             else {
@@ -75,19 +78,16 @@ public class ArtistActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
-                                    String timerange = startActivity.getSelectedTimePeriod();
-                                    List<String> artists;
-                                    if(timerange.equals("Monthly")) {
+                                    timeRange = startActivity.getSelectedTimePeriod();
+                                    if(timeRange.equals("Monthly")) {
                                         artists = (List<String>) document.get("short_term_artists");
-                                    } else if (timerange.equals("Biyearly")) {
+                                    } else if (timeRange.equals("Biyearly")) {
                                         artists = (List<String>) document.get("artists");
                                     } else {
                                         artists = (List<String>) document.get("long_term_artists");
                                     }
                                     if (artists != null && !artists.isEmpty()) {
                                         populateTopArtists(artists);
-                                        String prompt = "Please generate a short sentence describing the user's music taste and personality, using second-person point of view,  based on this list of genres of songs: " + String.join(", ", artists);
-                                        generateGeminiText(prompt);
                                     }
                                 }
                             } else {
@@ -103,21 +103,18 @@ public class ArtistActivity extends AppCompatActivity {
             return true;
         });
 
-        imageViewSetting = findViewById(R.id.settings_button);
         imageViewSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ArtistActivity.this, SettingsPage.class));
             }
         });
-        imageViewHome = findViewById(R.id.home_button);
         imageViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ArtistActivity.this, startActivity.class));
             }
         });
-        exportButton = findViewById(R.id.export_button);
 
         exportButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +144,7 @@ public class ArtistActivity extends AppCompatActivity {
 
     private void saveBitmapToFile(Bitmap bitmap) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, "song_image");
+        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, "artist_image");
         contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
         ContentResolver resolver = getContentResolver();
         Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
@@ -171,41 +168,20 @@ public class ArtistActivity extends AppCompatActivity {
 
 
     private void populateTopArtists(List<String> artists) {
-        if (artists.size() >= 3) {
-            String topArtists = artists.get(0) + "\n" + artists.get(1) + "\n" + artists.get(2);
-            artistTextView.setText(topArtists);
+        if (artists.size() > 0) {
+            artistTextView.setText(artists.get(0));
         }
-    }
-    private void generateGeminiText(String inputText) {
-        GenerativeModel gm = new GenerativeModel("gemini-pro", BuildConfig.apikey);
-        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-
-        Content content = new Content.Builder()
-                .addText(inputText)
-                .build();
-
-        Executor executor = Executors.newSingleThreadExecutor();
-        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
-        Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
-            @Override
-            public void onSuccess(GenerateContentResponse result) {
-                String generatedText = result.getText();
-                runOnUiThread(() -> {
-                    TextView generatedTextView = findViewById(R.id.generatedTextView);
-                    generatedTextView.setText(generatedText);
-                });
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                t.printStackTrace();
-            }
-        }, executor);
     }
 
     private void navigateToNextActivity(WrapData wrapData) {
-        Intent intent = new Intent(ArtistActivity.this, GenreActivity.class);
+        Intent intent = new Intent(ArtistActivity.this, ArtistSubActivity.class);
         intent.putExtra(WrapData.WRAP_DATA_KEY, wrapData);
+        if (wrapData == null) {
+            intent.putStringArrayListExtra("artistsList", (ArrayList<String>) artists);
+        } else {
+            intent.putStringArrayListExtra("artistsList", (ArrayList<String>) wrapData.getArtistList());
+        }
+        intent.putExtra("timeRange", timeRange);
         startActivity(intent);
         finish(); // Finish ArtistActivity to prevent going back to it on back press
     }
