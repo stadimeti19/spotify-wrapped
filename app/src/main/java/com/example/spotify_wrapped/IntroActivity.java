@@ -1,11 +1,17 @@
 package com.example.spotify_wrapped;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,14 +29,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 public class IntroActivity extends AppCompatActivity {
     private TextView welcomeText;
@@ -42,6 +53,7 @@ public class IntroActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String accessToken;
+    private String un;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +81,7 @@ public class IntroActivity extends AppCompatActivity {
                                 DocumentSnapshot document = task.getResult();
                                 if (document.exists()) {
                                     String username = document.getString("username");
+                                    un = username;
                                     if (username != null) {
                                         welcomeText.setText("Welcome, " + username + ", you got " + score + "!");
                                     }
@@ -77,6 +90,9 @@ public class IntroActivity extends AppCompatActivity {
                                         Picasso.get().load(profileImageUrl).into(profileImage);
                                     }
                                 }
+//                                profileImage.setVisibility(View.INVISIBLE);
+//                                fetchStabilityImage("Generate an avatar image for the user "+un+" that contains all the letters in the username");
+//                                profileImage.setVisibility(View.VISIBLE);
                             } else {
                                 // Handle failure
                             }
@@ -121,6 +137,43 @@ public class IntroActivity extends AppCompatActivity {
         Intent intent = new Intent(IntroActivity.this, SongActivity.class);
         startActivity(intent);
     }
+    private void fetchStabilityImage(String prompt) {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://api.stability.ai/v2beta/stable-image/generate/core")
+                .addHeader("Authorization", BuildConfig.stableapikey)
+                .addHeader("accept", "image/*")
+                .post(new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("prompt", prompt)
+                        .addFormDataPart("output_format", "png")
+                        .build())
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                Log.e("fetchStabilityImage", "Failed to fetch Stability image: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    byte[] imageData = response.body().bytes();
+                    runOnUiThread(() -> {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                        profileImage.setImageBitmap(bitmap);
+                    });
+                }
+            }
+        });
+    }
+
+
 
 //    private String getProfilePictureUrl(String accessToken) {
 //        OkHttpClient client = new OkHttpClient();
