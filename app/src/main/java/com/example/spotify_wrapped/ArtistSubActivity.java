@@ -178,7 +178,7 @@ public class ArtistSubActivity extends AppCompatActivity {
             public void onSuccess(GenerateContentResponse result) {
                 String generatedText = result.getText();
                 runOnUiThread(() -> {
-                    TextView generatedTextView = findViewById(R.id.llmTextView);
+                    TextView generatedTextView = findViewById(R.id.generatedTextView);
                     generatedTextView.setText(generatedText);
                 });
             }

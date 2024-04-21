@@ -10,56 +10,87 @@
         android:layout_width="417dp"
         android:layout_height="390dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/pink_patterns"
+        android:src="@drawable/background3"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintDimensionRatio="1:0.65" />
 
     <ImageView
         android:id="@+id/rectangle"
         android:layout_width="379dp"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:src="@drawable/display_rectangle"
-        app:layout_constraintBottom_toBottomOf="@id/album_rectangle2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-        <LinearLayout
+    <TextView
+        android:id="@+id/generatedTextViewDefine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/generatedTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/album_rectangle2"
+        android:layout_marginTop="-100dp"
+        android:fontFamily="@font/spotifyfont"
+        android:textColor="@android:color/white"
+        android:textSize="35sp"
+        android:text="Your LLM Description:"
+        />
+    <TextView
+        android:id="@+id/generatedTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/spotifyfont"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@id/navigateButtons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/generatedTextViewDefine"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toStartOf="@+id/rectangle"
+        app:layout_constraintTop_toTopOf="@+id/rectangle"
+        app:layout_constraintBottom_toBottomOf="@+id/rectangle"
+        android:layout_marginStart="40dp">
+
+        <TextView
+            android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="@+id/rectangle"
-            app:layout_constraintTop_toTopOf="@+id/rectangle"
-            app:layout_constraintBottom_toBottomOf="@+id/rectangle"
-            android:layout_marginStart="20dp">
+            android:fontFamily="@font/spotifyfont"
+            android:text="Top Artists"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/rectangle" />
 
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/spotifyfont"
-                android:text="Top Artists"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="@+id/rectangle"/>
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spotifyfont"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="200dp"
+            app:layout_constraintEnd_toEndOf="@id/imageView"/>
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/spotifyfont"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/imageView"/>
+    </LinearLayout>
 
-        </LinearLayout>
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="120dp"
@@ -68,65 +99,10 @@
         app:layout_constraintEnd_toEndOf="@id/rectangle"
         app:layout_constraintBottom_toBottomOf="@id/rectangle"
         app:layout_constraintVertical_bias="0.3"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="15dp"
         android:src="@drawable/drake" />
 
-    <ImageView
-        android:id="@+id/descriptionRectangle"
-        android:layout_width="379dp"
-        android:layout_height="200dp"
-        android:src="@drawable/llmrectangle"
-        app:layout_constraintStart_toStartOf="@+id/rectangle"
-        app:layout_constraintEnd_toEndOf="@id/rectangle"
-        app:layout_constraintTop_toBottomOf="@+id/rectangle"
-        app:layout_constraintBottom_toTopOf="@id/navigateButtons"/>
 
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@id/descriptionRectangle"
-        app:layout_constraintEnd_toEndOf="@id/descriptionRectangle"
-        app:layout_constraintStart_toStartOf="@id/descriptionRectangle"
-        app:layout_constraintTop_toTopOf="@+id/descriptionRectangle"
-        android:layout_marginBottom="40dp">
-
-        <TextView
-            android:id="@+id/top5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/spotifyfont"
-            android:layout_gravity="center"
-            android:text="@string/what_your_top_5_says_about_you"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/llmTextView"
-            app:layout_constraintEnd_toEndOf="@id/descriptionRectangle"
-            app:layout_constraintStart_toStartOf="@id/descriptionRectangle"
-            app:layout_constraintTop_toTopOf="@+id/descriptionRectangle"
-            android:textSize="23sp" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="10dp" />
-
-        <TextView
-            android:id="@+id/llmTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/spotifyfont"
-            android:layout_gravity="center"
-            android:textColor="@color/white"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            app:layout_constraintBottom_toBottomOf="@id/descriptionRectangle"
-            app:layout_constraintEnd_toEndOf="@id/descriptionRectangle"
-            app:layout_constraintStart_toStartOf="@id/descriptionRectangle"
-            app:layout_constraintTop_toBottomOf="@+id/top5"
-            android:textSize="18sp" />
-
-
-    </LinearLayout>
     <LinearLayout
         android:id="@+id/navigateButtons"
         android:layout_width="wrap_content"
@@ -173,7 +149,6 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView"
             app:layout_constraintVertical_bias="0.965" />
     </LinearLayout>
-
     <ImageView
         android:id="@+id/export_button"
         android:layout_width="45dp"
@@ -185,6 +160,5 @@
         android:src="@drawable/export_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
