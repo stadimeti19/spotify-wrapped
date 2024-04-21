@@ -142,7 +142,7 @@ public class IntroActivity extends AppCompatActivity {
 
         Request request = new Request.Builder()
                 .url("https://api.stability.ai/v2beta/stable-image/generate/core")
-                .addHeader("Authorization", "Bearer sk-WFxHhBEJcynhsMEDXsKxpgFBvHONM9cBjBHxgHL9qoKh0WBS") // Replace MYAPIKEY with your actual API key
+                .addHeader("Authorization", BuildConfig.stableapikey) // Replace MYAPIKEY with your actual API key
                 .addHeader("accept", "image/*")
                 .post(new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
