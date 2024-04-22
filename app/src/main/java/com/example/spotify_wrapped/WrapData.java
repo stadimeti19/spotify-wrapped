@@ -1,7 +1,6 @@
 package com.example.spotify_wrapped;
 import android.os.Parcel;
 import android.os.Parcelable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class WrapData implements Parcelable {
@@ -9,23 +8,31 @@ public class WrapData implements Parcelable {
     private List<String> trackList;
     private List<String> artistList;
     private List<String> topGenres;
-
-    public static final String WRAP_DATA_KEY = "wrapData";
-
-    // Constructor
-    public WrapData(String date, List<String> trackList, List<String> artistList, List<String> topGenres) {
+    private String trackImageUrl;
+    private String artistImageUrl;
+    private String genreImageUrl;
+    public WrapData(String date, List<String> trackList, String trackImageUrl,
+                    List<String> artistList, String artistImageUrl, List<String> topGenres, String genreImageUrl) {
         this.date = date;
         this.trackList = trackList;
         this.artistList = artistList;
         this.topGenres = topGenres;
+        this.trackImageUrl = trackImageUrl;
+        this.artistImageUrl = artistImageUrl;
+        this.genreImageUrl = genreImageUrl;
     }
+
+    public static final String WRAP_DATA_KEY = "wrapData";
 
     // Parcelable constructor
     protected WrapData(Parcel in) {
         date = in.readString();
         trackList = in.createStringArrayList();
+        trackImageUrl = in.readString();
         artistList = in.createStringArrayList();
+        artistImageUrl = in.readString();
         topGenres = in.createStringArrayList();
+        genreImageUrl = in.readString();
     }
 
     // Parcelable CREATOR
@@ -75,6 +82,16 @@ public class WrapData implements Parcelable {
         this.topGenres = topGenres;
     }
 
+    public String getTrackImageUrl() {
+        return trackImageUrl;
+    }
+    public String getArtistImageUrl() {
+        return artistImageUrl;
+    }
+    public String getGenreImageUrl() {
+        return genreImageUrl;
+    }
+
     // Parcelable methods
     @Override
     public int describeContents() {
@@ -85,7 +102,10 @@ public class WrapData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(date);
         dest.writeStringList(trackList);
+        dest.writeString(trackImageUrl);
         dest.writeStringList(artistList);
+        dest.writeString(artistImageUrl);
         dest.writeStringList(topGenres);
+        dest.writeString(genreImageUrl);
     }
 }

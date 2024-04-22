@@ -2,7 +2,6 @@ package com.example.spotify_wrapped;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,7 @@ public class WrapAdapter extends RecyclerView.Adapter<WrapAdapter.WrapViewHolder
                 public void onClick(View v) {
                     // Navigate to IntroActivity with the corresponding wrapped's data
                     Intent intent = new Intent(context, SongActivity.class);
-                    intent.putExtra(WrapData.WRAP_DATA_KEY, wrapData); // Pass the WrapData object to IntroActivity
+                    intent.putExtra(WrapData.WRAP_DATA_KEY, wrapData);
                     context.startActivity(intent);
                 }
             });

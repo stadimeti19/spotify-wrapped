@@ -63,6 +63,7 @@ public class GenreActivity extends AppCompatActivity {
         if (user != null) {
             db = FirebaseFirestore.getInstance();
             String userId = user.getUid();
+            timeRange = startActivity.getSelectedTimePeriod();
             if (wrapData != null) {
                 Log.e(TAG, "successfully got wrapData genres");
                 populateTopGenres(wrapData.getTopGenres());
@@ -73,7 +74,6 @@ public class GenreActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
-                                    timeRange = startActivity.getSelectedTimePeriod();
                                     if (timeRange != null) {
                                         if(timeRange.equals("Monthly")) {
                                             genres = (List<String>) document.get("short_term_genres");

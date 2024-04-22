@@ -86,33 +86,41 @@ public class GenreSubActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            String userId = currentUser.getUid();
-            db.collection("users").document(userId)
-                    .get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            String genreImageURL;
-                            if (timeRange != null) {
-                                if (timeRange.equals("Monthly")) {
-                                    genreImageURL = documentSnapshot.getString("short_genre_image");
-                                } else if (timeRange.equals("Biyearly")) {
-                                    genreImageURL = documentSnapshot.getString("genreImageUrl");
+            if (wrapData != null) {
+                if (wrapData.getGenreImageUrl() != null) {
+                    Picasso.get().load(wrapData.getGenreImageUrl()).into(imageViewGenre);
+                } else {
+                    Log.e("SongSubActivity", "The songImageURL is null!");
+                }
+            } else {
+                String userId = currentUser.getUid();
+                db.collection("users").document(userId)
+                        .get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot.exists()) {
+                                String genreImageURL;
+                                if (timeRange != null) {
+                                    if (timeRange.equals("Monthly")) {
+                                        genreImageURL = documentSnapshot.getString("short_genre_image");
+                                    } else if (timeRange.equals("Biyearly")) {
+                                        genreImageURL = documentSnapshot.getString("genreImageUrl");
+                                    } else {
+                                        genreImageURL = documentSnapshot.getString("long_genre_image");
+                                    }
                                 } else {
-                                    genreImageURL = documentSnapshot.getString("long_genre_image");
+                                    genreImageURL = documentSnapshot.getString("genreImageUrl");
                                 }
+                                Log.e("GenreSubActivity", "Successfully fetched genre image" + genreImageURL);
+                                // Load the image into the imageView using Picasso
+                                Picasso.get().load(genreImageURL).into(imageViewGenre); // Change to the appropriate imageView
                             } else {
-                                genreImageURL = documentSnapshot.getString("genreImageUrl");
+                                Log.d("GenreSubActivity", "Document does not exist");
                             }
-                            Log.e("GenreSubActivity", "Successfully fetched genre image" + genreImageURL);
-                            // Load the image into the imageView using Picasso
-                            Picasso.get().load(genreImageURL).into(imageViewGenre); // Change to the appropriate imageView
-                        } else {
-                            Log.d("GenreSubActivity", "Document does not exist");
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.e("GenreSubActivity", "Error fetching genre image URL", e);
-                    });
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("GenreSubActivity", "Error fetching genre image URL", e);
+                        });
+            }
         }
 //        imageViewGenre.setVisibility(View.INVISIBLE);
 //        fetchStabilityImage("Generate an image for the music genre" + genres.get(0));

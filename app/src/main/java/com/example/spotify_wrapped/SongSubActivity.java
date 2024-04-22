@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -80,34 +79,42 @@ public class SongSubActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            String userId = currentUser.getUid();
-            db.collection("users").document(userId)
-                    .get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            String songImageURL;
-                            if(timeRange != null) {
-                                if (timeRange.equals("Monthly")) {
-                                    songImageURL = documentSnapshot.getString("short_song_image");
-                                } else if (timeRange.equals("Biyearly")) {
-                                    songImageURL = documentSnapshot.getString("songImageUrl");
+            if (wrapData != null) {
+                if (wrapData.getTrackImageUrl() != null) {
+                    Picasso.get().load(wrapData.getTrackImageUrl()).into(imageViewSong);
+                } else {
+                    Log.e("SongSubActivity", "The songImageURL is null!");
+                }
+            } else {
+                String userId = currentUser.getUid();
+                db.collection("users").document(userId)
+                        .get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot.exists()) {
+                                String songImageURL;
+                                if (timeRange != null) {
+                                    if (timeRange.equals("Monthly")) {
+                                        songImageURL = documentSnapshot.getString("short_song_image");
+                                    } else if (timeRange.equals("Biyearly")) {
+                                        songImageURL = documentSnapshot.getString("songImageUrl");
+                                    } else {
+                                        songImageURL = documentSnapshot.getString("long_song_image");
+                                    }
                                 } else {
-                                    songImageURL = documentSnapshot.getString("long_song_image");
+                                    songImageURL = documentSnapshot.getString("songImageUrl");
                                 }
-                            } else {
-                                songImageURL = documentSnapshot.getString("songImageUrl");
-                            }
 
-                            Log.e("SongSubActivity", "Successfully fetched song" + songImageURL);
-                            // Load the image into the imageView using Picasso
-                            Picasso.get().load(songImageURL).into(imageViewSong); // Change to the appropriate imageView
-                        } else {
-                            Log.d("SongSubActivity", "Document does not exist");
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.e("SongSubActivity", "Error fetching song image URL", e);
-                    });
+                                Log.e("SongSubActivity", "Successfully fetched song" + songImageURL);
+                                // Load the image into the imageView using Picasso
+                                Picasso.get().load(songImageURL).into(imageViewSong); // Change to the appropriate imageView
+                            } else {
+                                Log.d("SongSubActivity", "Document does not exist");
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("SongSubActivity", "Error fetching song image URL", e);
+                        });
+            }
         }
         // Set onClickListeners
         imageViewSetting.setOnClickListener(new View.OnClickListener() {

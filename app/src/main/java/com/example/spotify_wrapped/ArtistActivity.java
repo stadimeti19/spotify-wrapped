@@ -9,22 +9,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.ai.client.generativeai.GenerativeModel;
-import com.google.ai.client.generativeai.java.GenerativeModelFutures;
-import com.google.ai.client.generativeai.type.Content;
-import com.google.ai.client.generativeai.type.GenerateContentResponse;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,8 +25,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class ArtistActivity extends AppCompatActivity {
 
@@ -66,7 +55,7 @@ public class ArtistActivity extends AppCompatActivity {
         if (user != null) {
             db = FirebaseFirestore.getInstance();
             String userId = user.getUid();
-
+            timeRange = startActivity.getSelectedTimePeriod();
             if (wrapData != null) {
                 Log.e(TAG, "successfully got wrapData artists");
                 populateTopArtists(wrapData.getArtistList());
@@ -78,7 +67,6 @@ public class ArtistActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
-                                    timeRange = startActivity.getSelectedTimePeriod();
                                     if (timeRange != null) {
                                         if(timeRange.equals("Monthly")) {
                                             artists = (List<String>) document.get("short_term_artists");
@@ -187,6 +175,6 @@ public class ArtistActivity extends AppCompatActivity {
         }
         intent.putExtra("timeRange", timeRange);
         startActivity(intent);
-        finish(); // Finish ArtistActivity to prevent going back to it on back press
+        finish();
     }
 }

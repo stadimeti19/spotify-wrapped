@@ -59,8 +59,7 @@ public class SongActivity extends AppCompatActivity {
         if (user != null) {
             db = FirebaseFirestore.getInstance();
             String userId = user.getUid();
-
-            // Now you can use the wrapData object as needed
+            timeRange = startActivity.getSelectedTimePeriod();
             if (wrapData != null) {
                 Log.e(TAG, "successfully got wrapData songs");
                 populateTopSongs(wrapData.getTrackList());
@@ -70,7 +69,6 @@ public class SongActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document != null && document.exists()) {
-                                    timeRange = startActivity.getSelectedTimePeriod();
                                     if(timeRange != null) {
                                         if(timeRange.equals("Monthly")) {
                                             songs = (List<String>) document.get("short_term_songs");

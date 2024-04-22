@@ -78,33 +78,41 @@ public class ArtistSubActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            String userId = currentUser.getUid();
-            db.collection("users").document(userId)
-                    .get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            String artistImageURL;
-                            if (timeRange != null) {
-                                if (timeRange.equals("Monthly")) {
-                                    artistImageURL = documentSnapshot.getString("short_artist_image");
-                                } else if (timeRange.equals("Biyearly")) {
-                                    artistImageURL = documentSnapshot.getString("artistImageUrl");
+            if (wrapData != null) {
+                if (wrapData.getArtistImageUrl() != null) {
+                    Picasso.get().load(wrapData.getArtistImageUrl()).into(imageViewArtist);
+                } else {
+                    Log.e("ArtistSubActivity", "The artistImageURL is null!");
+                }
+            } else {
+                String userId = currentUser.getUid();
+                db.collection("users").document(userId)
+                        .get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot.exists()) {
+                                String artistImageURL;
+                                if (timeRange != null) {
+                                    if (timeRange.equals("Monthly")) {
+                                        artistImageURL = documentSnapshot.getString("short_artist_image");
+                                    } else if (timeRange.equals("Biyearly")) {
+                                        artistImageURL = documentSnapshot.getString("artistImageUrl");
+                                    } else {
+                                        artistImageURL = documentSnapshot.getString("long_artist_image");
+                                    }
                                 } else {
-                                    artistImageURL = documentSnapshot.getString("long_artist_image");
+                                    artistImageURL = documentSnapshot.getString("artistImageUrl");
                                 }
+                                Log.e("ArtistSubActivity", "Successfully fetched artist image" + artistImageURL);
+                                // Load the image into the imageView using Picasso
+                                Picasso.get().load(artistImageURL).into(imageViewArtist); // Change to the appropriate imageView
                             } else {
-                                artistImageURL = documentSnapshot.getString("artistImageUrl");
+                                Log.d("ArtistSubActivity", "Document does not exist");
                             }
-                            Log.e("ArtistSubActivity", "Successfully fetched artist image" + artistImageURL);
-                            // Load the image into the imageView using Picasso
-                            Picasso.get().load(artistImageURL).into(imageViewArtist); // Change to the appropriate imageView
-                        } else {
-                            Log.d("ArtistSubActivity", "Document does not exist");
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.e("ArtistSubActivity", "Error fetching artist image URL", e);
-                    });
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("ArtistSubActivity", "Error fetching artist image URL", e);
+                        });
+            }
         }
         // Set onClickListeners
         imageViewSetting.setOnClickListener(new View.OnClickListener() {

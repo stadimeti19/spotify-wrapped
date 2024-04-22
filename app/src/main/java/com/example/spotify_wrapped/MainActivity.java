@@ -70,9 +70,24 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
     private ActivityMainBinding binding;
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
-    private ArrayList<String> artistList;
+    private ArrayList<String> shortTrackList;
     private ArrayList<String> trackList;
+    private ArrayList<String> longTrackList;
+    private ArrayList<String> shortArtistList;
+    private ArrayList<String> artistList;
+    private ArrayList<String> longArtistList;
+    private ArrayList<String> shortTopGenres;
     private ArrayList <String> topGenres;
+    private ArrayList<String> longTopGenres;
+    private String shortTrackImageUrl;
+    private String trackImageUrl;
+    private String longTrackImageUrl;
+    private String shortArtistImageUrl;
+    private String artistImageUrl;
+    private String longArtistImageUrl;
+    private String shortGenreImageUrl;
+    private String genreImageUrl;
+    private String longGenreImageUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,19 +191,19 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     String jsonResponse = response.body().string();
                     Log.d("Track Response", jsonResponse);
                     JSONArray items = new JSONObject(jsonResponse).getJSONArray("items");
-                    trackList = new ArrayList<>();
+                    shortTrackList = new ArrayList<>();
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject track = items.getJSONObject(i);
-                        trackList.add((i + 1) + ". " + track.getString("name"));
+                        shortTrackList.add((i + 1) + ". " + track.getString("name"));
                         JSONArray imagesArray = track.getJSONObject("album").getJSONArray("images");
                         if (i == 0) {
                             JSONObject firstImage = imagesArray.getJSONObject(0);
-                            String imageUrl = firstImage.getString("url");
-                            Log.d("Image URL", imageUrl);
-                            storeImageInFirebase(imageUrl,"short_song_image");
+                            shortTrackImageUrl = firstImage.getString("url");
+                            Log.d("Image URL", shortTrackImageUrl);
+                            storeImageInFirebase(shortTrackImageUrl,"short_song_image");
                         }
                     }
-                    storeTopInFirebase(trackList, "short_term_songs", () -> {
+                    storeTopInFirebase(shortTrackList, "short_term_songs", () -> {
                         onGetTopLongSongsClicked();
                     });
                     //setTextAsync(tracks.toString(), tracksTextView);
@@ -229,19 +244,19 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     String jsonResponse = response.body().string();
                     Log.d("Track Response", jsonResponse);
                     JSONArray items = new JSONObject(jsonResponse).getJSONArray("items");
-                    trackList = new ArrayList<>();
+                    longTrackList = new ArrayList<>();
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject track = items.getJSONObject(i);
-                        trackList.add((i + 1) + ". " + track.getString("name"));
+                        longTrackList.add((i + 1) + ". " + track.getString("name"));
                         JSONArray imagesArray = track.getJSONObject("album").getJSONArray("images");
                         if (i == 0) {
                             JSONObject firstImage = imagesArray.getJSONObject(0);
-                            String imageUrl = firstImage.getString("url");
-                            Log.d("Image URL", imageUrl);
-                            storeImageInFirebase(imageUrl,"long_song_image");
+                            longTrackImageUrl = firstImage.getString("url");
+                            Log.d("Image URL", longTrackImageUrl);
+                            storeImageInFirebase(longTrackImageUrl,"long_song_image");
                         }
                     }
-                    storeTopInFirebase(trackList, "long_term_songs", () -> {
+                    storeTopInFirebase(longTrackList, "long_term_songs", () -> {
                         onGetTopGenresClicked();
                     });
                     //setTextAsync(tracks.toString(), tracksTextView);
@@ -388,9 +403,9 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                                         JSONArray imagesArray = artist.getJSONArray("images");
                                         if (imagesArray.length() > 0) {
                                             JSONObject firstImage = imagesArray.getJSONObject(0);
-                                            String imageUrl = firstImage.getString("url");
-                                            Log.d("Image URL", imageUrl);
-                                            storeArtistImageInFirebase(imageUrl);
+                                            artistImageUrl = firstImage.getString("url");
+                                            Log.d("Image URL", artistImageUrl);
+                                            storeArtistImageInFirebase(artistImageUrl);
                                         }
                                     }
                                 }
@@ -445,21 +460,21 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray items = jsonObject.getJSONArray("items");
-                    artistList = new ArrayList<>();
+                    shortArtistList = new ArrayList<>();
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject artist = items.getJSONObject(i);
-                        artistList.add((i + 1) + ". " + artist.getString("name"));
+                        shortArtistList.add((i + 1) + ". " + artist.getString("name"));
                         if (i == 0) {
                             JSONArray imagesArray = artist.getJSONArray("images");
                             if (imagesArray.length() > 0) {
                                 JSONObject firstImage = imagesArray.getJSONObject(0);
-                                String imageUrl = firstImage.getString("url");
-                                Log.d("Image URL", imageUrl);
-                                storeImageInFirebase(imageUrl, "short_artist_image");
+                                shortArtistImageUrl = firstImage.getString("url");
+                                Log.d("Image URL", shortArtistImageUrl);
+                                storeImageInFirebase(shortArtistImageUrl, "short_artist_image");
                             }
                         }
                     }
-                    storeTopInFirebase(artistList, "short_term_artists", () -> {
+                    storeTopInFirebase(shortArtistList, "short_term_artists", () -> {
                         onGetTopLongArtistClicked();
                     });
                     //setTextAsync(artists.toString(), profileTextView);
@@ -497,21 +512,21 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray items = jsonObject.getJSONArray("items");
-                    artistList = new ArrayList<>();
+                    longArtistList = new ArrayList<>();
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject artist = items.getJSONObject(i);
-                        artistList.add((i + 1) + ". " + artist.getString("name"));
+                        longArtistList.add((i + 1) + ". " + artist.getString("name"));
                         if (i == 0) {
                             JSONArray imagesArray = artist.getJSONArray("images");
                             if (imagesArray.length() > 0) {
                                 JSONObject firstImage = imagesArray.getJSONObject(0);
-                                String imageUrl = firstImage.getString("url");
-                                Log.d("Image URL", imageUrl);
-                                storeImageInFirebase(imageUrl, "long_artist_image");
+                                longArtistImageUrl = firstImage.getString("url");
+                                Log.d("Image URL", longArtistImageUrl);
+                                storeImageInFirebase(longArtistImageUrl, "long_artist_image");
                             }
                         }
                     }
-                    storeTopInFirebase(artistList, "long_term_artists", () -> {
+                    storeTopInFirebase(longArtistList, "long_term_artists", () -> {
                         onGetTopTracksClicked();
                     });
                     //setTextAsync(artists.toString(), profileTextView);
@@ -653,9 +668,9 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         JSONArray imagesArray = track.getJSONObject("album").getJSONArray("images");
                         if (i == 0) {
                             JSONObject firstImage = imagesArray.getJSONObject(0);
-                            String imageUrl = firstImage.getString("url");
-                            Log.d("Image URL", imageUrl);
-                            storeSongImageInFirebase(imageUrl);
+                            trackImageUrl = firstImage.getString("url");
+                            Log.d("Image URL", trackImageUrl);
+                            storeSongImageInFirebase(trackImageUrl);
                         }
                     }
                     storeTopInFirebase(trackList, "songs", () -> {
@@ -719,8 +734,6 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     JSONArray items = new JSONObject(jsonResponse).getJSONArray("items");
                     ArrayList<String> genres = new ArrayList<>();
                     topGenres = new ArrayList<>();
-                    //String genres = "";
-
 
                     int count = 0;
                     for (int i = 0; i < items.length(); i++) {
@@ -728,9 +741,9 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         JSONArray imagesArray = artist.getJSONArray("images");
                         if (i==1) {
                             JSONObject firstImage = imagesArray.getJSONObject(0);
-                            String imageUrl = firstImage.getString("url");
-                            Log.d("Genre Image URL", imageUrl);
-                            storeGenreImageInFirebase(imageUrl);
+                            genreImageUrl = firstImage.getString("url");
+                            Log.d("Genre Image URL", genreImageUrl);
+                            storeGenreImageInFirebase(genreImageUrl);
                         }
 
                         JSONArray genresArray = artist.getJSONArray("genres");
@@ -796,9 +809,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     Log.d("Genre Response", jsonResponse);
                     JSONArray items = new JSONObject(jsonResponse).getJSONArray("items");
                     ArrayList<String> genres = new ArrayList<>();
-                    topGenres = new ArrayList<>();
-                    //String genres = "";
-
+                    shortTopGenres = new ArrayList<>();
 
                     int count = 0;
                     for (int i = 0; i < items.length(); i++) {
@@ -806,9 +817,9 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         JSONArray imagesArray = artist.getJSONArray("images");
                         if (i==1) {
                             JSONObject firstImage = imagesArray.getJSONObject(0);
-                            String imageUrl = firstImage.getString("url");
-                            Log.d("Genre Image URL", imageUrl);
-                            storeImageInFirebase(imageUrl,"short_genre_image");
+                            shortGenreImageUrl = firstImage.getString("url");
+                            Log.d("Genre Image URL", shortGenreImageUrl);
+                            storeImageInFirebase(shortGenreImageUrl,"short_genre_image");
                         }
 
                         JSONArray genresArray = artist.getJSONArray("genres");
@@ -829,10 +840,10 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     genreList.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
 
                     for (int i = 0; i < 10; ++i) {
-                        topGenres.add((i + 1) + ". " + genreList.get(i).getKey());
+                        shortTopGenres.add((i + 1) + ". " + genreList.get(i).getKey());
                     }
 
-                    storeTopInFirebase(topGenres, "short_term_genres", () -> {
+                    storeTopInFirebase(shortTopGenres, "short_term_genres", () -> {
                         onGetTopLongGenres();
                     });
                     //setTextAsync(topGenres.toString(), genresTextView);
@@ -874,7 +885,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     Log.d("Genre Response", jsonResponse);
                     JSONArray items = new JSONObject(jsonResponse).getJSONArray("items");
                     ArrayList<String> genres = new ArrayList<>();
-                    topGenres = new ArrayList<>();
+                    longTopGenres = new ArrayList<>();
                     //String genres = "";
 
 
@@ -884,9 +895,9 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         JSONArray imagesArray = artist.getJSONArray("images");
                         if (i==1) {
                             JSONObject firstImage = imagesArray.getJSONObject(0);
-                            String imageUrl = firstImage.getString("url");
-                            Log.d("Genre Image URL", imageUrl);
-                            storeImageInFirebase(imageUrl,"long_genre_image");
+                            longGenreImageUrl = firstImage.getString("url");
+                            Log.d("Genre Image URL", longGenreImageUrl);
+                            storeImageInFirebase(longGenreImageUrl,"long_genre_image");
                         }
 
                         JSONArray genresArray = artist.getJSONArray("genres");
@@ -907,10 +918,10 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     genreList.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
 
                     for (int i = 0; i < 10; ++i) {
-                        topGenres.add((i + 1) + ". " + genreList.get(i).getKey());
+                        longTopGenres.add((i + 1) + ". " + genreList.get(i).getKey());
                     }
 
-                    storeTopInFirebase(topGenres, "long_term_genres", () -> {
+                    storeTopInFirebase(longTopGenres, "long_term_genres", () -> {
                         updateFirestoreWithWrap();
                     });
                     //setTextAsync(topGenres.toString(), genresTextView);
@@ -947,9 +958,24 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
 
                         // Create a map containing the wrap data
                         Map<String, Object> wrapData = new HashMap<>();
+                        wrapData.put("shortTrackList", shortTrackList);
                         wrapData.put("trackList", trackList);
+                        wrapData.put("longTrackList", longTrackList);
+                        wrapData.put("shortArtistList", shortArtistList);
                         wrapData.put("artistList", artistList);
+                        wrapData.put("longArtistList", longArtistList);
+                        wrapData.put("shortTopGenres", shortTopGenres);
                         wrapData.put("topGenres", topGenres);
+                        wrapData.put("longTopGenres", longTopGenres);
+                        wrapData.put("shortTrackImageUrl", shortTrackImageUrl);
+                        wrapData.put("trackImageUrl", trackImageUrl);
+                        wrapData.put("longTrackImageUrl", longTrackImageUrl);
+                        wrapData.put("shortArtistImageUrl", shortArtistImageUrl);
+                        wrapData.put("artistImageUrl", artistImageUrl);
+                        wrapData.put("longArtistImageUrl", longArtistImageUrl);
+                        wrapData.put("shortGenreImageUrl", shortGenreImageUrl);
+                        wrapData.put("genreImageUrl", genreImageUrl);
+                        wrapData.put("longGenreImageUrl", longGenreImageUrl);
 
                         // Set the wrap data under the current date
                         userWrapsRef.collection("dates").document(date)
