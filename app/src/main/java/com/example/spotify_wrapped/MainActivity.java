@@ -52,9 +52,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity implements HomePage.OnLoginSuccessListener {
     private static final String TAG = "MainActivity";
-    public interface OnDataFetchedListener {
-        void onDataFetched();
-    }
     public static final String CLIENT_ID = "c7e24e2587ce44b89dfe5494431930e3";
     public static final String REDIRECT_URI = "spotify-wrapped://auth";
 
@@ -123,43 +120,6 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
         profileTextView = rootView.findViewById(R.id.response_text_view);
         tracksTextView = rootView.findViewById(R.id.tracks_text_view);
         genresTextView = rootView.findViewById(R.id.genres_text_view);
-
-
-        // Initialize the buttons
-        Button tokenBtn = rootView.findViewById(R.id.token_btn);
-        Button codeBtn = rootView.findViewById(R.id.code_btn);
-        Button profileBtn = rootView.findViewById(R.id.profile_btn);
-        Button tracksBtn = rootView.findViewById(R.id.tracks_btn);
-        Button genresBtn = rootView.findViewById(R.id.genres_btn);
-        //Button logoutBtn = (Button) findViewById(R.id.logout_btn);
-
-        // Set the click listeners for the buttons
-
-        tokenBtn.setOnClickListener((v) -> {
-            getToken();
-        });
-
-        codeBtn.setOnClickListener((v) -> {
-            getCode();
-        });
-
-        profileBtn.setOnClickListener((v) -> {
-            onGetTopArtistsClicked();
-        });
-
-        tracksBtn.setOnClickListener((v) -> {
-            onGetTopTracksClicked();
-        });
-
-        genresBtn.setOnClickListener((v) -> {
-            onGetTopGenresClicked();
-        });
-
-//        logoutBtn.setOnClickListener((v) -> {
-//            logout();
-//        });
-
-
     }
 
     public void onGetTopShortSongsClicked() {
@@ -206,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     storeTopInFirebase(shortTrackList, "short_term_songs", () -> {
                         onGetTopLongSongsClicked();
                     });
-                    //setTextAsync(tracks.toString(), tracksTextView);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
