@@ -54,6 +54,7 @@
         <activity android:name="com.example.spotify_wrapped.SongSubActivity" />
         <activity android:name="com.example.spotify_wrapped.ArtistSubActivity" />
         <activity android:name="com.example.spotify_wrapped.GenreSubActivity" />
+        <service android:name=".MusicService" />
     </application>
 
 </manifest>

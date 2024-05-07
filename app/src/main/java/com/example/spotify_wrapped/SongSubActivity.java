@@ -174,6 +174,7 @@ public class SongSubActivity extends AppCompatActivity {
         }
     }
     private void generateGeminiText(String inputText) {
+        Log.e("SongSubActivity", "The LLM method called!");
         GenerativeModel gm = new GenerativeModel("gemini-pro", BuildConfig.apikey);
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
@@ -190,12 +191,16 @@ public class SongSubActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     TextView generatedTextView = findViewById(R.id.generatedTextView);
                     generatedTextView.setText(generatedText);
+                    Log.e("SongSubActivity", "The LLM text was set!");
                 });
             }
 
             @Override
             public void onFailure(Throwable t) {
                 t.printStackTrace();
+                Log.e("SongSubActivity", "The LLM text was not set!");
+
+
             }
         }, executor);
     }

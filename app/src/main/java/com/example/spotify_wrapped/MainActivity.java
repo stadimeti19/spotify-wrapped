@@ -19,6 +19,7 @@ import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,8 +69,11 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
     private ArrayList<String> shortTrackList;
+    private ArrayList<String> shortTrackListUrls;
     private ArrayList<String> trackList;
+    private ArrayList<String> trackListUrls;
     private ArrayList<String> longTrackList;
+    private ArrayList<String> longTrackListUrls;
     private ArrayList<String> shortArtistList;
     private ArrayList<String> artistList;
     private ArrayList<String> longArtistList;
@@ -152,10 +156,15 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     Log.d("Track Response", jsonResponse);
                     JSONArray items = new JSONObject(jsonResponse).getJSONArray("items");
                     shortTrackList = new ArrayList<>();
+                    shortTrackListUrls = new ArrayList<>(5);
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject track = items.getJSONObject(i);
                         shortTrackList.add((i + 1) + ". " + track.getString("name"));
                         JSONArray imagesArray = track.getJSONObject("album").getJSONArray("images");
+                        if (i < 5) {
+                            shortTrackListUrls.add(track.getString("preview_url")); // Get the preview URL of the track
+                            Log.d("Song URL", shortTrackListUrls.get(i));
+                        }
                         if (i == 0) {
                             JSONObject firstImage = imagesArray.getJSONObject(0);
                             shortTrackImageUrl = firstImage.getString("url");
@@ -164,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         }
                     }
                     storeTopInFirebase(shortTrackList, "short_term_songs", () -> {
+                        storeUrlInFirebase(shortTrackListUrls, "shortTrackListUrls");
                         onGetTopLongSongsClicked();
                     });
                 } catch (JSONException e) {
@@ -204,10 +214,15 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     Log.d("Track Response", jsonResponse);
                     JSONArray items = new JSONObject(jsonResponse).getJSONArray("items");
                     longTrackList = new ArrayList<>();
+                    longTrackListUrls = new ArrayList<>(5);
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject track = items.getJSONObject(i);
                         longTrackList.add((i + 1) + ". " + track.getString("name"));
                         JSONArray imagesArray = track.getJSONObject("album").getJSONArray("images");
+                        if (i < 5) {
+                            longTrackListUrls.add(track.getString("preview_url")); // Get the preview URL of the track
+                            Log.d("Song URL", longTrackListUrls.get(i));
+                        }
                         if (i == 0) {
                             JSONObject firstImage = imagesArray.getJSONObject(0);
                             longTrackImageUrl = firstImage.getString("url");
@@ -216,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         }
                     }
                     storeTopInFirebase(longTrackList, "long_term_songs", () -> {
+                        storeUrlInFirebase(longTrackListUrls, "longTrackListUrls");
                         onGetTopGenresClicked();
                     });
                     //setTextAsync(tracks.toString(), tracksTextView);
@@ -621,10 +637,15 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     Log.d("Track Response", jsonResponse);
                     JSONArray items = new JSONObject(jsonResponse).getJSONArray("items");
                     trackList = new ArrayList<>();
+                    trackListUrls = new ArrayList<>(5);
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject track = items.getJSONObject(i);
                         trackList.add((i + 1) + ". " + track.getString("name"));
                         JSONArray imagesArray = track.getJSONObject("album").getJSONArray("images");
+                        if (i < 5) {
+                            trackListUrls.add(track.getString("preview_url")); // Get the preview URL of the track
+                            Log.d("Song URL", trackListUrls.get(i));
+                        }
                         if (i == 0) {
                             JSONObject firstImage = imagesArray.getJSONObject(0);
                             trackImageUrl = firstImage.getString("url");
@@ -633,6 +654,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         }
                     }
                     storeTopInFirebase(trackList, "songs", () -> {
+                        storeUrlInFirebase(trackListUrls, "trackListUrls");
                         onGetTopShortSongsClicked();
                     });
                 } catch (JSONException e) {
@@ -642,6 +664,23 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                 }
             }
         });
+    }
+
+    private void storeUrlInFirebase(List<String> trackListUrls, String id) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DocumentReference userDocRef = db.collection("users").document(userId);
+
+            userDocRef.update(id, trackListUrls)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "URL stored in Firebase"))
+                    .addOnFailureListener(e -> Log.e(TAG, "Error storing URL in Firebase", e));
+        } else {
+            Log.e(TAG, "Current user is null");
+        }
     }
 
     private void storeSongImageInFirebase(String songImageURL) {

@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -39,6 +41,10 @@ public class SongActivity extends AppCompatActivity {
     private ImageView exportButton;
     private List<String> songs;
     public String timeRange;
+    private MediaPlayer mediaPlayer;
+    private Intent musicServiceIntent;
+    private String songUrl;
+    private List <String> trackListUrls;
 
     private static final String TAG = "SongActivity";
 
@@ -72,17 +78,22 @@ public class SongActivity extends AppCompatActivity {
                                     if(timeRange != null) {
                                         if(timeRange.equals("Monthly")) {
                                             songs = (List<String>) document.get("short_term_songs");
+                                            songUrl = "shortTrackListUrls";
                                         } else if (timeRange.equals("Biyearly")) {
                                             songs = (List<String>) document.get("songs");
+                                            songUrl = "trackListUrls";
                                         } else {
                                             songs = (List<String>) document.get("long_term_songs");
+                                            songUrl = "longTrackListUrls";
                                         }
                                     } else {
                                         songs = (List<String>) document.get("songs");
+                                        songUrl = "trackListUrls";
                                     }
 
                                     if (songs != null && !songs.isEmpty()) {
                                         populateTopSongs(songs);
+                                        playSongFromFirebase(songUrl);
                                     }
                                 }
                             } else {
@@ -219,5 +230,55 @@ public class SongActivity extends AppCompatActivity {
     private void navigateToIntroActivity() {
         Intent intent = new Intent(SongActivity.this, IntroActivity.class);
         startActivity(intent);
+    }
+
+    private void startMusicService() {
+        // Start MusicService using an Intent
+        musicServiceIntent = new Intent(this, MusicService.class);
+        musicServiceIntent.putStringArrayListExtra("trackListUrls", (ArrayList<String>) trackListUrls);
+        startService(musicServiceIntent);
+    }
+    private void playSongFromFirebase(String urlType) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DocumentReference userDocRef = db.collection("users").document(userId);
+
+            // Retrieve the URL from Firebase Firestore
+            userDocRef.get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    trackListUrls = (List<String>) documentSnapshot.get(urlType);
+                    if (trackListUrls != null) {
+                        startMusicService();
+                        // Create a MediaPlayer instance
+//                        mediaPlayer = new MediaPlayer();
+//                        try {
+//                            // Set the data source to the retrieved URL
+//                            mediaPlayer.setDataSource(url);
+//                            // Prepare the MediaPlayer asynchronously
+//                            mediaPlayer.prepareAsync();
+//                            // Set a listener to start playback once preparation is complete
+//                            mediaPlayer.setOnPreparedListener(mp -> {
+//                                // Start playback
+//                                mp.start();
+//                            });
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+                    } else {
+                        Log.e(TAG, "URL is null for the specified ID");
+                    }
+                } else {
+                    Log.e(TAG, "Document does not exist");
+                }
+            }).addOnFailureListener(e -> {
+                Log.e(TAG, "Error retrieving document from Firestore", e);
+            });
+        } else {
+            Log.e(TAG, "Current user is null");
+        }
     }
 }
