@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private CollectionReference usersCollection;
     private ActivityMainBinding binding;
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
@@ -117,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
         FirebaseApp.initializeApp(this);
         // Initialize Firebase Firestore
         db = FirebaseFirestore.getInstance();
+        //Initializes an instance of the FirebaseAuth class, retrieves the default instance of FirebaseAuth, a singleton instance for app's default FirebaseApp
+        //Instance allows you to perform various authentication-related tasks such as signing in users, signing out users, getting information about current user, and more
         mAuth = FirebaseAuth.getInstance();
         //Get Current User
         currentUser = mAuth.getCurrentUser();
@@ -839,8 +840,11 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         // Create a map containing the wrap data
                         Map<String, Object> wrapData = new HashMap<>();
                         wrapData.put("shortTrackList", shortTrackList);
+                        wrapData.put("shortTrackListUrls", shortTrackListUrls);
                         wrapData.put("trackList", trackList);
+                        wrapData.put("trackListUrls", trackListUrls);
                         wrapData.put("longTrackList", longTrackList);
+                        wrapData.put("longTrackListUrls", longTrackListUrls);
                         wrapData.put("shortArtistList", shortArtistList);
                         wrapData.put("artistList", artistList);
                         wrapData.put("longArtistList", longArtistList);

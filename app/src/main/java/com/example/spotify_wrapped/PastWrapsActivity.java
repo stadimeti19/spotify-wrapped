@@ -24,6 +24,7 @@ public class PastWrapsActivity extends AppCompatActivity {
     private WrapAdapter wrapAdapter;
     private List<WrapData> wrapDataList;
     private List<String> trackList;
+    private List<String> trackListUrls;
     private List<String> artistList;
     private List<String> genreList;
     private String trackImageUrl;
@@ -71,6 +72,7 @@ public class PastWrapsActivity extends AppCompatActivity {
                     if (timeRange != null) {
                         if(timeRange.equals("Monthly")) {
                             trackList = (List<String>) document.get("shortTrackList");
+                            trackListUrls = (List<String>) document.get("shortTrackListUrls");
                             artistList = (List<String>) document.get("shortArtistList");
                             genreList = (List<String>) document.get("shortTopGenres");
                             trackImageUrl = (String) document.get("shortTrackImageUrl");
@@ -78,6 +80,7 @@ public class PastWrapsActivity extends AppCompatActivity {
                             genreImageUrl = (String) document.get("shortGenreImageUrl");
                         } else if (timeRange.equals("Biyearly")) {
                             trackList = (List<String>) document.get("trackList");
+                            trackListUrls = (List<String>) document.get("trackListUrls");
                             artistList = (List<String>) document.get("artistList");
                             genreList = (List<String>) document.get("topGenres");
                             trackImageUrl = (String) document.get("trackImageUrl");
@@ -85,6 +88,7 @@ public class PastWrapsActivity extends AppCompatActivity {
                             genreImageUrl = (String) document.get("genreImageUrl");
                         } else {
                             trackList = (List<String>) document.get("longTrackList");
+                            trackListUrls = (List<String>) document.get("longTrackListUrls");
                             artistList = (List<String>) document.get("longArtistList");
                             genreList = (List<String>) document.get("longTopGenres");
                             trackImageUrl = (String) document.get("longTrackImageUrl");
@@ -93,50 +97,31 @@ public class PastWrapsActivity extends AppCompatActivity {
                         }
                     } else {
                         trackList = (List<String>) document.get("trackList");
+                        trackListUrls = (List<String>) document.get("trackListUrls");
                         artistList = (List<String>) document.get("artistList");
                         genreList = (List<String>) document.get("topGenres");
                         trackImageUrl = (String) document.get("trackImageUrl");
                         artistImageUrl = (String) document.get("artistImageUrl");
                         genreImageUrl = (String) document.get("genreImageUrl");
                     }
-//                    List<String> shortTrackList = (List<String>) document.get("shortTrackList");
-//                    List<String> trackList = (List<String>) document.get("trackList");
-//                    List<String> longTrackList = (List<String>) document.get("longTrackList");
-//                    String shortTrackImageUrl = (String) document.get("shortTrackImageUrl");
-//                    String trackImageUrl = (String) document.get("trackImageUrl");
-//                    String longTrackImageUrl = (String) document.get("longTrackImageUrl");
-//
-//                    List<String> shortArtistList = (List<String>) document.get("shortArtistList");
-//                    List<String> artistList = (List<String>) document.get("artistList");
-//                    List<String> longArtistList = (List<String>) document.get("longArtistList");
-//                    String shortArtistImageUrl = (String) document.get("shortArtistImageUrl");
-//                    String artistImageUrl = (String) document.get("artistImageUrl");
-//                    String longArtistImageUrl = (String) document.get("longArtistImageUrl");
-//
-//                    List<String> shortTopGenres = (List<String>) document.get("shortTopGenres");
-//                    List<String> topGenres = (List<String>) document.get("topGenres");
-//                    List<String> longTopGenres = (List<String>) document.get("longTopGenres");
-//                    String shortGenreImageUrl = (String) document.get("shortGenreImageUrl");
-//                    String genreImageUrl = (String) document.get("genreImageUrl");
-//                    String longGenreImageUrl = (String) document.get("longGenreImageUrl");
-
 
                     // Create a WrapData object with the retrieved data
                     if (trackList != null) {
-                        WrapData wrapData = new WrapData(date, trackList, trackImageUrl,
-                                artistList, artistImageUrl, genreList, genreImageUrl);
+                        WrapData wrapData = new WrapData(date, trackList, trackListUrls,
+                                trackImageUrl, artistList, artistImageUrl, genreList, genreImageUrl);
                         // Add the WrapData object to the list
                         wrapDataList.add(wrapData);
                     } else {
                         trackList = (List<String>) document.get("trackList");
+                        trackListUrls = (List<String>) document.get("trackListUrls");
                         artistList = (List<String>) document.get("artistList");
                         genreList = (List<String>) document.get("topGenres");
                         trackImageUrl = (String) document.get("trackImageUrl");
                         artistImageUrl = (String) document.get("artistImageUrl");
                         genreImageUrl = (String) document.get("genreImageUrl");
 
-                        WrapData wrapData = new WrapData(date, trackList, trackImageUrl,
-                                artistList, artistImageUrl, genreList, genreImageUrl);
+                        WrapData wrapData = new WrapData(date, trackList, trackListUrls,
+                                trackImageUrl, artistList, artistImageUrl, genreList, genreImageUrl);
                         // Add the WrapData object to the list
                         wrapDataList.add(wrapData);
                     }

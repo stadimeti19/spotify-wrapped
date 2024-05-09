@@ -69,6 +69,8 @@ public class SongActivity extends AppCompatActivity {
             if (wrapData != null) {
                 Log.e(TAG, "successfully got wrapData songs");
                 populateTopSongs(wrapData.getTrackList());
+                trackListUrls = wrapData.getTrackListUrls();
+                startMusicService();
             } else {
                 db.collection("users").document(userId).get()
                         .addOnCompleteListener(task -> {

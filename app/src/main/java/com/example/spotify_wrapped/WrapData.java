@@ -6,15 +6,17 @@ import java.util.List;
 public class WrapData implements Parcelable {
     private String date;
     private List<String> trackList;
+    private List<String> trackListUrls;
     private List<String> artistList;
     private List<String> topGenres;
     private String trackImageUrl;
     private String artistImageUrl;
     private String genreImageUrl;
-    public WrapData(String date, List<String> trackList, String trackImageUrl,
+    public WrapData(String date, List<String> trackList, List<String> trackListUrls, String trackImageUrl,
                     List<String> artistList, String artistImageUrl, List<String> topGenres, String genreImageUrl) {
         this.date = date;
         this.trackList = trackList;
+        this.trackListUrls = trackListUrls;
         this.artistList = artistList;
         this.topGenres = topGenres;
         this.trackImageUrl = trackImageUrl;
@@ -28,6 +30,7 @@ public class WrapData implements Parcelable {
     protected WrapData(Parcel in) {
         date = in.readString();
         trackList = in.createStringArrayList();
+        trackListUrls = in.createStringArrayList();
         trackImageUrl = in.readString();
         artistList = in.createStringArrayList();
         artistImageUrl = in.readString();
@@ -53,35 +56,18 @@ public class WrapData implements Parcelable {
     public String getDate() {
         return date;
     }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public List<String> getTrackList() {
         return trackList;
     }
-
-    public void setTrackList(List<String> trackList) {
-        this.trackList = trackList;
+    public List<String> getTrackListUrls() {
+        return trackListUrls;
     }
-
     public List<String> getArtistList() {
         return artistList;
     }
-
-    public void setArtistList(List<String> artistList) {
-        this.artistList = artistList;
-    }
-
     public List<String> getTopGenres() {
         return topGenres;
     }
-
-    public void setTopGenres(List<String> topGenres) {
-        this.topGenres = topGenres;
-    }
-
     public String getTrackImageUrl() {
         return trackImageUrl;
     }
@@ -102,6 +88,7 @@ public class WrapData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(date);
         dest.writeStringList(trackList);
+        dest.writeStringList(trackListUrls);
         dest.writeString(trackImageUrl);
         dest.writeStringList(artistList);
         dest.writeString(artistImageUrl);
