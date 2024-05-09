@@ -41,7 +41,6 @@
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:fontFamily="@font/spotifyfont"
-        android:text="Love Story"
         android:textColor="@android:color/white"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="@id/generatedTextView"
@@ -101,7 +100,8 @@
             app:layout_constraintHorizontal_bias="0.365"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.965" />
+            app:layout_constraintVertical_bias="0.965"
+            android:contentDescription="@string/home_button"/>
 
         <Space
             android:layout_width="35dp"
@@ -110,8 +110,8 @@
 
         <ImageView
             android:id="@+id/settings_button"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:src="@drawable/settings_button"
             android:clickable="true"
             android:focusable="true"
@@ -120,20 +120,22 @@
             app:layout_constraintHorizontal_bias="0.365"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.965" />
+            app:layout_constraintVertical_bias="0.965"
+            android:contentDescription="@string/settings_button"/>
 
 
     </LinearLayout>
     <ImageView
         android:id="@+id/export_button"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/export_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/export_page"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

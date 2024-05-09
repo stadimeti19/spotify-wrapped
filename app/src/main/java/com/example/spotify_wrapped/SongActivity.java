@@ -50,6 +50,7 @@ public class SongActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e(TAG, "onCreate called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.song_page);
         WrapData wrapData = getIntent().getParcelableExtra(WrapData.WRAP_DATA_KEY);
@@ -233,18 +234,11 @@ public class SongActivity extends AppCompatActivity {
         Intent intent = new Intent(SongActivity.this, IntroActivity.class);
         startActivity(intent);
     }
-
-    private void startMusicService() {
-        // Start MusicService using an Intent
-        musicServiceIntent = new Intent(this, MusicService.class);
-        musicServiceIntent.putStringArrayListExtra("trackListUrls", (ArrayList<String>) trackListUrls);
-        startService(musicServiceIntent);
-    }
     private void playSongFromFirebase(String urlType) {
+        Log.e(TAG, "playSongFromFirebase called");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-
         if (currentUser != null) {
             String userId = currentUser.getUid();
             DocumentReference userDocRef = db.collection("users").document(userId);
@@ -255,21 +249,6 @@ public class SongActivity extends AppCompatActivity {
                     trackListUrls = (List<String>) documentSnapshot.get(urlType);
                     if (trackListUrls != null) {
                         startMusicService();
-                        // Create a MediaPlayer instance
-//                        mediaPlayer = new MediaPlayer();
-//                        try {
-//                            // Set the data source to the retrieved URL
-//                            mediaPlayer.setDataSource(url);
-//                            // Prepare the MediaPlayer asynchronously
-//                            mediaPlayer.prepareAsync();
-//                            // Set a listener to start playback once preparation is complete
-//                            mediaPlayer.setOnPreparedListener(mp -> {
-//                                // Start playback
-//                                mp.start();
-//                            });
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
                     } else {
                         Log.e(TAG, "URL is null for the specified ID");
                     }
@@ -282,5 +261,14 @@ public class SongActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "Current user is null");
         }
+    }
+
+    private void startMusicService() {
+        Log.e(TAG, "startMusicService called");
+        // Start MusicService using an Intent
+        musicServiceIntent = new Intent(this, MusicService.class);
+        musicServiceIntent.putStringArrayListExtra("trackListUrls", (ArrayList<String>) trackListUrls);
+        Log.e(TAG, "trackListUrls sent to MusicService");
+        startService(musicServiceIntent);
     }
 }

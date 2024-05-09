@@ -28,4 +28,7 @@
     <string name="welcome_user_name">Welcome user_name!</string>
     <string name="wrapped">wrapped</string>
     <string name="what_your_top_5_says_about_you">What your Top 5 says about you:</string>
+    <string name="export_page">Export Page</string>
+    <string name="settings_button">Settings Button</string>
+    <string name="home_button">Home Button</string>
 </resources>

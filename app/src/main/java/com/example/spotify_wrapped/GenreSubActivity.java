@@ -51,6 +51,7 @@ public class GenreSubActivity extends AppCompatActivity {
     private ImageView imageViewGenre;
     private ImageView exportButton;
     private GestureDetector gestureDetector;
+    private static final String TAG = "GenreSubActivity";
 
 
 
@@ -90,7 +91,7 @@ public class GenreSubActivity extends AppCompatActivity {
                 if (wrapData.getGenreImageUrl() != null) {
                     Picasso.get().load(wrapData.getGenreImageUrl()).into(imageViewGenre);
                 } else {
-                    Log.e("SongSubActivity", "The songImageURL is null!");
+                    Log.e(TAG, "The genreImageURL is null!");
                 }
             } else {
                 String userId = currentUser.getUid();
@@ -110,15 +111,15 @@ public class GenreSubActivity extends AppCompatActivity {
                                 } else {
                                     genreImageURL = documentSnapshot.getString("genreImageUrl");
                                 }
-                                Log.e("GenreSubActivity", "Successfully fetched genre image" + genreImageURL);
+                                Log.e(TAG, "Successfully fetched genre image" + genreImageURL);
                                 // Load the image into the imageView using Picasso
                                 Picasso.get().load(genreImageURL).into(imageViewGenre); // Change to the appropriate imageView
                             } else {
-                                Log.d("GenreSubActivity", "Document does not exist");
+                                Log.d(TAG, "Document does not exist");
                             }
                         })
                         .addOnFailureListener(e -> {
-                            Log.e("GenreSubActivity", "Error fetching genre image URL", e);
+                            Log.e(TAG, "Error fetching genre image URL", e);
                         });
             }
         }
@@ -292,11 +293,14 @@ public class GenreSubActivity extends AppCompatActivity {
         }
     }
     private void navigateToNextActivity() {
+        stopService(new Intent(this, MusicService.class));
+        Log.e(TAG, "Stopped MusicService");
         Intent intent = new Intent(GenreSubActivity.this, startActivity.class);
         startActivity(intent);
         finish();
     }
     private void navigateToIntroActivity() {
+        stopService(new Intent(this, MusicService.class));
         Intent intent = new Intent(GenreSubActivity.this, IntroActivity.class);
         startActivity(intent);
     }

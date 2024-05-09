@@ -23,10 +23,11 @@ public class MusicService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.e(TAG, "MusicService start command");
         // Initialize MediaPlayer and start playback
         mediaPlayer = new MediaPlayer();
         trackListUrls = intent.getStringArrayListExtra("trackListUrls");
-        Log.e(TAG, "tracksize" + trackListUrls.size());
+        Log.e(TAG, "tracksize: " + trackListUrls.size());
         currIndex = 0;
         playNextSong();
         return START_STICKY;
@@ -38,7 +39,7 @@ public class MusicService extends Service {
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(nextSongUrl);
                 mediaPlayer.setOnPreparedListener(mp -> {
-                    Log.e(TAG, "onPreparedListener");
+                    Log.e(TAG, "onPreparedListener: " + currIndex);
                     if (mp == mediaPlayer) {
                         mediaPlayer.start();
                         handler = new Handler();
@@ -49,15 +50,9 @@ public class MusicService extends Service {
                                 playNextSong();
                             }
                         };
-                        handler.postDelayed(stopPlaybackRunnable, 15000); // Track duration                    }
+                        handler.postDelayed(stopPlaybackRunnable, 15000); // Track duration}
                     }
                 });
-//                mediaPlayer.setOnCompletionListener(completionMediaPlayer -> {
-//                    // Move to the next song when the current song finishes
-//                    Log.e(TAG, "onCompletionListener");
-//                    currIndex++;
-//                    playNextSong();
-//                });
                 mediaPlayer.prepareAsync();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -67,7 +62,6 @@ public class MusicService extends Service {
             stopSelf();
         }
     }
-
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -79,8 +73,13 @@ public class MusicService extends Service {
         super.onDestroy();
         // Release MediaPlayer resources
         if (mediaPlayer != null) {
+            mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
+        }
+        if (handler != null) {
+            handler.removeCallbacks(stopPlaybackRunnable);
+            handler = null;
         }
     }
 }
