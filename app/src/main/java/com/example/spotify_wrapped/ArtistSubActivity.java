@@ -59,9 +59,11 @@ public class ArtistSubActivity extends AppCompatActivity {
         imageViewHome = findViewById(R.id.home_button);
         imageViewArtist = findViewById(R.id.imageView);
         exportButton = findViewById(R.id.export_button);
-        populateTopArtists(artists);
-        String prompt = "Please generate one sentence (25 word limit) describing user's music taste and personality, and how someone who listens to this kind of music tends to act/think/dress, using second-person point of view,  based on this list of artists: " + String.join(", ", artists);
-        generateGeminiText(prompt);
+        if (artists != null) {
+            populateTopArtists(artists);
+            String prompt = "Please generate one sentence (25 word limit) describing user's music taste and personality, and how someone who listens to this kind of music tends to act/think/dress, using second-person point of view,  based on this list of artists: " + String.join(", ", artists);
+            generateGeminiText(prompt);
+        }
 
         gestureDetector = new GestureDetector(this, new ArtistSubActivity.SwipeGestureListener());
 
@@ -109,35 +111,20 @@ public class ArtistSubActivity extends AppCompatActivity {
                                 Log.d("ArtistSubActivity", "Document does not exist");
                             }
                         })
-                        .addOnFailureListener(e -> {
-                            Log.e("ArtistSubActivity", "Error fetching artist image URL", e);
-                        });
+                        .addOnFailureListener(e -> Log.e("ArtistSubActivity", "Error fetching artist image URL", e));
             }
         }
         // Set onClickListeners
-        imageViewSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ArtistSubActivity.this, SettingsPage.class));
-            }
-        });
-        imageViewHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ArtistSubActivity.this, startActivity.class));
-            }
-        });
-        exportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageViewHome.setVisibility(View.GONE);
-                imageViewSetting.setVisibility(View.GONE);
-                exportButton.setVisibility(View.GONE);
-                captureAndExportImage();
-                imageViewHome.setVisibility(View.VISIBLE);
-                imageViewSetting.setVisibility(View.VISIBLE);
-                exportButton.setVisibility(View.VISIBLE);
-            }
+        imageViewSetting.setOnClickListener(v -> startActivity(new Intent(ArtistSubActivity.this, SettingsPage.class)));
+        imageViewHome.setOnClickListener(v -> startActivity(new Intent(ArtistSubActivity.this, startActivity.class)));
+        exportButton.setOnClickListener(v -> {
+            imageViewHome.setVisibility(View.GONE);
+            imageViewSetting.setVisibility(View.GONE);
+            exportButton.setVisibility(View.GONE);
+            captureAndExportImage();
+            imageViewHome.setVisibility(View.VISIBLE);
+            imageViewSetting.setVisibility(View.VISIBLE);
+            exportButton.setVisibility(View.VISIBLE);
         });
     }
     private void captureAndExportImage() {

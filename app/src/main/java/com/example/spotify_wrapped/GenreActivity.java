@@ -16,14 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.ai.client.generativeai.GenerativeModel;
-import com.google.ai.client.generativeai.java.GenerativeModelFutures;
-import com.google.ai.client.generativeai.type.Content;
-import com.google.ai.client.generativeai.type.GenerateContentResponse;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,17 +25,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class GenreActivity extends AppCompatActivity {
-    private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
     private TextView genreTextView;
     private ImageView imageViewSetting;
-
     private ImageView imageViewHome;
-
     private ImageView exportButton;
     private List<String> genres;
     private String timeRange;
@@ -58,10 +44,10 @@ public class GenreActivity extends AppCompatActivity {
         // Set up the text views
         genreTextView = findViewById(R.id.textView2);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            db = FirebaseFirestore.getInstance();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
             String userId = user.getUid();
             timeRange = startActivity.getSelectedTimePeriod();
             if (wrapData != null) {
@@ -91,7 +77,7 @@ public class GenreActivity extends AppCompatActivity {
                                     }
                                 }
                             } else {
-                                // Handle errors
+                                Log.e(TAG, "Task was not successful!");
                             }
                         });
             }
@@ -106,20 +92,11 @@ public class GenreActivity extends AppCompatActivity {
             }
         });
         imageViewSetting = findViewById(R.id.settings_button);
-        imageViewSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(GenreActivity.this, SettingsPage.class));
-            }
-        });
         imageViewHome = findViewById(R.id.home_button);
-        imageViewHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(GenreActivity.this, startActivity.class));
-            }
-        });
         exportButton = findViewById(R.id.export_button);
+        
+        imageViewSetting.setOnClickListener(v -> startActivity(new Intent(GenreActivity.this, SettingsPage.class)));
+        imageViewHome.setOnClickListener(v -> startActivity(new Intent(GenreActivity.this, startActivity.class)));
 
         exportButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,14 +149,10 @@ public class GenreActivity extends AppCompatActivity {
     }
 
     private void populateTopGenres(List<String> genres) {
-        if (genres.size() >= 0) {
+        if (genres.size() > 0) {
             genreTextView.setText(genres.get(0));
         }
     }
-//    public boolean onTouchEvent(MotionEvent event) {
-//        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
-//    }
-
     private void navigateToNextActivity(WrapData wrapData) {
         Intent intent = new Intent(GenreActivity.this, GenreSubActivity.class);
         intent.putExtra(WrapData.WRAP_DATA_KEY, wrapData);

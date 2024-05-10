@@ -2,6 +2,7 @@ package com.example.spotify_wrapped;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -21,41 +22,37 @@ import java.util.List;
 import java.util.Random;
 
 public class GamePage extends AppCompatActivity {
-
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
     private int score = 0;
-    private Random random = new Random();
-
+    private final Random random = new Random();
     private String correctSong;
     private String correctArtist;
     private String correctGenre;
     private String accessToken;
-
-
+    private String timeRange;
+    private static final String TAG = "GamePage";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_page);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
         if (user != null) {
-            db = FirebaseFirestore.getInstance();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
             String userId = user.getUid();
             accessToken = getIntent().getStringExtra("accessToken");
+            timeRange = startActivity.getSelectedTimePeriod();
 
             db.collection("users").document(userId).get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document != null && document.exists()) {
-                                String timerange = startActivity.getSelectedTimePeriod();
                                 List<String> songs;
-                                if(timerange.equals("Monthly")) {
+                                if(timeRange.equals("Monthly")) {
                                     songs = (List<String>) document.get("short_term_songs");
-                                } else if (timerange.equals("Biyearly")) {
+                                } else if (timeRange.equals("Biyearly")) {
                                     songs = (List<String>) document.get("songs");
                                 } else {
                                     songs = (List<String>) document.get("long_term_songs");
@@ -66,7 +63,7 @@ public class GamePage extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            // Handle errors
+                            Log.e(TAG, "Task was not successful for songs!");
                         }
                     });
 
@@ -75,11 +72,10 @@ public class GamePage extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document != null && document.exists()) {
-                                String timerange = startActivity.getSelectedTimePeriod();
                                 List<String> genres;
-                                if(timerange.equals("Monthly")) {
+                                if(timeRange.equals("Monthly")) {
                                     genres = (List<String>) document.get("short_term_genres");
-                                } else if (timerange.equals("Biyearly")) {
+                                } else if (timeRange.equals("Biyearly")) {
                                     genres = (List<String>) document.get("genres");
                                 } else {
                                     genres = (List<String>) document.get("long_term_genres");
@@ -90,7 +86,7 @@ public class GamePage extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            // Handle errors
+                            Log.e(TAG, "Task was not successful for genres!");
                         }
                     });
 
@@ -99,11 +95,10 @@ public class GamePage extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document != null && document.exists()) {
-                                String timerange = startActivity.getSelectedTimePeriod();
                                 List<String> artists;
-                                if(timerange.equals("Monthly")) {
+                                if(timeRange.equals("Monthly")) {
                                     artists = (List<String>) document.get("short_term_artists");
-                                } else if (timerange.equals("Biyearly")) {
+                                } else if (timeRange.equals("Biyearly")) {
                                     artists = (List<String>) document.get("artists");
                                 } else {
                                     artists = (List<String>) document.get("long_term_artists");
@@ -114,7 +109,7 @@ public class GamePage extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            // Handle errors
+                            Log.e(TAG, "Task was not successful for artists!");
                         }
                     });
 

@@ -28,8 +28,6 @@ import java.util.List;
 
 public class ArtistActivity extends AppCompatActivity {
 
-    private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
     private TextView artistTextView;
     private ImageView imageViewSetting;
     private ImageView imageViewHome;
@@ -50,10 +48,10 @@ public class ArtistActivity extends AppCompatActivity {
         imageViewHome = findViewById(R.id.home_button);
         exportButton = findViewById(R.id.export_button);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            db = FirebaseFirestore.getInstance();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
             String userId = user.getUid();
             timeRange = startActivity.getSelectedTimePeriod();
             if (wrapData != null) {
@@ -83,7 +81,7 @@ public class ArtistActivity extends AppCompatActivity {
                                     }
                                 }
                             } else {
-                                // Handle errors
+                                Log.e(TAG, "Task not successful!");
                             }
                         });
             }
@@ -95,35 +93,22 @@ public class ArtistActivity extends AppCompatActivity {
             return true;
         });
 
-        imageViewSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ArtistActivity.this, SettingsPage.class));
-            }
-        });
-        imageViewHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ArtistActivity.this, startActivity.class));
-            }
-        });
+        imageViewSetting.setOnClickListener(v -> startActivity(new Intent(ArtistActivity.this, SettingsPage.class)));
+        imageViewHome.setOnClickListener(v -> startActivity(new Intent(ArtistActivity.this, startActivity.class)));
 
-        exportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Hide the buttons before taking a screenshot
-                imageViewHome.setVisibility(View.GONE);
-                imageViewSetting.setVisibility(View.GONE);
-                exportButton.setVisibility(View.GONE);
+        exportButton.setOnClickListener(v -> {
+            // Hide the buttons before taking a screenshot
+            imageViewHome.setVisibility(View.GONE);
+            imageViewSetting.setVisibility(View.GONE);
+            exportButton.setVisibility(View.GONE);
 
-                // Capture and export the image
-                captureAndExportImage();
+            // Capture and export the image
+            captureAndExportImage();
 
-                // Show the buttons again after exporting
-                imageViewHome.setVisibility(View.VISIBLE);
-                imageViewSetting.setVisibility(View.VISIBLE);
-                exportButton.setVisibility((View.VISIBLE));
-            }
+            // Show the buttons again after exporting
+            imageViewHome.setVisibility(View.VISIBLE);
+            imageViewSetting.setVisibility(View.VISIBLE);
+            exportButton.setVisibility((View.VISIBLE));
         });
     }
     private void captureAndExportImage() {
