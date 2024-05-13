@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.IBinder;
-import android.content.Intent;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import java.io.IOException;
@@ -27,7 +25,7 @@ public class MusicService extends Service {
         // Initialize MediaPlayer and start playback
         mediaPlayer = new MediaPlayer();
         trackListUrls = intent.getStringArrayListExtra("trackListUrls");
-        Log.e(TAG, "tracksize: " + trackListUrls.size());
+        Log.e(TAG, "track size: " + trackListUrls.size());
         currIndex = 0;
         playNextSong();
         return START_STICKY;

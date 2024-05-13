@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -41,8 +40,6 @@ public class SongActivity extends AppCompatActivity {
     private ImageView exportButton;
     private List<String> songs;
     public String timeRange;
-    private MediaPlayer mediaPlayer;
-    private Intent musicServiceIntent;
     private String songUrl;
     private List <String> trackListUrls;
 
@@ -111,38 +108,22 @@ public class SongActivity extends AppCompatActivity {
 
         // Set up touch listener on the layout to detect screen tap
         View rootLayout = findViewById(android.R.id.content);
-        rootLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                navigateToNextActivity(wrapData);
-                return true;
-            }
+        rootLayout.setOnTouchListener((v, event) -> {
+            navigateToNextActivity(wrapData);
+            return true;
         });
 
         // Set onClickListeners
-        imageViewSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SongActivity.this, SettingsPage.class));
-            }
-        });
-        imageViewHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SongActivity.this, startActivity.class));
-            }
-        });
-        exportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageViewHome.setVisibility(View.GONE);
-                imageViewSetting.setVisibility(View.GONE);
-                exportButton.setVisibility(View.GONE);
-                captureAndExportImage();
-                imageViewHome.setVisibility(View.VISIBLE);
-                imageViewSetting.setVisibility(View.VISIBLE);
-                exportButton.setVisibility(View.VISIBLE);
-            }
+        imageViewSetting.setOnClickListener(v -> startActivity(new Intent(SongActivity.this, SettingsPage.class)));
+        imageViewHome.setOnClickListener(v -> startActivity(new Intent(SongActivity.this, startActivity.class)));
+        exportButton.setOnClickListener(v -> {
+            imageViewHome.setVisibility(View.GONE);
+            imageViewSetting.setVisibility(View.GONE);
+            exportButton.setVisibility(View.GONE);
+            captureAndExportImage();
+            imageViewHome.setVisibility(View.VISIBLE);
+            imageViewSetting.setVisibility(View.VISIBLE);
+            exportButton.setVisibility(View.VISIBLE);
         });
     }
 
@@ -255,9 +236,7 @@ public class SongActivity extends AppCompatActivity {
                 } else {
                     Log.e(TAG, "Document does not exist");
                 }
-            }).addOnFailureListener(e -> {
-                Log.e(TAG, "Error retrieving document from Firestore", e);
-            });
+            }).addOnFailureListener(e -> Log.e(TAG, "Error retrieving document from Firestore", e));
         } else {
             Log.e(TAG, "Current user is null");
         }
@@ -266,7 +245,7 @@ public class SongActivity extends AppCompatActivity {
     private void startMusicService() {
         Log.e(TAG, "startMusicService called");
         // Start MusicService using an Intent
-        musicServiceIntent = new Intent(this, MusicService.class);
+        Intent musicServiceIntent = new Intent(this, MusicService.class);
         musicServiceIntent.putStringArrayListExtra("trackListUrls", (ArrayList<String>) trackListUrls);
         Log.e(TAG, "trackListUrls sent to MusicService");
         startService(musicServiceIntent);

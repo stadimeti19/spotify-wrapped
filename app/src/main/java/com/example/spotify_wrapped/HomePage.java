@@ -1,7 +1,6 @@
 package com.example.spotify_wrapped;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,12 +113,8 @@ public class HomePage extends Fragment {
 
         // Update the document with the map
         userRef.update("datesWrapped", currentDate)
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "DocumentSnapshot successfully updated!");
-                })
-                .addOnFailureListener(e -> {
-                    Log.w(TAG, "Error updating document", e);
-                });
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully updated!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error updating document", e));
     }
 
     // method to show sign up dialog

@@ -27,7 +27,6 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
@@ -67,12 +66,9 @@ public class SongSubActivity extends AppCompatActivity {
         gestureDetector = new GestureDetector(this, new SongSubActivity.SwipeGestureListener());
 
         View rootLayout = findViewById(android.R.id.content);
-        rootLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                navigateToNextActivity(wrapData);
-                return true;
-            }
+        rootLayout.setOnTouchListener((v, event) -> {
+            navigateToNextActivity(wrapData);
+            return true;
         });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -111,35 +107,20 @@ public class SongSubActivity extends AppCompatActivity {
                                 Log.d("SongSubActivity", "Document does not exist");
                             }
                         })
-                        .addOnFailureListener(e -> {
-                            Log.e("SongSubActivity", "Error fetching song image URL", e);
-                        });
+                        .addOnFailureListener(e -> Log.e("SongSubActivity", "Error fetching song image URL", e));
             }
         }
         // Set onClickListeners
-        imageViewSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SongSubActivity.this, SettingsPage.class));
-            }
-        });
-        imageViewHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SongSubActivity.this, startActivity.class));
-            }
-        });
-        exportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageViewHome.setVisibility(View.GONE);
-                imageViewSetting.setVisibility(View.GONE);
-                exportButton.setVisibility(View.GONE);
-                captureAndExportImage();
-                imageViewHome.setVisibility(View.VISIBLE);
-                imageViewSetting.setVisibility(View.VISIBLE);
-                exportButton.setVisibility(View.VISIBLE);
-            }
+        imageViewSetting.setOnClickListener(v -> startActivity(new Intent(SongSubActivity.this, SettingsPage.class)));
+        imageViewHome.setOnClickListener(v -> startActivity(new Intent(SongSubActivity.this, startActivity.class)));
+        exportButton.setOnClickListener(v -> {
+            imageViewHome.setVisibility(View.GONE);
+            imageViewSetting.setVisibility(View.GONE);
+            exportButton.setVisibility(View.GONE);
+            captureAndExportImage();
+            imageViewHome.setVisibility(View.VISIBLE);
+            imageViewSetting.setVisibility(View.VISIBLE);
+            exportButton.setVisibility(View.VISIBLE);
         });
     }
     private void captureAndExportImage() {

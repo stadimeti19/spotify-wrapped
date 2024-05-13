@@ -15,9 +15,6 @@ import java.util.List;
 public class WrapAdapter extends RecyclerView.Adapter<WrapAdapter.WrapViewHolder> {
     private Context context;
     private List<WrapData> wrapList;
-
-    private static final String TAG = "WrapAdapter";
-
     public WrapAdapter(Context context, List<WrapData> wrapList) {
         this.context = context;
         this.wrapList = wrapList;
@@ -51,14 +48,11 @@ public class WrapAdapter extends RecyclerView.Adapter<WrapAdapter.WrapViewHolder
 
         public void bind(WrapData wrapData) {
             dateTextView.setText("Date: " + wrapData.getDate());
-            dateTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Navigate to IntroActivity with the corresponding wrapped's data
-                    Intent intent = new Intent(context, SongActivity.class);
-                    intent.putExtra(WrapData.WRAP_DATA_KEY, wrapData);
-                    context.startActivity(intent);
-                }
+            dateTextView.setOnClickListener(v -> {
+                // Navigate to IntroActivity with the corresponding wrapped data
+                Intent intent = new Intent(context, SongActivity.class);
+                intent.putExtra(WrapData.WRAP_DATA_KEY, wrapData);
+                context.startActivity(intent);
             });
         }
     }

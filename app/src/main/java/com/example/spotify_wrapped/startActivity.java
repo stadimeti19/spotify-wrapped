@@ -48,32 +48,12 @@ public class startActivity extends AppCompatActivity {
 
         letsGoButton = findViewById(R.id.button);
         viewPastWrapsButton = findViewById(R.id.buttonViewPastWraps);
-        letsGoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToGameClass();
-            }
-        });
+        letsGoButton.setOnClickListener(v -> navigateToGameClass());
         imageViewSetting = findViewById(R.id.settings_button);
-        imageViewSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(startActivity.this, SettingsPage.class));
-            }
-        });
+        imageViewSetting.setOnClickListener(v -> startActivity(new Intent(startActivity.this, SettingsPage.class)));
         imageViewHome = findViewById(R.id.home_button);
-        imageViewHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(startActivity.this, HomePage.class));
-            }
-        });
-        viewPastWrapsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(startActivity.this, PastWrapsActivity.class));
-            }
-        });
+        imageViewHome.setOnClickListener(v -> startActivity(new Intent(startActivity.this, HomePage.class)));
+        viewPastWrapsButton.setOnClickListener(v -> startActivity(new Intent(startActivity.this, PastWrapsActivity.class)));
         accessToken = getIntent().getStringExtra("accessToken");
     }
     private void navigateToGameClass() {
@@ -84,9 +64,5 @@ public class startActivity extends AppCompatActivity {
 
     public static String getSelectedTimePeriod() {
         return selectedTimePeriod;
-    }
-
-    public void setSelectedTimePeriod(String selectedTimePeriod) {
-        this.selectedTimePeriod = selectedTimePeriod;
     }
 }

@@ -27,38 +27,6 @@ public class User {
         this.albums = new ArrayList<>();
         this.genres = new ArrayList<>();
     }
-
-    // getters and setters for user attributes
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-    public HashMap<String, ArrayList<ArrayList<String>>> getDatesWrapped() {
-        return datesWrapped;
-    }
-    public void setDatesWrapped(HashMap<String, ArrayList<ArrayList<String>>> spotifyWrapped) {
-        this.datesWrapped = spotifyWrapped;
-    }
-    // Method to add Spotify Wrapped data for a specific date
-    public void addSpotifyWrapped(String date, ArrayList<ArrayList<String>> wrappedData) {
-        datesWrapped.put(date, wrappedData);
-    }
-    // Method to remove Spotify Wrapped data for a specific date
-    public void removeSpotifyWrapped(String date) {
-        datesWrapped.remove(date);
-    }
-    public List<String> getSongs() { return songs; }
-    public void setSongs(List<String> songs) { this.songs = songs; }
-    public List<String> getArtists() { return artists; }
-    public void setArtists(List<String> artists) { this.artists = artists; }
-    public List<String> getAlbums() { return albums; }
-    public void setAlbums(List<String> albums) { this.albums = albums; }
-    public List<String> getGenres() { return genres; }
-    public void setGenres(List<String> genres) { this.genres = genres; }
-
-    // other methods
     // Method to convert User object to HashMap
     public Map<String, Object> toHashMap() {
         Map<String, Object> userMap = new HashMap<>();

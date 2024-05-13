@@ -44,7 +44,6 @@ import android.view.View;
 
 import com.example.spotify_wrapped.databinding.ActivityMainBinding;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity implements HomePage.OnLoginSuccessListener {
@@ -60,10 +59,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
     private Call mCall;
     private TextView codeTextView;
     private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private ActivityMainBinding binding;
-    private NavController navController;
     private AppBarConfiguration appBarConfiguration;
     private ArrayList<String> shortTrackList;
     private ArrayList<String> shortTrackListUrls;
@@ -89,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        com.example.spotify_wrapped.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         // Set up the ActionBar
@@ -102,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
-        navController = navHostFragment.getNavController();
+        NavController navController = navHostFragment.getNavController();
 
         // Set up the AppBarConfiguration with the NavGraph
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
@@ -110,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
         // Set up ActionBar with NavController
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        HomePage homePageFragment = HomePage.newInstance(MainActivity.this);
+        HomePage.newInstance(MainActivity.this);
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this);
@@ -118,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
         db = FirebaseFirestore.getInstance();
         //Initializes an instance of the FirebaseAuth class, retrieves the default instance of FirebaseAuth, a singleton instance for app's default FirebaseApp
         //Instance allows you to perform various authentication-related tasks such as signing in users, signing out users, getting information about current user, and more
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         //Get Current User
         currentUser = mAuth.getCurrentUser();
 
@@ -135,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
      * Get token from Spotify
      * This method will open the Spotify login activity and get the token
      * What is token?
-     * https://developer.spotify.com/documentation/general/guides/authorization-guide/
+     * <a href="https://developer.spotify.com/documentation/general/guides/authorization-guide/">...</a>
      */
     public void getToken() {
         Log.d(TAG, "Get Token callback invoked");
@@ -147,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
      * Get code from Spotify
      * This method will open the Spotify login activity and get the code
      * What is code?
-     * https://developer.spotify.com/documentation/general/guides/authorization-guide/
+     * <a href="https://developer.spotify.com/documentation/general/guides/authorization-guide/">...</a>
      */
     public void getCode() {
         final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.CODE);
@@ -169,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
             mAccessToken = response.getAccessToken();
             getCode();
-            onGetTopArtistsClicked();
+            getTopArtists();
             Log.d(TAG, "Tracks callback invoked");
 
         } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
@@ -177,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             setTextAsync(mAccessCode, codeTextView);
         }
     }
-    public void onGetTopTracksClicked() {
+    public void getTopTracks() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -225,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     }
                     storeTopListInFirebase(trackList, "songs", () -> {
                         storeUrlInFirebase(trackListUrls, "trackListUrls");
-                        onGetTopShortSongsClicked();
+                        getTopShortTracks();
                     });
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -237,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
     }
 
 
-    public void onGetTopShortSongsClicked() {
+    public void getTopShortTracks() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -285,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     }
                     storeTopListInFirebase(shortTrackList, "short_term_songs", () -> {
                         storeUrlInFirebase(shortTrackListUrls, "shortTrackListUrls");
-                        onGetTopLongSongsClicked();
+                        getTopLongTracks();
                     });
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -295,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             }
         });
     }
-    public void onGetTopLongSongsClicked() {
+    public void getTopLongTracks() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -343,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     }
                     storeTopListInFirebase(longTrackList, "long_term_songs", () -> {
                         storeUrlInFirebase(longTrackListUrls, "longTrackListUrls");
-                        onGetTopGenresClicked();
+                        getTopGenres();
                     });
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -354,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
         });
     }
 
-    public void onGetTopArtistsClicked() {
+    public void getTopArtists() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -429,31 +425,25 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                                         }
                                     }
                                 }
-                                storeTopListInFirebase(artistList, "artists", () -> {
-                                    onGetTopShortArtistClicked();
-                                });
+                                storeTopListInFirebase(artistList, "artists", () -> getTopShortArtists());
 
                             } catch (JSONException e) {
                                 Log.d("JSON", "Failed to parse top artists data: " + e);
-                                runOnUiThread(() -> {
-                                    Toast.makeText(MainActivity.this, "Failed to parse top artists data, watch Logcat for more details",
-                                            Toast.LENGTH_SHORT).show();
-                                });
+                                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to parse top artists data, watch Logcat for more details",
+                                        Toast.LENGTH_SHORT).show());
                             }
                         }
                     });
 
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse profile data: " + e);
-                    runOnUiThread(() -> {
-                        Toast.makeText(MainActivity.this, "Failed to parse profile data, watch Logcat for more details",
-                                Toast.LENGTH_SHORT).show();
-                    });
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to parse profile data, watch Logcat for more details",
+                            Toast.LENGTH_SHORT).show());
                 }
             }
         });
     }
-    public void onGetTopShortArtistClicked() {
+    public void getTopShortArtists() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -469,10 +459,8 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d("HTTP", "Failed to fetch data: " + e);
-                runOnUiThread(() -> {
-                    Toast.makeText(MainActivity.this, "Failed to fetch data artists, watch Logcat for more details",
-                            Toast.LENGTH_SHORT).show();
-                });
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to fetch data artists, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show());
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -493,9 +481,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                             }
                         }
                     }
-                    storeTopListInFirebase(shortArtistList, "short_term_artists", () -> {
-                        onGetTopLongArtistClicked();
-                    });
+                    storeTopListInFirebase(shortArtistList, "short_term_artists", () -> getTopLongArtists());
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
@@ -504,7 +490,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             }
         });
     }
-    public void onGetTopLongArtistClicked() {
+    public void getTopLongArtists() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -520,10 +506,8 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d("HTTP", "Failed to fetch data: " + e);
-                runOnUiThread(() -> {
-                    Toast.makeText(MainActivity.this, "Failed to fetch data artists, watch Logcat for more details",
-                            Toast.LENGTH_SHORT).show();
-                });
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to fetch data artists, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show());
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -544,9 +528,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                             }
                         }
                     }
-                    storeTopListInFirebase(longArtistList, "long_term_artists", () -> {
-                        onGetTopTracksClicked();
-                    });
+                    storeTopListInFirebase(longArtistList, "long_term_artists", () -> getTopTracks());
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
@@ -555,7 +537,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             }
         });
     }
-    public void onGetTopGenresClicked() {
+    public void getTopGenres() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -617,9 +599,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         topGenres.add((i + 1) + ". " + genreList.get(i).getKey());
                     }
 
-                    storeTopListInFirebase(topGenres, "genres", () -> {
-                        onGetTopShortGenres();
-                    });
+                    storeTopListInFirebase(topGenres, "genres", () -> getTopShortGenres());
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
@@ -628,7 +608,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             }
         });
     }
-    public void onGetTopShortGenres() {
+    public void getTopShortGenres() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -690,10 +670,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                         shortTopGenres.add((i + 1) + ". " + genreList.get(i).getKey());
                     }
 
-                    storeTopListInFirebase(shortTopGenres, "short_term_genres", () -> {
-                        onGetTopLongGenres();
-                    });
-                    //setTextAsync(topGenres.toString(), genresTextView);
+                    storeTopListInFirebase(shortTopGenres, "short_term_genres", () -> getTopLongGenres());
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
@@ -702,7 +679,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
             }
         });
     }
-    public void onGetTopLongGenres() {
+    public void getTopLongGenres() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -765,8 +742,43 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                     }
 
                     storeTopListInFirebase(longTopGenres, "long_term_genres", () -> {
+                        getUsername();
                         updateFirestoreWithWrap();
                     });
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void getUsername() {
+        if (mAccessToken == null) {
+            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // Create a request to get the user profile
+        final Request request = new Request.Builder()
+                .url("https://api.spotify.com/v1/me")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to fetch data username, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show());
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    final JSONObject jsonObject = new JSONObject(response.body().string());
+                    String username = jsonObject.getString("id");
+                    storeImageInFirebase(username, "username");
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
@@ -790,28 +802,26 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
     }
 
     private void storeTopListInFirebase(List<String> list, String type, final Runnable callback) {
-        // Get a reference to the users collection in Firestore
-        CollectionReference usersCollection = db.collection("users");
+        if (currentUser != null) {
+            // Get current user's ID or username
+            String userId = currentUser.getUid();
+            DocumentReference userDocRef = db.collection("users").document(userId);
 
-        // Get current user's ID or username (you may need to adjust this based on your Firebase user management)
-        String userId = currentUser.getUid();
-
-        // Store the array of top artists in Firebase under the user's document
-        usersCollection.document(userId)
-                .update(type, list)
-                .addOnSuccessListener(documentReference -> {
-                    // Successfully stored top artists in Firebase
-                    Log.d(TAG, type +  " stored in Firebase: " + list);
-                    callback.run();
-                })
-                .addOnFailureListener(e -> {
-                    // Failed to store top artists in Firebase
-                    Log.e(TAG, "Error storing " + type + " in Firebase", e);
-                });
+            // Store the array of top lists in Firebase under the user's document
+            userDocRef.update(type, list)
+                    .addOnSuccessListener(documentReference -> {
+                        // Successfully stored top artists in Firebase
+                        Log.d(TAG, type + " stored in Firebase: " + list);
+                        callback.run();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Failed to store top artists in Firebase
+                        Log.e(TAG, "Error storing " + type + " in Firebase", e);
+                    });
+        }
     }
 
     private void storeUrlInFirebase(List<String> trackListUrls, String id) {
-
         if (currentUser != null) {
             String userId = currentUser.getUid();
             DocumentReference userDocRef = db.collection("users").document(userId);
@@ -873,9 +883,7 @@ public class MainActivity extends AppCompatActivity implements HomePage.OnLoginS
                 } else {
                     Log.d(TAG, "No such document");
                 }
-            }).addOnFailureListener(e -> {
-                Log.e(TAG, "Error getting user document from Firestore", e);
-            });
+            }).addOnFailureListener(e -> Log.e(TAG, "Error getting user document from Firestore", e));
         } else {
             Log.e(TAG, "Current user is null");
         }

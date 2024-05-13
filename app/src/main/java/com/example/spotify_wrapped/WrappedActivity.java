@@ -3,15 +3,10 @@ package com.example.spotify_wrapped;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -31,7 +26,6 @@ public class WrappedActivity extends AppCompatActivity {
     private TextView mTextViewTopArtist;
     private ImageView mImageViewTopArtist;
     private TextView mTextViewMostPlayedSongs;
-    private HorizontalScrollView mHorizontalScrollViewMostPlayedSongs;
     private TextView mTextViewSongRecommendation;
 
     private TextView mTextViewSongRecommendationName;
@@ -48,7 +42,6 @@ public class WrappedActivity extends AppCompatActivity {
         mTextViewTopArtist = findViewById(R.id.textViewTopArtist);
         mImageViewTopArtist = findViewById(R.id.imageViewTopArtist);
         mTextViewMostPlayedSongs = findViewById(R.id.textViewMostPlayedSongs);
-        mHorizontalScrollViewMostPlayedSongs = findViewById(R.id.horizontalScrollViewMostPlayedSongs);
         mTextViewSongRecommendation = findViewById(R.id.textViewSongRecommendation);
         mImageViewSongRecommendation = findViewById(R.id.imageViewSongRecommendation);
         mButtonExportImage = findViewById(R.id.buttonExportImage);
@@ -70,12 +63,7 @@ public class WrappedActivity extends AppCompatActivity {
         mImageViewSongRecommendation.setImageResource(R.drawable.song_recommendation);
         mTextViewSongRecommendationName.setText("Song 2");
 
-        mButtonExportImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                exportImage();
-            }
-        });
+        mButtonExportImage.setOnClickListener(v -> exportImage());
         mSeekBarTimeSpan.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

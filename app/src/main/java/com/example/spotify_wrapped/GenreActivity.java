@@ -98,22 +98,19 @@ public class GenreActivity extends AppCompatActivity {
         imageViewSetting.setOnClickListener(v -> startActivity(new Intent(GenreActivity.this, SettingsPage.class)));
         imageViewHome.setOnClickListener(v -> startActivity(new Intent(GenreActivity.this, startActivity.class)));
 
-        exportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Hide the buttons before taking a screenshot
-                imageViewHome.setVisibility(View.GONE);
-                imageViewSetting.setVisibility(View.GONE);
-                exportButton.setVisibility(View.GONE);
+        exportButton.setOnClickListener(v -> {
+            // Hide the buttons before taking a screenshot
+            imageViewHome.setVisibility(View.GONE);
+            imageViewSetting.setVisibility(View.GONE);
+            exportButton.setVisibility(View.GONE);
 
-                // Capture and export the image
-                captureAndExportImage();
+            // Capture and export the image
+            captureAndExportImage();
 
-                // Show the buttons again after exporting
-                imageViewHome.setVisibility(View.VISIBLE);
-                imageViewSetting.setVisibility(View.VISIBLE);
-                exportButton.setVisibility((View.VISIBLE));
-            }
+            // Show the buttons again after exporting
+            imageViewHome.setVisibility(View.VISIBLE);
+            imageViewSetting.setVisibility(View.VISIBLE);
+            exportButton.setVisibility((View.VISIBLE));
         });
     }
     private void captureAndExportImage() {
